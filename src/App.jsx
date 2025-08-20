@@ -235,7 +235,10 @@ export default function App() {
               We connect your <strong>sales, inventory, suppliers, and customers</strong> into one intelligent system that doesn’t just report data — it <strong>acts on it</strong>. Our AI agents anticipate what your business needs and deliver coordinated actions: the right purchases, timely reorders, adaptive pricing, and smart promotions.
             </p>
             <p className="text-gray-300 mb-6">
-              <strong>You stay in control.</strong> The system does the heavy lifting. The result? <strong>Seamless operations</strong>, healthier margins, and a business that’s always one step ahead.
+              <strong>You stay in control.</strong> The system does the heavy lifting.
+            </p>
+            <p className="text-gray-300 mb-6">
+               The result? <strong>Seamless operations</strong>, healthier margins, and a business that’s always one step ahead.
             </p>
             <div className="flex flex-col sm:flex-row gap-3">
               <Button size="lg" className="rounded-2xl" onClick={handleBriefing}>
