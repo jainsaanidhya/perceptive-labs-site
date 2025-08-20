@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { Button } from "./components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "./components/ui/card";
 import { Input } from "./components/ui/input";
@@ -16,7 +16,6 @@ import {
   Cpu,
   Workflow,
   ShieldCheck,
-  Sparkles,
   Building2,
   LayoutDashboard,
   Plug,
@@ -28,7 +27,7 @@ import {
   Truck,
   Users,
   Brain,
-  Wallet
+  Wallet,
 } from "lucide-react";
 
 export default function App() {
@@ -37,86 +36,7 @@ export default function App() {
   const [message, setMessage] = useState("");
   const [open, setOpen] = useState(false);
 
-  // --- Agents carousel data ---
-  const AGENTS = [
-    {
-      key: "SALES & INVENTORY AGENTS",
-      icon: <Package className="h-5 w-5" />,
-      tagline: "Never miss a sale. Stock what moves.",
-      impact: ["Stockouts ↓ 25–40%", "Sell‑through ↑ 10–20%", "Dead stock ↓"],
-      actions: [
-        "Replenishment plans by store/SKU",
-        "Expiry & batch risk watch",
-        "Elasticity‑aware price nudges",
-        "Promo lift targeting"
-      ]
-    },
-    {
-      key: "BUSINESS PROFITABILITY AGENTS",
-      icon: <TrendingUp className="h-5 w-5" />,
-      tagline: "Margin up without guesswork.",
-      impact: ["Gross margin ↑ 2–5%", "Waste & shrink ↓", "Revenue quality ↑"],
-      actions: [
-        "Mix & markdown optimization",
-        "Basket‑affinity bundles",
-        "ROI guardrails for promos",
-        "High‑leverage price changes"
-      ]
-    },
-    {
-      key: "VENDOR & PURCHASE AGENTS",
-      icon: <Truck className="h-5 w-5" />,
-      tagline: "Buy smarter. Faster. With proof.",
-      impact: ["Lead time ↓", "Fill rate ↑", "Cost‑to‑serve ↓"],
-      actions: [
-        "PO suggestions & reorder windows",
-        "Vendor switch / renegotiate packs",
-        "Payment‑terms scoring",
-        "SLA breach alerts with evidence"
-      ]
-    },
-    {
-      key: "CUSTOMER & LOYALTY AGENTS",
-      icon: <Users className="h-5 w-5" />,
-      tagline: "Retain, re‑activate, and grow baskets.",
-      impact: ["Repeat rate ↑", "AOV ↑", "Churn ↓"],
-      actions: [
-        "WhatsApp segments & templates",
-        "Win‑back flows for lapsing buyers",
-        "Coupons to clear overstock",
-        "Local‑language nudges"
-      ]
-    },
-    {
-      key: "INSIGHT & STRATEGY AGENTS",
-      icon: <Brain className="h-5 w-5" />,
-      tagline: "From ‘what happened’ to ‘what to do next’.",
-      impact: ["Assortment gaps closed", "Better store clusters", "White‑space finds"],
-      actions: [
-        "Root‑cause analysis (price, vendor, depth)",
-        "Assortment depth planner",
-        "Store cluster & micro‑market views",
-        "What‑if simulators"
-      ]
-    },
-    {
-      key: "EXPENSE & CASHFLOW AGENTS",
-      icon: <Wallet className="h-5 w-5" />,
-      tagline: "See spend early. Keep cash moving.",
-      impact: ["Run‑rate visibility ↑", "Leakage ↓", "Cash conversion ↑"],
-      actions: [
-        "Expense autopilot & anomalies",
-        "Cashflow runway alerts",
-        "Vendor payment scheduling",
-        "Shrink detection signals"
-      ]
-    }
-  ];
-  const [agentIdx, setAgentIdx] = useState(0);
-  const next = () => setAgentIdx((i) => (i + 1) % AGENTS.length);
-  const prev = () => setAgentIdx((i) => (i - 1 + AGENTS.length) % AGENTS.length);
-
-  // --- CTAs ---
+  // ===== CTA handlers =====
   const handleBriefing = () =>
     document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
 
@@ -130,14 +50,135 @@ export default function App() {
     window.location.href = `mailto:${to}?subject=${subject}&body=${body}`;
   };
 
+  // ===== Agents data (richer, impact + actions) =====
+  const AGENTS = [
+    {
+      key: "SALES & INVENTORY AGENTS",
+      icon: <Package className="h-5 w-5" />,
+      tagline: "Never miss a sale. Stock what moves.",
+      impact: [
+        "Stockouts ↓ 25–40%",
+        "Sell‑through ↑ 10–20%",
+        "Dead stock ↓",
+        "Expiry risk ↓",
+      ],
+      actions: [
+        "Replenishment windows by store/SKU",
+        "Slow‑mover & dead‑stock sweeps",
+        "Expiry & batch risk watch",
+        "Elasticity‑aware price nudges",
+        "Promo lift targeting on fast movers",
+      ],
+    },
+    {
+      key: "BUSINESS PROFITABILITY AGENTS",
+      icon: <TrendingUp className="h-5 w-5" />,
+      tagline: "Margin up without guesswork.",
+      impact: ["Gross margin ↑ 2–5%", "Waste & shrink ↓", "Revenue quality ↑"],
+      actions: [
+        "Mix & markdown optimization",
+        "Basket‑affinity bundles",
+        "ROI guardrails for discounts",
+        "High‑leverage price changes",
+        "Zero/negative margin detectors",
+      ],
+    },
+    {
+      key: "VENDOR & PURCHASE AGENTS",
+      icon: <Truck className="h-5 w-5" />,
+      tagline: "Buy smarter. Faster. With proof.",
+      impact: ["Lead time ↓", "Fill rate ↑", "Cost‑to‑serve ↓"],
+      actions: [
+        "PO suggestions from reorder logic",
+        "Vendor switch / renegotiate packs",
+        "Payment‑terms scoring",
+        "SLA breach evidence & alerts",
+        "WhatsApp PO drafts to vendors",
+      ],
+    },
+    {
+      key: "CUSTOMER & LOYALTY AGENTS",
+      icon: <Users className="h-5 w-5" />,
+      tagline: "Retain, re‑activate, and grow baskets.",
+      impact: ["Repeat rate ↑", "AOV ↑", "Churn ↓"],
+      actions: [
+        "RFM & loyalty tagging",
+        "Win‑back flows for lapsing buyers",
+        "Segments & WhatsApp templates",
+        "Coupons to clear overstock",
+        "Local‑language nudges",
+      ],
+    },
+    {
+      key: "INSIGHT & STRATEGY AGENTS",
+      icon: <Brain className="h-5 w-5" />,
+      tagline: "From ‘what happened’ to ‘what to do next’.",
+      impact: [
+        "Assortment gaps closed",
+        "Better store clusters",
+        "Festive/seasonal planning ↑",
+      ],
+      actions: [
+        "Root‑cause analysis (price, vendor, depth)",
+        "Assortment depth planner",
+        "Store clusters & micro‑markets",
+        "What‑if simulators & briefings",
+        "Weekly business health score",
+      ],
+    },
+    {
+      key: "EXPENSE & CASHFLOW AGENTS",
+      icon: <Wallet className="h-5 w-5" />,
+      tagline: "See spend early. Keep cash moving.",
+      impact: ["Run‑rate visibility ↑", "Leakage ↓", "Cash conversion ↑"],
+      actions: [
+        "Expense autopilot & anomalies",
+        "Cashflow runway alerts",
+        "Vendor dues scheduling",
+        "EMI & payout calendars",
+        "Shrink detection signals",
+      ],
+    },
+  ];
+
+  // ===== Carousel state + swipe handling =====
+  const [agentIdx, setAgentIdx] = useState(0);
+  const next = () => setAgentIdx((i) => (i + 1) % AGENTS.length);
+  const prev = () => setAgentIdx((i) => (i - 1 + AGENTS.length) % AGENTS.length);
+
+  const startX = useRef(0);
+  const lastX = useRef(0);
+  const dragging = useRef(false);
+  const threshold = 48; // px to trigger swipe
+
+  const getX = (e) =>
+    "touches" in e ? e.touches[0].clientX : "changedTouches" in e ? e.changedTouches[0].clientX : e.clientX;
+
+  const onStart = (e) => {
+    dragging.current = true;
+    startX.current = getX(e);
+    lastX.current = startX.current;
+  };
+  const onMove = (e) => {
+    if (!dragging.current) return;
+    lastX.current = getX(e);
+  };
+  const onEnd = () => {
+    if (!dragging.current) return;
+    const delta = lastX.current - startX.current;
+    if (delta > threshold) prev();
+    if (delta < -threshold) next();
+    dragging.current = false;
+  };
+
   return (
     <div className="min-h-screen bg-white text-gray-900">
       {/* Top bar */}
       <header className="sticky top-0 z-50 bg-white/80 backdrop-blur border-b">
         <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
           <a href="#overview" className="flex items-center gap-2 group">
-            {/* Drop /public/logo.png to use your real logo */}
-            <img src="/logo.png" alt="Perceptive Labs" className="h-8 w-auto rounded" />
+            {/* Put your logo at /public/logo.png */}
+            <img src="/logo.png" alt="Perceptive Labs" className="h-9 w-auto rounded" />
             <span className="font-semibold text-lg group-hover:opacity-90">Perceptive Labs</span>
             <span className="hidden sm:inline text-xs text-gray-500 ml-2">Agentic Suite</span>
           </a>
@@ -167,7 +208,7 @@ export default function App() {
                 ["#agents", "Agents"],
                 ["#principles", "Principles"],
                 ["#resources", "Resources"],
-                ["#contact", "Contact"]
+                ["#contact", "Contact"],
               ].map(([href, label]) => (
                 <a key={href} href={href} className="py-2">
                   {label}
@@ -192,9 +233,9 @@ export default function App() {
             </h1>
             <p className="text-gray-300 mb-6">
               We turn fragmented sales, inventory and supplier data into{" "}
-              <strong>coordinated actions</strong> — purchase, pricing and promotions —
-              delivered to the channels you already use. No more dashboard staring.
-              <strong> Agents decide. You approve. Results move.</strong>
+              <strong>coordinated actions</strong> — purchase, pricing and promotions — delivered to the
+              channels you already use. No more dashboard staring.{" "}
+              <strong>Agents decide. You approve. Results move.</strong>
             </p>
             <div className="flex flex-col sm:flex-row gap-3">
               <Button size="lg" className="rounded-2xl" onClick={handleBriefing}>
@@ -210,18 +251,9 @@ export default function App() {
               </Button>
             </div>
             <div className="mt-6 flex flex-wrap items-center gap-4 text-sm text-gray-300">
-              <div className="flex items-center gap-2">
-                <Shield className="h-4 w-4" />
-                Privacy‑first
-              </div>
-              <div className="flex items-center gap-2">
-                <Zap className="h-4 w-4" />
-                Offline‑capable
-              </div>
-              <div className="flex items-center gap-2">
-                <Smartphone className="h-4 w-4" />
-                Phone & desktop
-              </div>
+              <div className="flex items-center gap-2"><Shield className="h-4 w-4" />Privacy‑first</div>
+              <div className="flex items-center gap-2"><Zap className="h-4 w-4" />Offline‑capable</div>
+              <div className="flex items-center gap-2"><Smartphone className="h-4 w-4" />Phone & desktop</div>
             </div>
           </div>
           <div className="bg-white/5 rounded-3xl p-6 border border-white/10">
@@ -229,8 +261,8 @@ export default function App() {
             {[
               "Replenish 18 SKUs before Friday; margin impact +2.1%",
               "Shift 20% promo budget from low‑lift items to fast movers",
-              "Suggest vendor swap for biscuits; expected lead‑time −3 days",
-              "Draft WhatsApp for price‑sensitive buyers in Zone B"
+              "Vendor swap for biscuits; expected lead‑time −3 days",
+              "Draft WhatsApp for price‑sensitive buyers in Zone B",
             ].map((t, i) => (
               <div key={i} className="flex items-start gap-2 py-2">
                 <span className="mt-1 h-2 w-2 rounded-full bg-emerald-400" />
@@ -249,31 +281,31 @@ export default function App() {
         <div className="max-w-6xl mx-auto px-4 py-16">
           <h2 className="text-2xl font-semibold mb-2">The Agentic Suite</h2>
           <p className="text-gray-600 mb-8 max-w-2xl">
-            A layered system that moves from data → decisions → delivery, with governance
-            built‑in. Modern, modular, and ready for real‑world retail.
+            A layered system that moves from data → decisions → delivery, with governance built‑in.
+            Modern, modular, and ready for real‑world retail.
           </p>
           <div className="grid md:grid-cols-4 gap-6">
             {[
               {
                 icon: <Layers className="h-5 w-5" />,
                 t: "Data Layer",
-                d: "Connect POS, Excel/CSV, vendor lists. Clean & unify SKUs, vendors, customers."
+                d: "Connect POS, Excel/CSV, vendor lists. Clean & unify SKUs, vendors, customers.",
               },
               {
                 icon: <Cpu className="h-5 w-5" />,
                 t: "Reasoning Layer",
-                d: "Causal models rank purchase, price, and promo moves by expected ROI."
+                d: "Causal models rank purchase, price, and promo moves by expected ROI.",
               },
               {
                 icon: <Workflow className="h-5 w-5" />,
                 t: "Action Layer",
-                d: "One‑click execution: WhatsApp, lists, emails, ERP bridges—no new habits required."
+                d: "One‑click execution: WhatsApp, lists, emails, ERP bridges—no new habits required.",
               },
               {
                 icon: <ShieldCheck className="h-5 w-5" />,
                 t: "Assurance Layer",
-                d: "Privacy, on‑prem options, audit trails and human‑in‑the‑loop controls."
-              }
+                d: "Privacy, on‑prem options, audit trails and human‑in‑the‑loop controls.",
+              },
             ].map((s, i) => (
               <Card key={i} className="rounded-2xl">
                 <CardHeader className="flex items-center gap-3">
@@ -296,21 +328,21 @@ export default function App() {
               {
                 icon: <LayoutDashboard className="h-5 w-5" />,
                 t: "Command Console",
-                d: "A single pane to review agent suggestions, approve in bulk, and track impact."
+                d: "Review agent suggestions, approve in bulk, and track impact.",
               },
               {
                 icon: <Bot className="h-5 w-5" />,
                 t: "Retail Agents",
-                d: "Specialist agents for Replenish, Price, Promo, Vendor—coordinated, not siloed."
+                d: "Specialists for Replenish, Price, Promo, Vendor—coordinated, not siloed.",
               },
               { icon: <Plug className="h-5 w-5" />, t: "Connector Hub", d: "POS/Excel/CSV now; ERP and marketplace bridges next." },
               {
                 icon: <MessageSquare className="h-5 w-5" />,
                 t: "WhatsApp Workbench",
-                d: "Ready‑to‑send messages to customers & suppliers—multi‑language."
+                d: "Ready‑to‑send messages to customers & suppliers—multi‑language.",
               },
               { icon: <Building2 className="h-5 w-5" />, t: "ERP Bridges", d: "Voucher‑safe exports and imports to your existing systems." },
-              { icon: <LineChart className="h-5 w-5" />, t: "Impact Feeds", d: "Before/after metrics and weekly impact notes you can trust." }
+              { icon: <LineChart className="h-5 w-5" />, t: "Impact Feeds", d: "Before/after metrics and weekly impact notes you can trust." },
             ].map((m, i) => (
               <Card key={i} className="rounded-2xl">
                 <CardHeader className="flex items-center gap-3">
@@ -335,7 +367,7 @@ export default function App() {
               { icon: <Store className="h-5 w-5" />, title: "Quick‑service F&B", pts: ["Recipe costing", "Prep forecasts", "Vendor price checks"] },
               { icon: <Store className="h-5 w-5" />, title: "Electronics", pts: ["Assortment gaps", "Seasonal price nudges", "Warranty funnel nudges"] },
               { icon: <Store className="h-5 w-5" />, title: "Fashion", pts: ["Size‑color depth", "Markdown planning", "Repeat buyer activation"] },
-              { icon: <Store className="h-5 w-5" />, title: "Home & Lifestyle", pts: ["Bundle suggestions", "Vendor SLAs", "Regional preferences"] }
+              { icon: <Store className="h-5 w-5" />, title: "Home & Lifestyle", pts: ["Bundle suggestions", "Vendor SLAs", "Regional preferences"] },
             ].map((b, i) => (
               <Card key={i} className="rounded-2xl">
                 <CardHeader className="flex items-center gap-3">
@@ -355,7 +387,7 @@ export default function App() {
         </div>
       </section>
 
-      {/* Agents Carousel (replaces old 'Use cases') */}
+      {/* AGENTS — swipeable carousel */}
       <section id="agents" className="bg-gray-50">
         <div className="max-w-6xl mx-auto px-4 py-16">
           <div className="flex items-center justify-between mb-6">
@@ -366,13 +398,26 @@ export default function App() {
             </div>
           </div>
 
-          <div className="relative overflow-hidden rounded-2xl">
+          <div
+            className="relative overflow-hidden rounded-2xl select-none"
+            style={{ touchAction: "pan-y" }}
+            onTouchStart={onStart}
+            onTouchMove={onMove}
+            onTouchEnd={onEnd}
+            onMouseDown={(e) => {
+              e.preventDefault();
+              onStart(e);
+            }}
+            onMouseMove={onMove}
+            onMouseUp={onEnd}
+            onMouseLeave={onEnd}
+          >
             <div
               className="flex transition-transform duration-300"
               style={{ transform: `translateX(-${agentIdx * 100}%)`, width: `${AGENTS.length * 100}%` }}
             >
               {AGENTS.map((a, i) => (
-                <div key={i} className="w-full md:w-full shrink-0 px-0 md:px-0" style={{ width: "100%" }}>
+                <div key={i} className="w-full shrink-0" style={{ width: "100%" }}>
                   <Card className="rounded-2xl">
                     <CardHeader className="flex items-center gap-3">
                       <div className="p-2 rounded-xl bg-white">{a.icon}</div>
@@ -384,7 +429,9 @@ export default function App() {
                     <CardContent>
                       <div className="flex flex-wrap gap-2 mb-4">
                         {a.impact.map((chip, j) => (
-                          <span key={j} className="text-xs px-3 py-1 rounded-full bg-gray-100 border">{chip}</span>
+                          <span key={j} className="text-xs px-3 py-1 rounded-full bg-gray-100 border">
+                            {chip}
+                          </span>
                         ))}
                       </div>
                       <div className="grid md:grid-cols-2 gap-4 text-sm text-gray-700">
@@ -409,30 +456,33 @@ export default function App() {
                 </div>
               ))}
             </div>
-          </div>
 
-          {/* dots */}
-          <div className="mt-4 flex items-center justify-center gap-2">
-            {AGENTS.map((_, i) => (
-              <button
-                key={i}
-                aria-label={`Go to slide ${i + 1}`}
-                onClick={() => setAgentIdx(i)}
-                className={`h-2 w-2 rounded-full ${i === agentIdx ? "bg-gray-900" : "bg-gray-300"}`}
-              />
-            ))}
+            {/* dots */}
+            <div className="mt-4 flex items-center justify-center gap-2">
+              {AGENTS.map((_, i) => (
+                <button
+                  key={i}
+                  aria-label={`Go to slide ${i + 1}`}
+                  onClick={() => setAgentIdx(i)}
+                  className={`h-2 w-2 rounded-full ${i === agentIdx ? "bg-gray-900" : "bg-gray-300"}`}
+                />
+              ))}
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Why different (kept) */}
+      {/* Why different */}
       <section className="bg-white border-y">
         <div className="max-w-6xl mx-auto px-4 py-14">
           <h2 className="text-2xl font-semibold mb-4">Why it’s different</h2>
           <div className="grid md:grid-cols-3 gap-6 text-sm text-gray-700">
             <div className="p-5 bg-gray-50 rounded-2xl border">
               <div className="font-medium mb-1">Root‑cause intelligence</div>
-              <div>We don’t just flag issues — agents trace why (vendor lead time, price elasticity, assortment depth) and propose the fix.</div>
+              <div>
+                Agents trace <em>why</em> (vendor lead time, price elasticity, assortment depth) and propose
+                the fix — not just flag symptoms.
+              </div>
             </div>
             <div className="p-5 bg-gray-50 rounded-2xl border">
               <div className="font-medium mb-1">Actions over dashboards</div>
@@ -455,7 +505,7 @@ export default function App() {
               { icon: <ShieldCheck className="h-5 w-5" />, t: "Privacy by design", d: "Own your data. On‑prem options. No data brokers." },
               { icon: <Workflow className="h-5 w-5" />, t: "Human in the loop", d: "Agents propose. You approve. Audit trail everywhere." },
               { icon: <Zap className="h-5 w-5" />, t: "Real‑world speed", d: "Fast on modest hardware. Offline‑capable." },
-              { icon: <LineChart className="h-5 w-5" />, t: "Measured impact", d: "Before/after metrics, not vanity charts." }
+              { icon: <LineChart className="h-5 w-5" />, t: "Measured impact", d: "Before/after metrics, not vanity charts." },
             ].map((p, i) => (
               <Card key={i} className="rounded-2xl">
                 <CardHeader className="flex items-center gap-3">
@@ -485,15 +535,9 @@ export default function App() {
           <div>
             <h3 className="text-xl font-semibold mb-3">FAQs</h3>
             <ul className="text-sm text-gray-700 space-y-3">
-              <li>
-                <span className="font-medium">Is this a dashboard?</span> No—agents produce actions you can execute.
-              </li>
-              <li>
-                <span className="font-medium">Will it work with my POS?</span> Yes—via CSV/Excel now, connectors next.
-              </li>
-              <li>
-                <span className="font-medium">How private is my data?</span> Local or on‑prem with audit trails.
-              </li>
+              <li><span className="font-medium">Is this a dashboard?</span> No—agents produce actions you can execute.</li>
+              <li><span className="font-medium">Will it work with my POS?</span> Yes—via CSV/Excel now, connectors next.</li>
+              <li><span className="font-medium">How private is my data?</span> Local or on‑prem with audit trails.</li>
             </ul>
           </div>
         </div>
@@ -512,15 +556,10 @@ export default function App() {
               onChange={(e) => setMessage(e.target.value)}
               className="rounded-2xl"
             />
-            <Button type="submit" className="rounded-2xl">
-              Send
-            </Button>
+            <Button type="submit" className="rounded-2xl">Send</Button>
           </form>
           <p className="text-sm text-gray-500 mt-4">
-            Prefer email?{" "}
-            <a className="underline" href="mailto:team@clyptt.com">
-              team@clyptt.com
-            </a>
+            Prefer email? <a className="underline" href="mailto:team@clyptt.com">team@clyptt.com</a>
           </p>
         </div>
       </section>
@@ -535,41 +574,17 @@ export default function App() {
           <div>
             <div className="font-medium text-gray-900 mb-2">Company</div>
             <ul className="space-y-2">
-              <li>
-                <a href="#overview" className="hover:text-black">
-                  Overview
-                </a>
-              </li>
-              <li>
-                <a href="#suite" className="hover:text-black">
-                  Suite
-                </a>
-              </li>
-              <li>
-                <a href="#contact" className="hover:text-black">
-                  Contact
-                </a>
-              </li>
+              <li><a href="#overview" className="hover:text-black">Overview</a></li>
+              <li><a href="#suite" className="hover:text-black">Suite</a></li>
+              <li><a href="#contact" className="hover:text-black">Contact</a></li>
             </ul>
           </div>
           <div>
             <div className="font-medium text-gray-900 mb-2">Legal</div>
             <ul className="space-y-2">
-              <li>
-                <a href="#" className="hover:text-black">
-                  Privacy
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-black">
-                  Terms
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-black">
-                  Security
-                </a>
-              </li>
+              <li><a href="#" className="hover:text-black">Privacy</a></li>
+              <li><a href="#" className="hover:text-black">Terms</a></li>
+              <li><a href="#" className="hover:text-black">Security</a></li>
             </ul>
           </div>
           <div>
