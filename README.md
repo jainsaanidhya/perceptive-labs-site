@@ -14,3 +14,4 @@ npm run build
 
 ## Deploy (static hosting)
 Upload the `dist/` folder to any static host or serve via Nginx/Apache.
+Site launch
