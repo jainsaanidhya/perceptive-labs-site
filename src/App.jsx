@@ -1,0 +1,321 @@
+import { useState } from "react";
+import { Button } from "./components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "./components/ui/card";
+import { Input } from "./components/ui/input";
+import { Textarea } from "./components/ui/textarea";
+import {
+  ArrowRight,
+  Play,
+  Shield,
+  Smartphone,
+  Store,
+  LineChart,
+  Bot,
+  Zap,
+  Layers,
+  Cpu,
+  Workflow,
+  ShieldCheck,
+  Sparkles,
+  Building2,
+  LayoutDashboard,
+  Plug,
+  MessageSquare,
+  Menu,
+  X
+} from "lucide-react";
+
+export default function App() {
+  const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
+  const [message, setMessage] = useState("");
+  const [open, setOpen] = useState(false);
+
+  return (
+    <div className="min-h-screen bg-white text-gray-900">
+      {/* Top bar */}
+      <header className="sticky top-0 z-50 bg-white/80 backdrop-blur border-b">
+        <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <div className="h-8 w-8 rounded-xl bg-black" />
+            <span className="font-semibold text-lg">Perceptive Labs</span>
+            <span className="hidden sm:inline text-xs text-gray-500 ml-2">Agentic Suite</span>
+          </div>
+          <nav className="hidden md:flex items-center gap-6 text-sm">
+            <a href="#overview" className="hover:text-black">Overview</a>
+            <a href="#suite" className="hover:text-black">Suite</a>
+            <a href="#industries" className="hover:text-black">Industries</a>
+            <a href="#usecases" className="hover:text-black">Use cases</a>
+            <a href="#principles" className="hover:text-black">Principles</a>
+            <a href="#resources" className="hover:text-black">Resources</a>
+            <a href="#contact" className="hover:text-black">Contact</a>
+          </nav>
+          <div className="flex items-center gap-2">
+            <Button variant="ghost" className="md:hidden" onClick={()=>setOpen(v=>!v)}>
+              {open ? <X className="h-5 w-5"/> : <Menu className="h-5 w-5"/>}
+            </Button>
+            <Button className="rounded-2xl">Request access</Button>
+          </div>
+        </div>
+        {open && (
+          <div className="md:hidden border-t">
+            <div className="max-w-6xl mx-auto px-4 py-3 grid gap-3 text-sm">
+              {[
+                ["#overview","Overview"],
+                ["#suite","Suite"],
+                ["#industries","Industries"],
+                ["#usecases","Use cases"],
+                ["#principles","Principles"],
+                ["#resources","Resources"],
+                ["#contact","Contact"],
+              ].map(([href,label])=> (
+                <a key={href} href={href} className="py-2">{label}</a>
+              ))}
+            </div>
+          </div>
+        )}
+      </header>
+
+      {/* Hero */}
+      <section id="overview" className="relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-b from-gray-900 via-gray-900 to-gray-800"/>
+        <div className="relative max-w-6xl mx-auto px-4 py-20 grid md:grid-cols-2 gap-10 items-center text-white">
+          <div>
+            <p className="text-xs uppercase tracking-widest text-gray-400 mb-4">Perceptive Labs · Agentic Suite for Retail</p>
+            <h1 className="text-4xl md:text-5xl font-semibold leading-tight mb-4">
+              Empowering retail with agents that <span className="underline decoration-wavy decoration-gray-500">decide & deliver</span>
+            </h1>
+            <p className="text-gray-300 mb-6">
+              We turn fragmented sales, inventory and supplier data into coordinated actions—
+              purchase, pricing and promotions—shipped to the channels you already use.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-3">
+              <Button size="lg" className="rounded-2xl">Request a briefing</Button>
+              <Button size="lg" variant="outline" className="rounded-2xl border-white/30 text-white hover:bg-white/10">
+                <Play className="h-4 w-4 mr-2"/>Watch concept trailer
+              </Button>
+            </div>
+            <div className="mt-6 flex flex-wrap items-center gap-4 text-sm text-gray-300">
+              <div className="flex items-center gap-2"><Shield className="h-4 w-4"/>Privacy‑first</div>
+              <div className="flex items-center gap-2"><Zap className="h-4 w-4"/>Offline‑capable</div>
+              <div className="flex items-center gap-2"><Smartphone className="h-4 w-4"/>Phone & desktop</div>
+            </div>
+          </div>
+          <div className="bg-white/5 rounded-3xl p-6 border border-white/10">
+            <div className="text-xs text-gray-300 mb-2">Agent feed · Today</div>
+            {[
+              "Replenish 18 SKUs before Friday; margin impact +2.1%",
+              "Shift 20% promo budget from low‑lift items to fast movers",
+              "Suggest vendor swap for biscuits; expected lead‑time −3 days",
+              "Draft WhatsApp for price‑sensitive buyers in Zone B",
+            ].map((t,i)=> (
+              <div key={i} className="flex items-start gap-2 py-2">
+                <span className="mt-1 h-2 w-2 rounded-full bg-emerald-400"/>
+                <div className="text-sm text-gray-100">{t}</div>
+              </div>
+            ))}
+            <Button className="mt-4 w-full rounded-2xl bg-white text-gray-900 hover:bg-gray-100">Apply all <ArrowRight className="h-4 w-4 ml-1"/></Button>
+          </div>
+        </div>
+      </section>
+
+      {/* Suite overview */}
+      <section id="suite" className="bg-white">
+        <div className="max-w-6xl mx-auto px-4 py-16">
+          <h2 className="text-2xl font-semibold mb-2">The Agentic Suite</h2>
+          <p className="text-gray-600 mb-8 max-w-2xl">A layered system that moves from data → decisions → delivery, with governance built‑in. Modern, modular, and ready for real‑world retail.</p>
+          <div className="grid md:grid-cols-4 gap-6">
+            {[ 
+              {icon: <Layers className="h-5 w-5"/>, t: "Data Layer", d: "Connect POS, Excel/CSV, vendor lists. Clean & unify SKUs, vendors, customers."},
+              {icon: <Cpu className="h-5 w-5"/>, t: "Reasoning Layer", d: "Causal models rank purchase, price, and promo moves by expected ROI."},
+              {icon: <Workflow className="h-5 w-5"/>, t: "Action Layer", d: "One‑click execution: WhatsApp, lists, emails, ERP bridges—no new habits required."},
+              {icon: <ShieldCheck className="h-5 w-5"/>, t: "Assurance Layer", d: "Privacy, on‑prem options, audit trails and human‑in‑the‑loop controls."},
+            ].map((s,i)=> (
+              <Card key={i} className="rounded-2xl">
+                <CardHeader className="flex items-center gap-3">
+                  <div className="p-2 rounded-xl bg-gray-50">{s.icon}</div>
+                  <CardTitle className="text-base">{s.t}</CardTitle>
+                </CardHeader>
+                <CardContent className="text-sm text-gray-600">{s.d}</CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Modules */}
+      <section className="bg-gray-50">
+        <div className="max-w-6xl mx-auto px-4 py-16">
+          <h3 className="text-xl font-semibold mb-6">What’s inside</h3>
+          <div className="grid md:grid-cols-3 gap-6">
+            {[
+              {icon: <LayoutDashboard className="h-5 w-5"/>, t: "Command Console", d: "A single pane to review agent suggestions, approve in bulk, and track impact."},
+              {icon: <Bot className="h-5 w-5"/>, t: "Retail Agents", d: "Specialist agents for Replenish, Price, Promo, Vendor—coordinated, not siloed."},
+              {icon: <Plug className="h-5 w-5"/>, t: "Connector Hub", d: "POS/Excel/CSV now; ERP and marketplace bridges next."},
+              {icon: <MessageSquare className="h-5 w-5"/>, t: "WhatsApp Workbench", d: "Ready‑to‑send messages to customers & suppliers—multi‑language."},
+              {icon: <Building2 className="h-5 w-5"/>, t: "ERP Bridges", d: "Voucher‑safe exports and imports to your existing systems."},
+              {icon: <LineChart className="h-5 w-5"/>, t: "Impact Feeds", d: "Before/after metrics and weekly impact notes you can trust."},
+            ].map((m,i)=> (
+              <Card key={i} className="rounded-2xl">
+                <CardHeader className="flex items-center gap-3">
+                  <div className="p-2 rounded-xl bg-white">{m.icon}</div>
+                  <CardTitle className="text-base">{m.t}</CardTitle>
+                </CardHeader>
+                <CardContent className="text-sm text-gray-600">{m.d}</CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Industries */}
+      <section id="industries" className="bg-white border-y">
+        <div className="max-w-6xl mx-auto px-4 py-16">
+          <h2 className="text-2xl font-semibold mb-6">Designed for modern retail</h2>
+          <div className="grid md:grid-cols-3 gap-6">
+            {[
+              {icon: <Store className="h-5 w-5"/>, title: "Grocery & Convenience", pts: ["Smart replenishment", "Expiry risk watch", "Promo lift guidance"]},
+              {icon: <Store className="h-5 w-5"/>, title: "Pharmacy", pts: ["Batch/expiry controls", "Shortage radar", "Therapy substitutions"]},
+              {icon: <Store className="h-5 w-5"/>, title: "Quick‑service F&B", pts: ["Recipe costing", "Prep forecasts", "Vendor price checks"]},
+              {icon: <Store className="h-5 w-5"/>, title: "Electronics", pts: ["Assortment gaps", "Seasonal price nudges", "Warranty funnel nudges"]},
+              {icon: <Store className="h-5 w-5"/>, title: "Fashion", pts: ["Size‑color depth", "Markdown planning", "Repeat buyer activation"]},
+              {icon: <Store className="h-5 w-5"/>, title: "Home & Lifestyle", pts: ["Bundle suggestions", "Vendor SLAs", "Regional preferences"]},
+            ].map((b,i)=> (
+              <Card key={i} className="rounded-2xl">
+                <CardHeader className="flex items-center gap-3">
+                  <div className="p-2 rounded-xl bg-gray-50">{b.icon}</div>
+                  <CardTitle className="text-base">{b.title}</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <ul className="text-sm text-gray-600 list-disc pl-5 space-y-1">
+                    {b.pts.map((p,j)=> <li key={j}>{p}</li>)}
+                  </ul>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Use cases / Transformation */}
+      <section id="usecases" className="bg-gray-50">
+        <div className="max-w-6xl mx-auto px-4 py-16">
+          <h2 className="text-2xl font-semibold mb-2">From insight to movement</h2>
+          <p className="text-gray-600 mb-8 max-w-2xl">A few ways teams use the suite to shift outcomes in weeks, not quarters.</p>
+          <div className="grid md:grid-cols-3 gap-6">
+            {[
+              {k:"Replenish", a:"Stockouts down", b:"+2% margin from targeted depth"},
+              {k:"Price", a:"MRP‑sensitive wins", b:"Elasticity‑aware nudges"},
+              {k:"Promo", a:"Budget to ROI", b:"Move spend to fast movers"},
+              {k:"Vendor", a:"Lead‑time cuts", b:"Switch or renegotiate with proof"},
+              {k:"Assortment", a:"Gaps closed", b:"Local preferences filled"},
+              {k:"Engagement", a:"WhatsApp ready", b:"Templates that convert"},
+            ].map((c,i)=> (
+              <Card key={i} className="rounded-2xl">
+                <CardHeader>
+                  <CardTitle className="text-base">{c.k}</CardTitle>
+                </CardHeader>
+                <CardContent className="text-sm text-gray-600">
+                  <div className="flex items-center gap-2 mb-2"><Sparkles className="h-4 w-4"/>{c.a}</div>
+                  <div className="text-gray-600">{c.b}</div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Principles */}
+      <section id="principles" className="bg-white">
+        <div className="max-w-6xl mx-auto px-4 py-16">
+          <h2 className="text-2xl font-semibold mb-6">Principles we won’t compromise</h2>
+          <div className="grid md:grid-cols-4 gap-6">
+            {[
+              {icon: <ShieldCheck className="h-5 w-5"/>, t:"Privacy by design", d:"Own your data. On‑prem options. No data brokers."},
+              {icon: <Workflow className="h-5 w-5"/>, t:"Human in the loop", d:"Agents propose. You approve. Audit trail everywhere."},
+              {icon: <Zap className="h-5 w-5"/>, t:"Real‑world speed", d:"Fast on modest hardware. Offline‑capable."},
+              {icon: <LineChart className="h-5 w-5"/>, t:"Measured impact", d:"Before/after metrics, not vanity charts."},
+            ].map((p,i)=> (
+              <Card key={i} className="rounded-2xl">
+                <CardHeader className="flex items-center gap-3">
+                  <div className="p-2 rounded-xl bg-gray-50">{p.icon}</div>
+                  <CardTitle className="text-base">{p.t}</CardTitle>
+                </CardHeader>
+                <CardContent className="text-sm text-gray-600">{p.d}</CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Resources */}
+      <section id="resources" className="bg-gray-50">
+        <div className="max-w-6xl mx-auto px-4 py-16 grid md:grid-cols-2 gap-10">
+          <div>
+            <h3 className="text-xl font-semibold mb-3">Launch resources</h3>
+            <div className="grid gap-3">
+              {["Briefing deck (PDF)", "Vision note: Agentic retail", "Pilot playbook (4 weeks)"].map((g,i)=> (
+                <a key={i} className="p-4 bg-white rounded-2xl border hover:shadow-sm" href="#">{g}</a>
+              ))}
+            </div>
+          </div>
+          <div>
+            <h3 className="text-xl font-semibold mb-3">FAQs</h3>
+            <ul className="text-sm text-gray-700 space-y-3">
+              <li><span className="font-medium">Is this a dashboard?</span> No—agents produce actions you can execute.</li>
+              <li><span className="font-medium">Will it work with my POS?</span> Yes—via CSV/Excel now, connectors next.</li>
+              <li><span className="font-medium">How private is my data?</span> Local or on‑prem with audit trails.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      {/* Contact */}
+      <section id="contact" className="bg-white border-t">
+        <div className="max-w-3xl mx-auto px-4 py-16">
+          <h2 className="text-2xl font-semibold mb-6">Request access</h2>
+          <form className="grid gap-4" onSubmit={(e)=>e.preventDefault()}>
+            <Input placeholder="Your name" value={name} onChange={e=>setName(e.target.value)} className="rounded-2xl"/>
+            <Input placeholder="Work email" value={email} onChange={e=>setEmail(e.target.value)} className="rounded-2xl"/>
+            <Textarea placeholder="Tell us about your retail footprint (stores, categories)" value={message} onChange={e=>setMessage(e.target.value)} className="rounded-2xl"/>
+            <Button type="submit" className="rounded-2xl">Send</Button>
+          </form>
+          <p className="text-sm text-gray-500 mt-4">Prefer email? <a className="underline" href="mailto:team@clyptt.com">team@clyptt.com</a></p>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="bg-gray-50 border-t">
+        <div className="max-w-6xl mx-auto px-4 py-10 text-sm text-gray-600 grid md:grid-cols-4 gap-6">
+          <div>
+            <div className="font-semibold text-gray-900 mb-2">Perceptive Labs</div>
+            <p>Agentic Suite for retail. Decide & deliver.</p>
+          </div>
+          <div>
+            <div className="font-medium text-gray-900 mb-2">Company</div>
+            <ul className="space-y-2">
+              <li><a href="#overview" className="hover:text-black">Overview</a></li>
+              <li><a href="#suite" className="hover:text-black">Suite</a></li>
+              <li><a href="#contact" className="hover:text-black">Contact</a></li>
+            </ul>
+          </div>
+          <div>
+            <div className="font-medium text-gray-900 mb-2">Legal</div>
+            <ul className="space-y-2">
+              <li><a href="#" className="hover:text-black">Privacy</a></li>
+              <li><a href="#" className="hover:text-black">Terms</a></li>
+              <li><a href="#" className="hover:text-black">Security</a></li>
+            </ul>
+          </div>
+          <div>
+            <div className="font-medium text-gray-900 mb-2">Stay in touch</div>
+            <div className="flex gap-2">
+              <Input placeholder="Email" className="rounded-2xl"/>
+              <Button className="rounded-2xl">Subscribe</Button>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div>
+  );
+}
