@@ -36,18 +36,53 @@ export default function App() {
   const [message, setMessage] = useState("");
   const [open, setOpen] = useState(false);
 
+  // form status
+  const [sending, setSending] = useState(false);
+  const [sent, setSent] = useState(false);
+  const [error, setError] = useState("");
+
+  const WORKER_URL = "https://perceptive-contact.jainsaanidhya.workers.dev/"; // <-- replace with your Worker endpoint
+
   // ===== CTA handlers =====
   const handleBriefing = () =>
     document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
 
-  const handleSubmit = (e) => {
+  // POST the form to your Worker (which sends the email via Resend/SMTP)
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const to = "team@clyptt.com"; // change if needed
-    const subject = encodeURIComponent("Perceptive Labs — Access request");
-    const body = encodeURIComponent(
-      `Name: ${name}\nEmail: ${email}\n\nGoal / footprint:\n${message}\n\n— Sent from perceptivelabs.in`
-    );
-    window.location.href = `mailto:${to}?subject=${subject}&body=${body}`;
+    setError("");
+    setSent(false);
+    setSending(true);
+    try {
+      const res = await fetch(WORKER_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({
+          name,
+          email,
+          message,
+          _origin: window.location.href,
+        }),
+      });
+      if (!res.ok) {
+        // Try to surface server detail if present
+        let detail = "";
+        try {
+          const j = await res.json();
+          detail = j.detail || j.error || "";
+        } catch {}
+        throw new Error(detail || `HTTP ${res.status}`);
+      }
+      setSent(true);
+      setName("");
+      setEmail("");
+      setMessage("");
+    } catch (err) {
+      setError("Couldn’t send. Please try again or email team@perceptivelabs.in.");
+      console.error(err);
+    } finally {
+      setSending(false);
+    }
   };
 
   // ===== Agents data (richer, impact + actions) =====
@@ -56,17 +91,12 @@ export default function App() {
       key: "SALES & INVENTORY AGENTS",
       icon: <Package className="h-5 w-5" />,
       tagline: "Never miss a sale. Stock what moves.",
-      impact: [
-        "Stockouts ↓ 25–40%",
-        "Sell‑through ↑ 10–20%",
-        "Dead stock ↓",
-        "Expiry risk ↓",
-      ],
+      impact: ["Stockouts ↓ 25–40%", "Sell-through ↑ 10–20%", "Dead stock ↓", "Expiry risk ↓"],
       actions: [
         "Replenishment windows by store/SKU",
-        "Slow‑mover & dead‑stock sweeps",
+        "Slow-mover & dead-stock sweeps",
         "Expiry & batch risk watch",
-        "Elasticity‑aware price nudges",
+        "Elasticity-aware price nudges",
         "Promo lift targeting on fast movers",
       ],
     },
@@ -77,9 +107,9 @@ export default function App() {
       impact: ["Gross margin ↑ 2–5%", "Waste & shrink ↓", "Revenue quality ↑"],
       actions: [
         "Mix & markdown optimization",
-        "Basket‑affinity bundles",
+        "Basket-affinity bundles",
         "ROI guardrails for discounts",
-        "High‑leverage price changes",
+        "High-leverage price changes",
         "Zero/negative margin detectors",
       ],
     },
@@ -87,11 +117,11 @@ export default function App() {
       key: "VENDOR & PURCHASE AGENTS",
       icon: <Truck className="h-5 w-5" />,
       tagline: "Buy smarter. Faster. With proof.",
-      impact: ["Lead time ↓", "Fill rate ↑", "Cost‑to‑serve ↓"],
+      impact: ["Lead time ↓", "Fill rate ↑", "Cost-to-serve ↓"],
       actions: [
         "PO suggestions from reorder logic",
         "Vendor switch / renegotiate packs",
-        "Payment‑terms scoring",
+        "Payment-terms scoring",
         "SLA breach evidence & alerts",
         "WhatsApp PO drafts to vendors",
       ],
@@ -99,30 +129,26 @@ export default function App() {
     {
       key: "CUSTOMER & LOYALTY AGENTS",
       icon: <Users className="h-5 w-5" />,
-      tagline: "Retain, re‑activate, and grow baskets.",
+      tagline: "Retain, re-activate, and grow baskets.",
       impact: ["Repeat rate ↑", "AOV ↑", "Churn ↓"],
       actions: [
         "RFM & loyalty tagging",
-        "Win‑back flows for lapsing buyers",
+        "Win-back flows for lapsing buyers",
         "Segments & WhatsApp templates",
         "Coupons to clear overstock",
-        "Local‑language nudges",
+        "Local-language nudges",
       ],
     },
     {
       key: "INSIGHT & STRATEGY AGENTS",
       icon: <Brain className="h-5 w-5" />,
       tagline: "From ‘what happened’ to ‘what to do next’.",
-      impact: [
-        "Assortment gaps closed",
-        "Better store clusters",
-        "Festive/seasonal planning ↑",
-      ],
+      impact: ["Assortment gaps closed", "Better store clusters", "Festive/seasonal planning ↑"],
       actions: [
-        "Root‑cause analysis (price, vendor, depth)",
+        "Root-cause analysis (price, vendor, depth)",
         "Assortment depth planner",
-        "Store clusters & micro‑markets",
-        "What‑if simulators & briefings",
+        "Store clusters & micro-markets",
+        "What-if simulators & briefings",
         "Weekly business health score",
       ],
     },
@@ -130,7 +156,7 @@ export default function App() {
       key: "EXPENSE & CASHFLOW AGENTS",
       icon: <Wallet className="h-5 w-5" />,
       tagline: "See spend early. Keep cash moving.",
-      impact: ["Run‑rate visibility ↑", "Leakage ↓", "Cash conversion ↑"],
+      impact: ["Run-rate visibility ↑", "Leakage ↓", "Cash conversion ↑"],
       actions: [
         "Expense autopilot & anomalies",
         "Cashflow runway alerts",
@@ -232,13 +258,15 @@ export default function App() {
               <span className="underline decoration-wavy decoration-gray-500">decide & deliver</span>
             </h1>
             <p className="text-gray-300 mb-4">
-              We connect your <strong>sales, inventory, suppliers, and customers</strong> into one intelligent system that dosen’t just report data — it <strong>acts on it</strong>.
+              We connect your <strong>sales, inventory, suppliers, and customers</strong> into one intelligent
+              system that doesn’t just report data — it <strong>acts on it</strong>.
             </p>
             <p className="text-gray-300 mb-6">
-              <strong>You stay in control. The system anticipate what your business needs and deliver coordinated actions. </strong>
+              <strong>You stay in control.</strong> The system <strong>anticipates</strong> what your business needs
+              and <strong>delivers coordinated actions</strong>.
             </p>
             <p className="text-gray-300 mb-6">
-               The result? Seamless operations, healthier margins, and a business that’s always one step ahead.
+              The result? <strong>Seamless operations</strong>, healthier margins, and a business that’s always one step ahead.
             </p>
             <div className="flex flex-col sm:flex-row gap-3">
               <Button size="lg" className="rounded-2xl" onClick={handleBriefing}>
@@ -254,8 +282,8 @@ export default function App() {
               </Button>
             </div>
             <div className="mt-6 flex flex-wrap items-center gap-4 text-sm text-gray-300">
-              <div className="flex items-center gap-2"><Shield className="h-4 w-4" />Privacy‑first</div>
-              <div className="flex items-center gap-2"><Zap className="h-4 w-4" />Offline‑capable</div>
+              <div className="flex items-center gap-2"><Shield className="h-4 w-4" />Privacy-first</div>
+              <div className="flex items-center gap-2"><Zap className="h-4 w-4" />Offline-capable</div>
               <div className="flex items-center gap-2"><Smartphone className="h-4 w-4" />Phone & desktop</div>
             </div>
           </div>
@@ -263,9 +291,9 @@ export default function App() {
             <div className="text-xs text-gray-300 mb-2">Agent feed · Today</div>
             {[
               "Replenish 18 SKUs before Friday; margin impact +2.1%",
-              "Shift 20% promo budget from low‑lift items to fast movers",
-              "Vendor swap for biscuits; expected lead‑time −3 days",
-              "Draft WhatsApp for price‑sensitive buyers in Zone B",
+              "Shift 20% promo budget from low-lift items to fast movers",
+              "Vendor swap for biscuits; expected lead-time −3 days",
+              "Draft WhatsApp for price-sensitive buyers in Zone B",
             ].map((t, i) => (
               <div key={i} className="flex items-start gap-2 py-2">
                 <span className="mt-1 h-2 w-2 rounded-full bg-emerald-400" />
@@ -284,31 +312,15 @@ export default function App() {
         <div className="max-w-6xl mx-auto px-4 py-16">
           <h2 className="text-2xl font-semibold mb-2">The Agentic Suite</h2>
           <p className="text-gray-600 mb-8 max-w-2xl">
-            A layered system that moves from data → decisions → delivery, with governance built‑in.
-            Modern, modular, and ready for real‑world retail.
+            A layered system that moves from data → decisions → delivery, with governance built-in.
+            Modern, modular, and ready for real-world retail.
           </p>
           <div className="grid md:grid-cols-4 gap-6">
             {[
-              {
-                icon: <Layers className="h-5 w-5" />,
-                t: "Data Layer",
-                d: "Connect POS, Excel/CSV, vendor lists. Clean & unify SKUs, vendors, customers.",
-              },
-              {
-                icon: <Cpu className="h-5 w-5" />,
-                t: "Reasoning Layer",
-                d: "Causal models rank purchase, price, and promo moves by expected ROI.",
-              },
-              {
-                icon: <Workflow className="h-5 w-5" />,
-                t: "Action Layer",
-                d: "One‑click execution: WhatsApp, lists, emails, ERP bridges—no new habits required.",
-              },
-              {
-                icon: <ShieldCheck className="h-5 w-5" />,
-                t: "Assurance Layer",
-                d: "Privacy, on‑prem options, audit trails and human‑in‑the‑loop controls.",
-              },
+              { icon: <Layers className="h-5 w-5" />, t: "Data Layer", d: "Connect POS, Excel/CSV, vendor lists. Clean & unify SKUs, vendors, customers." },
+              { icon: <Cpu className="h-5 w-5" />, t: "Reasoning Layer", d: "Causal models rank purchase, price, and promo moves by expected ROI." },
+              { icon: <Workflow className="h-5 w-5" />, t: "Action Layer", d: "One-click execution: WhatsApp, lists, emails, ERP bridges—no new habits required." },
+              { icon: <ShieldCheck className="h-5 w-5" />, t: "Assurance Layer", d: "Privacy, on-prem options, audit trails and human-in-the-loop controls." },
             ].map((s, i) => (
               <Card key={i} className="rounded-2xl">
                 <CardHeader className="flex items-center gap-3">
@@ -328,23 +340,11 @@ export default function App() {
           <h3 className="text-xl font-semibold mb-6">Agentic Suite modules</h3>
           <div className="grid md:grid-cols-3 gap-6">
             {[
-              {
-                icon: <LayoutDashboard className="h-5 w-5" />,
-                t: "Command Console",
-                d: "Review agent suggestions, approve in bulk, and track impact.",
-              },
-              {
-                icon: <Bot className="h-5 w-5" />,
-                t: "Retail Agents",
-                d: "Specialists for Replenish, Price, Promo, Vendor—coordinated, not siloed.",
-              },
+              { icon: <LayoutDashboard className="h-5 w-5" />, t: "Command Console", d: "Review agent suggestions, approve in bulk, and track impact." },
+              { icon: <Bot className="h-5 w-5" />, t: "Retail Agents", d: "Specialists for Replenish, Price, Promo, Vendor—coordinated, not siloed." },
               { icon: <Plug className="h-5 w-5" />, t: "Connector Hub", d: "POS/Excel/CSV now; ERP and marketplace bridges next." },
-              {
-                icon: <MessageSquare className="h-5 w-5" />,
-                t: "WhatsApp Workbench",
-                d: "Ready‑to‑send messages to customers & suppliers—multi‑language.",
-              },
-              { icon: <Building2 className="h-5 w-5" />, t: "ERP Bridges", d: "Voucher‑safe exports and imports to your existing systems." },
+              { icon: <MessageSquare className="h-5 w-5" />, t: "WhatsApp Workbench", d: "Ready-to-send messages to customers & suppliers—multi-language." },
+              { icon: <Building2 className="h-5 w-5" />, t: "ERP Bridges", d: "Voucher-safe exports and imports to your existing systems." },
               { icon: <LineChart className="h-5 w-5" />, t: "Impact Feeds", d: "Before/after metrics and weekly impact notes you can trust." },
             ].map((m, i) => (
               <Card key={i} className="rounded-2xl">
@@ -367,9 +367,9 @@ export default function App() {
             {[
               { icon: <Store className="h-5 w-5" />, title: "Grocery & Convenience", pts: ["Smart replenishment", "Expiry risk watch", "Promo lift guidance"] },
               { icon: <Store className="h-5 w-5" />, title: "Pharmacy", pts: ["Batch/expiry controls", "Shortage radar", "Therapy substitutions"] },
-              { icon: <Store className="h-5 w-5" />, title: "Quick‑service F&B", pts: ["Recipe costing", "Prep forecasts", "Vendor price checks"] },
+              { icon: <Store className="h-5 w-5" />, title: "Quick-service F&B", pts: ["Recipe costing", "Prep forecasts", "Vendor price checks"] },
               { icon: <Store className="h-5 w-5" />, title: "Electronics", pts: ["Assortment gaps", "Seasonal price nudges", "Warranty funnel nudges"] },
-              { icon: <Store className="h-5 w-5" />, title: "Fashion", pts: ["Size‑color depth", "Markdown planning", "Repeat buyer activation"] },
+              { icon: <Store className="h-5 w-5" />, title: "Fashion", pts: ["Size-color depth", "Markdown planning", "Repeat buyer activation"] },
               { icon: <Store className="h-5 w-5" />, title: "Home & Lifestyle", pts: ["Bundle suggestions", "Vendor SLAs", "Regional preferences"] },
             ].map((b, i) => (
               <Card key={i} className="rounded-2xl">
@@ -432,26 +432,20 @@ export default function App() {
                     <CardContent>
                       <div className="flex flex-wrap gap-2 mb-4">
                         {a.impact.map((chip, j) => (
-                          <span key={j} className="text-xs px-3 py-1 rounded-full bg-gray-100 border">
-                            {chip}
-                          </span>
+                          <span key={j} className="text-xs px-3 py-1 rounded-full bg-gray-100 border">{chip}</span>
                         ))}
                       </div>
                       <div className="grid md:grid-cols-2 gap-4 text-sm text-gray-700">
                         <ul className="list-disc pl-5 space-y-1">
-                          {a.actions.slice(0, Math.ceil(a.actions.length / 2)).map((p, j) => (
-                            <li key={j}>{p}</li>
-                          ))}
+                          {a.actions.slice(0, Math.ceil(a.actions.length / 2)).map((p, j) => <li key={j}>{p}</li>)}
                         </ul>
                         <ul className="list-disc pl-5 space-y-1">
-                          {a.actions.slice(Math.ceil(a.actions.length / 2)).map((p, j) => (
-                            <li key={j}>{p}</li>
-                          ))}
+                          {a.actions.slice(Math.ceil(a.actions.length / 2)).map((p, j) => <li key={j}>{p}</li>)}
                         </ul>
                       </div>
                       <div className="mt-5">
                         <Button className="rounded-2xl" onClick={handleBriefing}>
-                          See a 5‑min walkthrough <ArrowRight className="h-4 w-4 ml-1" />
+                          See a 5-min walkthrough <ArrowRight className="h-4 w-4 ml-1" />
                         </Button>
                       </div>
                     </CardContent>
@@ -481,19 +475,16 @@ export default function App() {
           <h2 className="text-2xl font-semibold mb-4">Why it’s different</h2>
           <div className="grid md:grid-cols-3 gap-6 text-sm text-gray-700">
             <div className="p-5 bg-gray-50 rounded-2xl border">
-              <div className="font-medium mb-1">Root‑cause intelligence</div>
-              <div>
-                Agents trace <em>why</em> (vendor lead time, price elasticity, assortment depth) and propose
-                the fix — not just flag symptoms.
-              </div>
+              <div className="font-medium mb-1">Root-cause intelligence</div>
+              <div>Agents trace <em>why</em> (vendor lead time, price elasticity, assortment depth) and propose the fix — not just flag symptoms.</div>
             </div>
             <div className="p-5 bg-gray-50 rounded-2xl border">
               <div className="font-medium mb-1">Actions over dashboards</div>
               <div>Every insight becomes an actionable list, message, or export. Move the business, not pixels.</div>
             </div>
             <div className="p-5 bg-gray-50 rounded-2xl border">
-              <div className="font-medium mb-1">Human‑in‑the‑loop control</div>
-              <div>Agents propose; you approve. Audit trail on every step. Private by design, offline‑capable.</div>
+              <div className="font-medium mb-1">Human-in-the-loop control</div>
+              <div>Agents propose; you approve. Audit trail on every step. Private by design, offline-capable.</div>
             </div>
           </div>
         </div>
@@ -505,9 +496,9 @@ export default function App() {
           <h2 className="text-2xl font-semibold mb-6">Principles we won’t compromise</h2>
           <div className="grid md:grid-cols-4 gap-6">
             {[
-              { icon: <ShieldCheck className="h-5 w-5" />, t: "Privacy by design", d: "Own your data. On‑prem options. No data brokers." },
+              { icon: <ShieldCheck className="h-5 w-5" />, t: "Privacy by design", d: "Own your data. On-prem options. No data brokers." },
               { icon: <Workflow className="h-5 w-5" />, t: "Human in the loop", d: "Agents propose. You approve. Audit trail everywhere." },
-              { icon: <Zap className="h-5 w-5" />, t: "Real‑world speed", d: "Fast on modest hardware. Offline‑capable." },
+              { icon: <Zap className="h-5 w-5" />, t: "Real-world speed", d: "Fast on modest hardware. Offline-capable." },
               { icon: <LineChart className="h-5 w-5" />, t: "Measured impact", d: "Before/after metrics, not vanity charts." },
             ].map((p, i) => (
               <Card key={i} className="rounded-2xl">
@@ -540,7 +531,7 @@ export default function App() {
             <ul className="text-sm text-gray-700 space-y-3">
               <li><span className="font-medium">Is this a dashboard?</span> No—agents produce actions you can execute.</li>
               <li><span className="font-medium">Will it work with my POS?</span> Yes—via CSV/Excel now, connectors next.</li>
-              <li><span className="font-medium">How private is my data?</span> Local or on‑prem with audit trails.</li>
+              <li><span className="font-medium">How private is my data?</span> Local or on-prem with audit trails.</li>
             </ul>
           </div>
         </div>
@@ -551,18 +542,23 @@ export default function App() {
         <div className="max-w-3xl mx-auto px-4 py-16">
           <h2 className="text-2xl font-semibold mb-6">Request access</h2>
           <form className="grid gap-4" onSubmit={handleSubmit}>
-            <Input placeholder="Your name" value={name} onChange={(e) => setName(e.target.value)} className="rounded-2xl" />
-            <Input placeholder="Work email" value={email} onChange={(e) => setEmail(e.target.value)} className="rounded-2xl" />
+            <Input placeholder="Your name" value={name} onChange={(e) => setName(e.target.value)} className="rounded-2xl" required />
+            <Input type="email" placeholder="Work email" value={email} onChange={(e) => setEmail(e.target.value)} className="rounded-2xl" required />
             <Textarea
               placeholder="Tell us about your retail footprint (stores, categories)"
               value={message}
               onChange={(e) => setMessage(e.target.value)}
               className="rounded-2xl"
+              required
             />
-            <Button type="submit" className="rounded-2xl">Send</Button>
+            <Button type="submit" className="rounded-2xl" disabled={sending}>
+              {sending ? "Sending..." : "Send"}
+            </Button>
+            {sent && <p className="text-sm text-emerald-600">Thanks! We’ll reply from team@perceptivelabs.in.</p>}
+            {error && <p className="text-sm text-red-600">{error}</p>}
           </form>
           <p className="text-sm text-gray-500 mt-4">
-            Prefer email? <a className="underline" href="mailto:team@clyptt.com">team@clyptt.com</a>
+            Prefer email? <a className="underline" href="mailto:team@perceptivelabs.in">team@perceptivelabs.in</a>
           </p>
         </div>
       </section>
