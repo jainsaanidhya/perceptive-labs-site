@@ -435,7 +435,7 @@ export default function App() {
           </div>
 
           {/* Decorative / visual block (no buttons, no claims) */}
-          <div>
+          <div className="lg:mt-12">
             <div className="rounded-3xl border border-white/10 bg-white/5 shadow-soft overflow-hidden">
               <div className="p-6">
                 <div className="text-xs uppercase tracking-widest text-white/60 mb-4">How work closes</div>
@@ -492,7 +492,7 @@ export default function App() {
                 <div key={it.title} className="rounded-2xl border border-border/70 bg-surface shadow-sm overflow-hidden">
                   <button
                     type="button"
-                    className="w-full px-5 py-4 flex items-center justify-between gap-4 text-left"
+                    className="w-full px-5 py-4 flex items-start justify-between gap-4 text-left"
                     onClick={() => setOpenRealityIdx((cur) => (cur === idx ? -1 : idx))}
                     aria-expanded={isOpen}
                   >
@@ -501,9 +501,9 @@ export default function App() {
                         {it.icon}
                       </div>
                       <div className="min-w-0">
-                        <div className="flex items-baseline gap-3">
-                          <span className="text-xs text-subtext tabular-nums">{it.n}</span>
-                          <span className="font-medium truncate">{it.title}</span>
+                        <div className="flex items-start gap-3">
+                          <span className="text-xs text-subtext tabular-nums mt-0.5">{it.n}</span>
+                          <span className="font-medium leading-snug">{it.title}</span>
                         </div>
                       </div>
                     </div>
@@ -841,35 +841,39 @@ export default function App() {
           <div className="grid md:grid-cols-2 gap-6">
             {[
               {
+                icon: <Workflow className="h-5 w-5" aria-hidden="true" />,
                 title: "Operations-first (not demo-first)",
                 text: "We start from the workflow, the constraints, and the handoffs—not from a model capability list.",
               },
               {
+                icon: <LayoutDashboard className="h-5 w-5" aria-hidden="true" />,
                 title: "Works with what you already run",
                 text: "We integrate into existing systems and tools—so your software and dashboards adapt to your operations, not the other way around.",
               },
               {
+                icon: <Zap className="h-5 w-5" aria-hidden="true" />,
                 title: "Designed for exceptions",
                 text: "Real operations live in edge cases. We build so workflows don’t collapse when reality changes.",
               },
               {
+                icon: <Building2 className="h-5 w-5" aria-hidden="true" />,
                 title: "Builders and partners",
                 text: "We build agent systems internally (retail-first) and also implement custom intelligence for client operations.",
               },
               {
+                icon: <Users className="h-5 w-5" aria-hidden="true" />,
                 title: "Human value stays central",
                 text: "The goal isn’t “more AI.” The goal is less unnecessary work—so people can create more value.",
               },
             ].map((w) => (
-              <div key={w.title} className="rounded-2xl border border-border/70 bg-muted p-6">
-                <div className="flex items-start gap-3">
-                  <div
-                    className="mt-0.5 h-7 w-7 rounded-full bg-gradient-to-r from-brand to-brand2 text-white flex items-center justify-center text-sm"
-                    aria-hidden="true"
-                  >
-                    ✓
+              <div key={w.title} className="relative rounded-2xl border border-border/70 bg-muted p-6 overflow-hidden">
+                <div aria-hidden className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-brand to-brand2 opacity-70" />
+                <div aria-hidden className="pointer-events-none absolute -top-10 -right-10 h-28 w-28 rounded-full bg-brand/10 blur-2xl" />
+                <div className="flex items-start gap-4">
+                  <div className="mt-0.5 p-2.5 rounded-2xl bg-surface border border-border/70 text-brand shadow-sm">
+                    {w.icon}
                   </div>
-                  <div>
+                  <div className="min-w-0">
                     <div className="font-medium mb-1">{w.title}</div>
                     <div className="text-sm text-subtext leading-relaxed">{w.text}</div>
                   </div>
