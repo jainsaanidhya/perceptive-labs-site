@@ -39,9 +39,14 @@ export default function App() {
   const WORKER_URL = "https://perceptive-contact.jainsaanidhya.workers.dev/"; // replace with your Worker endpoint
 
   // ===== helpers =====
+  const prefersReducedMotion = () =>
+    typeof window !== "undefined" &&
+    !!window.matchMedia &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
   const scrollToId = (id) => {
     const el = document.getElementById(id);
-    el?.scrollIntoView({ behavior: "smooth", block: "start" });
+    el?.scrollIntoView({ behavior: prefersReducedMotion() ? "auto" : "smooth", block: "start" });
   };
 
   const handleTalk = () => {
@@ -316,14 +321,25 @@ export default function App() {
 
           <nav className="hidden md:flex items-center gap-6 text-sm">
             {nav.map((i) => (
-              <a key={i.href} href={i.href} className="hover:text-black">
+              <a
+                key={i.href}
+                href={i.href}
+                className="hover:text-black focus:outline-none focus:ring-2 focus:ring-gray-300 focus:ring-offset-2 rounded"
+              >
                 {i.label}
               </a>
             ))}
           </nav>
 
           <div className="flex items-center gap-2">
-            <Button variant="ghost" className="md:hidden" onClick={() => setMenuOpen((v) => !v)}>
+            <Button
+              variant="ghost"
+              className="md:hidden"
+              onClick={() => setMenuOpen((v) => !v)}
+              aria-label={menuOpen ? "Close menu" : "Open menu"}
+              aria-controls="mobile-nav"
+              aria-expanded={menuOpen}
+            >
               {menuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             </Button>
             <Button className="rounded-2xl" onClick={handleTalk}>
@@ -333,13 +349,13 @@ export default function App() {
         </div>
 
         {menuOpen && (
-          <div className="md:hidden border-t">
+          <div id="mobile-nav" className="md:hidden border-t">
             <div className="max-w-6xl mx-auto px-4 py-3 grid gap-1 text-sm">
               {nav.map((i) => (
                 <a
                   key={i.href}
                   href={i.href}
-                  className="py-2"
+                  className="py-2 rounded focus:outline-none focus:ring-2 focus:ring-gray-300 focus:ring-offset-2"
                   onClick={() => setMenuOpen(false)}
                 >
                   {i.label}
@@ -708,13 +724,13 @@ export default function App() {
             onMouseLeave={onIndustryEnd}
           >
             <div
-              className="flex transition-transform duration-300"
-              style={{ transform: `translateX(-${industryIdx * 100}%)`, width: `${INDUSTRIES.length * 100}%` }}
+              className="flex w-full transition-transform duration-300 motion-reduce:duration-0 will-change-transform"
+              style={{ transform: `translateX(-${industryIdx * 100}%)` }}
             >
               {INDUSTRIES.map((x) => {
                 const Icon = x.Icon;
                 return (
-                  <div key={x.key} className="w-full shrink-0" style={{ width: "100%" }}>
+                  <div key={x.key} className="w-full flex-none">
                     <Card className="rounded-3xl">
                       <CardHeader className="flex items-center gap-3">
                         <div className="p-2 rounded-xl bg-white border">
@@ -888,6 +904,8 @@ export default function App() {
           <div>
             <form className="grid gap-4" onSubmit={handleSubmit}>
               <Input
+                name="name"
+                autoComplete="name"
                 placeholder="Your name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
@@ -896,6 +914,9 @@ export default function App() {
               />
               <Input
                 type="email"
+                name="email"
+                autoComplete="email"
+                inputMode="email"
                 placeholder="Work email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -903,6 +924,7 @@ export default function App() {
                 required
               />
               <Textarea
+                name="message"
                 placeholder="Workflow + tools involved + outcome you want."
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
