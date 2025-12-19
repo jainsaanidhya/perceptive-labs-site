@@ -121,8 +121,8 @@ export default function App() {
               When tools don’t speak in actions, people become the bridge—copying information,
               reconciling numbers, and keeping multiple versions of “truth” aligned.
             </p>
-            <p className="mt-3 text-gray-600">
-              <span className="font-medium text-gray-700">Common signs:</span> repeated updates,
+            <p className="mt-3 text-subtext">
+              <span className="font-medium text-text">Common signs:</span> repeated updates,
               parallel trackers, daily checklists that never end.
             </p>
           </>
@@ -138,8 +138,8 @@ export default function App() {
               Reports get reviewed in batches. By the time a decision is taken, the situation has
               already changed—and the business becomes reactive by default.
             </p>
-            <p className="mt-3 text-gray-600">
-              <span className="font-medium text-gray-700">Common signs:</span> late reorder
+            <p className="mt-3 text-subtext">
+              <span className="font-medium text-text">Common signs:</span> late reorder
               decisions, delayed pricing moves, slow response to demand shifts.
             </p>
           </>
@@ -155,8 +155,8 @@ export default function App() {
               Automation handles the happy path. Real operations live in exceptions—mismatches,
               delays, missing inputs, edge cases—and that’s what consumes the team.
             </p>
-            <p className="mt-3 text-gray-600">
-              <span className="font-medium text-gray-700">Common signs:</span> firefighting,
+            <p className="mt-3 text-subtext">
+              <span className="font-medium text-text">Common signs:</span> firefighting,
               constant escalations, “why did this happen again?” loops.
             </p>
           </>
@@ -172,8 +172,8 @@ export default function App() {
               Your best operators become workflow managers—routing tasks, chasing approvals,
               updating stakeholders—while real value creation gets squeezed out.
             </p>
-            <p className="mt-3 text-gray-600">
-              <span className="font-medium text-gray-700">Common signs:</span> more meetings,
+            <p className="mt-3 text-subtext">
+              <span className="font-medium text-text">Common signs:</span> more meetings,
               more follow-ups, less true progress.
             </p>
           </>
@@ -310,10 +310,10 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-white text-gray-900 scroll-smooth">
+    <div className="min-h-screen bg-bg text-text overflow-x-hidden break-words scroll-smooth">
       {/* Top bar */}
-      <header className="sticky top-0 z-50 bg-white/80 backdrop-blur border-b">
-        <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+      <header className="sticky top-0 z-50 bg-surface/70 backdrop-blur border-b border-border/60">
+        <div className="container-page py-3 flex items-center justify-between">
           <a href="#overview" className="flex items-center gap-2 group" onClick={() => setMenuOpen(false)}>
             <img src="/logo.png" alt="Perceptive Labs" className="h-9 w-auto rounded" />
             <span className="font-semibold text-lg group-hover:opacity-90">Perceptive Labs</span>
@@ -324,7 +324,7 @@ export default function App() {
               <a
                 key={i.href}
                 href={i.href}
-                className="hover:text-black focus:outline-none focus:ring-2 focus:ring-gray-300 focus:ring-offset-2 rounded"
+                className="hover:text-brand focus:outline-none focus:ring-2 focus:ring-brand/30 focus:ring-offset-2 focus:ring-offset-bg rounded"
               >
                 {i.label}
               </a>
@@ -349,13 +349,13 @@ export default function App() {
         </div>
 
         {menuOpen && (
-          <div id="mobile-nav" className="md:hidden border-t">
-            <div className="max-w-6xl mx-auto px-4 py-3 grid gap-1 text-sm">
+          <div id="mobile-nav" className="md:hidden border-t border-border/60">
+            <div className="container-page py-3 grid gap-1 text-sm">
               {nav.map((i) => (
                 <a
                   key={i.href}
                   href={i.href}
-                  className="py-2 rounded focus:outline-none focus:ring-2 focus:ring-gray-300 focus:ring-offset-2"
+                  className="py-2 rounded focus:outline-none focus:ring-2 focus:ring-brand/30 focus:ring-offset-2 focus:ring-offset-bg"
                   onClick={() => setMenuOpen(false)}
                 >
                   {i.label}
@@ -367,30 +367,35 @@ export default function App() {
       </header>
 
       {/* Overview / Hero */}
-      <section id="overview" className="relative overflow-hidden scroll-mt-24">
+      <section id="overview" className="relative overflow-hidden bg-bg scroll-mt-24">
         {/* subtle background */}
         <div aria-hidden className="pointer-events-none absolute inset-0">
-          <div className="absolute -top-48 left-1/2 h-72 w-[44rem] -translate-x-1/2 rounded-full bg-gray-100 blur-3xl" />
-          <div className="absolute -bottom-48 right-[-6rem] h-72 w-72 rounded-full bg-gray-50 blur-3xl" />
-          <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(0,0,0,0.04)_1px,transparent_1px),linear-gradient(to_bottom,rgba(0,0,0,0.04)_1px,transparent_1px)] bg-[size:64px_64px] opacity-25" />
+          <div className="absolute -top-48 left-1/2 h-72 w-[44rem] -translate-x-1/2 rounded-full bg-brand/12 blur-3xl" />
+          <div className="absolute -bottom-48 right-[-6rem] h-72 w-72 rounded-full bg-brand2/10 blur-3xl" />
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,hsl(var(--brand)/0.10)_1px,transparent_1px),linear-gradient(to_bottom,hsl(var(--brand)/0.10)_1px,transparent_1px)] bg-[size:64px_64px] opacity-20" />
         </div>
 
-        <div className="relative max-w-6xl mx-auto px-4 pt-16 pb-14 md:pt-20 md:pb-16 grid md:grid-cols-2 gap-10 items-start">
+        <div className="relative container-page pt-16 pb-14 sm:pt-20 sm:pb-16 lg:pt-24 lg:pb-20 grid lg:grid-cols-2 gap-12 items-start">
           <div>
-            <p className="text-xs uppercase tracking-widest text-gray-500 mb-4">Perceptive Labs</p>
+            <p className="section-label mb-4">Perceptive Labs</p>
 
-            <p className="text-sm text-gray-600 mb-3">Intelligence for the business of tomorrow.</p>
+            <div className="inline-flex items-center gap-2 rounded-full border border-brand/20 bg-brand/10 px-3 py-1 text-xs text-brand mb-4">
+              <span className="h-1.5 w-1.5 rounded-full bg-brand" aria-hidden="true" />
+              Intelligence for the business of tomorrow.
+            </div>
 
-            <h1 className="text-4xl md:text-5xl font-semibold leading-tight mb-4">Operations, without the drag.</h1>
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-semibold leading-[1.05] tracking-tight mb-4">
+              Operations, without the drag.
+            </h1>
 
-            <p className="text-gray-700 mb-7 max-w-xl">
+            <p className="text-subtext mb-7 max-w-xl">
               We help businesses reduce manual work, improve operational efficiency, and turn data into decisions that
               actually get executed—inside the tools and workflows you already run.
             </p>
 
             <div className="grid gap-3 mb-8">
               <div className="flex items-start gap-3">
-                <div className="mt-0.5 p-2 rounded-xl bg-gray-50 border">
+                <div className="mt-0.5 p-2 rounded-xl bg-brand/10 border border-brand/20 text-brand">
                   <Workflow className="h-4 w-4" aria-hidden="true" />
                 </div>
                 <div>
@@ -398,7 +403,7 @@ export default function App() {
                 </div>
               </div>
               <div className="flex items-start gap-3">
-                <div className="mt-0.5 p-2 rounded-xl bg-gray-50 border">
+                <div className="mt-0.5 p-2 rounded-xl bg-brand/10 border border-brand/20 text-brand">
                   <Zap className="h-4 w-4" aria-hidden="true" />
                 </div>
                 <div>
@@ -406,7 +411,7 @@ export default function App() {
                 </div>
               </div>
               <div className="flex items-start gap-3">
-                <div className="mt-0.5 p-2 rounded-xl bg-gray-50 border">
+                <div className="mt-0.5 p-2 rounded-xl bg-brand/10 border border-brand/20 text-brand">
                   <LayoutDashboard className="h-4 w-4" aria-hidden="true" />
                 </div>
                 <div>
@@ -423,14 +428,14 @@ export default function App() {
               </Button>
             </div>
 
-            <p className="mt-6 text-sm text-gray-600">Retail-built. Designed for real operational reality.</p>
+            <p className="mt-6 text-sm text-subtext">Retail-built. Designed for real operational reality.</p>
           </div>
 
           {/* Decorative / visual block (no buttons, no claims) */}
           <div className="md:pt-2">
-            <div className="rounded-3xl border bg-white shadow-sm overflow-hidden">
+            <div className="rounded-3xl border border-border/70 bg-surface shadow-soft overflow-hidden">
               <div className="p-6">
-                <div className="text-xs uppercase tracking-widest text-gray-500 mb-4">A simple loop</div>
+                <div className="section-label mb-4">A simple loop</div>
                 <div className="grid gap-3">
                   {[
                     { t: "Observe", d: "Signals from operations" },
@@ -439,43 +444,47 @@ export default function App() {
                     { t: "Verify", d: "Check outcomes, continue" },
                   ].map((x, idx) => (
                     <div key={x.t} className="flex items-start gap-3">
-                      <div className="mt-0.5 h-7 w-7 rounded-full border bg-gray-50 flex items-center justify-center text-xs text-gray-600">
+                      <div className="mt-0.5 h-7 w-7 rounded-full border border-border/60 bg-muted flex items-center justify-center text-xs text-subtext">
                         {idx + 1}
                       </div>
                       <div className="flex-1">
                         <div className="font-medium">{x.t}</div>
-                        <div className="text-sm text-gray-600">{x.d}</div>
+                        <div className="text-sm text-subtext">{x.d}</div>
                       </div>
                     </div>
                   ))}
                 </div>
               </div>
 
-              <div aria-hidden className="h-20 bg-gradient-to-r from-gray-50 via-white to-gray-50 border-t" />
+              <div
+                aria-hidden
+                className="h-20 bg-gradient-to-r from-brand/10 via-surface to-brand2/10 border-t border-border/60"
+              />
             </div>
           </div>
         </div>
       </section>
 
       {/* Reality */}
-      <section id="reality" className="bg-white border-t scroll-mt-24">
-        <div className="max-w-6xl mx-auto px-4 py-16 grid lg:grid-cols-[1fr_1.15fr] gap-10 items-start">
+      <section id="reality" className="bg-surface scroll-mt-24">
+        <div aria-hidden className="hairline" />
+        <div className="container-page section-pad grid lg:grid-cols-[0.95fr_1.05fr] gap-10 items-start">
           <div className="lg:sticky lg:top-24">
-            <p className="text-xs uppercase tracking-widest text-gray-500 mb-3">Reality</p>
-            <h2 className="text-2xl md:text-3xl font-semibold mb-4">Why teams stay busy—and execution still slows</h2>
-            <p className="text-gray-700 mb-4">
-              Most businesses have capable people and plenty of software. But day‑to‑day work still runs on follow‑ups,
+            <p className="section-label mb-3">Reality</p>
+            <h2 className="section-title mb-4">Why teams stay busy—and execution still slows</h2>
+            <p className="text-subtext leading-relaxed mb-4 max-w-prose">
+              Most businesses have capable people and plenty of software. But day-to-day work still runs on follow-ups,
               spreadsheets, manual checks, and coordination between tools—because systems don’t carry responsibility.
               Over time, teams end up running the process instead of the process running itself.
             </p>
-            <p className="text-gray-700">This is where time, margin, and momentum quietly leak.</p>
+            <p className="text-subtext max-w-prose">This is where time, margin, and momentum quietly leak.</p>
           </div>
 
           <div className="space-y-3">
             {realityItems.map((it, idx) => {
               const isOpen = idx === openRealityIdx;
               return (
-                <div key={it.title} className="rounded-2xl border bg-white overflow-hidden">
+                <div key={it.title} className="rounded-2xl border border-border/70 bg-surface shadow-sm overflow-hidden">
                   <button
                     type="button"
                     className="w-full px-5 py-4 flex items-center justify-between gap-4 text-left"
@@ -483,24 +492,24 @@ export default function App() {
                     aria-expanded={isOpen}
                   >
                     <div className="flex items-center gap-3 min-w-0">
-                      <div className="hidden sm:flex h-9 w-9 rounded-xl bg-gray-50 border items-center justify-center">
+                      <div className="hidden sm:flex h-9 w-9 rounded-xl bg-brand/10 border border-brand/20 text-brand items-center justify-center">
                         {it.icon}
                       </div>
                       <div className="min-w-0">
                         <div className="flex items-baseline gap-3">
-                          <span className="text-xs text-gray-500 tabular-nums">{it.n}</span>
+                          <span className="text-xs text-subtext tabular-nums">{it.n}</span>
                           <span className="font-medium truncate">{it.title}</span>
                         </div>
                       </div>
                     </div>
                     <span
-                      className="shrink-0 h-8 w-8 rounded-full border bg-gray-50 flex items-center justify-center text-gray-700"
+                      className="shrink-0 h-8 w-8 rounded-full border border-brand/20 bg-brand/10 flex items-center justify-center text-brand"
                       aria-hidden="true"
                     >
                       {isOpen ? "–" : "+"}
                     </span>
                   </button>
-                  {isOpen && <div className="px-5 pb-5 text-sm text-gray-700 leading-relaxed">{it.body}</div>}
+                  {isOpen && <div className="px-5 pb-5 text-sm text-subtext leading-relaxed">{it.body}</div>}
                 </div>
               );
             })}
@@ -509,11 +518,12 @@ export default function App() {
       </section>
 
       {/* Value */}
-      <section id="value" className="bg-gray-50 border-t scroll-mt-24">
-        <div className="max-w-6xl mx-auto px-4 py-16">
-          <p className="text-xs uppercase tracking-widest text-gray-500 mb-3">Value</p>
-          <h2 className="text-2xl md:text-3xl font-semibold mb-4">Turn workflows into self‑running operations</h2>
-          <p className="text-gray-700 mb-10 max-w-3xl">
+      <section id="value" className="bg-muted scroll-mt-24">
+        <div aria-hidden className="hairline" />
+        <div className="container-page section-pad">
+          <p className="section-label mb-3">Value</p>
+          <h2 className="section-title mb-4">Turn workflows into self-running operations</h2>
+          <p className="text-subtext mb-10 max-w-3xl leading-relaxed">
             We redesign operational work so routine execution no longer depends on humans, decisions happen on time, and
             people stay focused on judgment—not monitoring.
           </p>
@@ -526,7 +536,7 @@ export default function App() {
                 body: (
                   <>
                     We identify where humans are acting as “glue” between systems and replace that glue with reliable
-                    flow—so routine actions stop requiring follow‑ups and copy/paste work.
+                    flow—so routine actions stop requiring follow-ups and copy/paste work.
                   </>
                 ),
               },
@@ -553,27 +563,27 @@ export default function App() {
             ].map((p) => (
               <Card key={p.title} className="rounded-2xl">
                 <CardHeader className="flex items-center gap-3">
-                  <div className="p-2 rounded-xl bg-white border">{p.icon}</div>
+                  <div className="p-2 rounded-xl bg-brand/10 border border-brand/20 text-brand">{p.icon}</div>
                   <CardTitle className="text-base">{p.title}</CardTitle>
                 </CardHeader>
-                <CardContent className="text-sm text-gray-700 leading-relaxed">{p.body}</CardContent>
+                <CardContent className="text-sm text-subtext leading-relaxed">{p.body}</CardContent>
               </Card>
             ))}
           </div>
 
           <div className="mt-10 grid lg:grid-cols-2 gap-6">
-            <div className="rounded-2xl border bg-white p-6">
+            <div className="rounded-2xl border border-border/70 bg-surface shadow-soft p-6">
               <div className="font-medium mb-3">What teams typically notice</div>
-              <ul className="text-sm text-gray-700 list-disc pl-5 space-y-2">
+              <ul className="text-sm text-subtext list-disc pl-5 space-y-2">
                 <li>Fewer handoffs and fewer “check with X” moments</li>
                 <li>Faster cycle times for recurring work</li>
                 <li>Exceptions surfaced early, with clear next actions</li>
                 <li>More time for strategy, growth, and customer outcomes</li>
               </ul>
             </div>
-            <div className="rounded-2xl border bg-white p-6">
+            <div className="rounded-2xl border border-border/70 bg-surface shadow-soft p-6">
               <div className="font-medium mb-3">A simple principle</div>
-              <p className="text-sm text-gray-700 leading-relaxed">
+              <p className="text-sm text-subtext leading-relaxed">
                 And instead of forcing teams to adapt to new tools, we help your existing software and dashboards adapt to
                 how your business actually works.
               </p>
@@ -583,14 +593,15 @@ export default function App() {
       </section>
 
       {/* Agentic AI */}
-      <section id="agentic" className="bg-white border-t scroll-mt-24">
-        <div className="max-w-6xl mx-auto px-4 py-16">
-          <p className="text-xs uppercase tracking-widest text-gray-500 mb-3">Agentic AI</p>
-          <h2 className="text-2xl md:text-3xl font-semibold mb-4">Agentic AI, explained simply</h2>
+      <section id="agentic" className="bg-surface scroll-mt-24">
+        <div aria-hidden className="hairline" />
+        <div className="container-page section-pad">
+          <p className="section-label mb-3">Agentic AI</p>
+          <h2 className="section-title mb-4">Agentic AI, explained simply</h2>
 
           <div className="grid lg:grid-cols-[1.1fr_0.9fr] gap-10 items-start">
             <div>
-              <p className="text-gray-700 leading-relaxed">
+              <p className="text-subtext leading-relaxed max-w-prose">
                 A capable employee doesn’t wait for step-by-step instructions. They remember context, understand what
                 matters, take the next action, and check the result. <br />
                 Agentic AI brings this same loop into software—so systems don’t just inform people, they can carry
@@ -620,24 +631,24 @@ export default function App() {
                     text: "acts, checks the outcome, and continues until complete",
                   },
                 ].map((a) => (
-                  <div key={a.title} className="rounded-2xl border bg-gray-50 p-5">
+                  <div key={a.title} className="rounded-2xl border border-border/70 bg-muted p-5">
                     <div className="flex items-center gap-3 mb-2">
-                      <div className="p-2 rounded-xl bg-white border">{a.icon}</div>
+                      <div className="p-2 rounded-xl bg-surface border border-border/70 text-brand">{a.icon}</div>
                       <div className="font-medium">{a.title}:</div>
                     </div>
-                    <div className="text-sm text-gray-700 leading-relaxed">{a.text}</div>
+                    <div className="text-sm text-subtext leading-relaxed">{a.text}</div>
                   </div>
                 ))}
               </div>
 
-              <p className="mt-8 text-gray-700">
-                <span className="font-medium">One-line distinction:</span> Automation follows rules. Agentic systems handle
+              <p className="mt-8 text-subtext">
+                <span className="font-medium text-text">One-line distinction:</span> Automation follows rules. Agentic systems handle
                 change and variability without collapsing back onto humans.
               </p>
 
-              <div className="mt-6 rounded-2xl border bg-white p-6">
+              <div className="mt-6 rounded-2xl border border-border/70 bg-surface shadow-soft p-6">
                 <div className="text-sm font-medium mb-3">What it isn’t</div>
-                <ul className="text-sm text-gray-700 list-disc pl-5 space-y-2">
+                <ul className="text-sm text-subtext list-disc pl-5 space-y-2">
                   <li>Not a chatbot</li>
                   <li>Not another dashboard</li>
                   <li>Not “advice” that still needs manual execution to become real</li>
@@ -646,9 +657,9 @@ export default function App() {
             </div>
 
             {/* simple visual metaphor */}
-            <div className="rounded-3xl border bg-white shadow-sm overflow-hidden">
+            <div className="rounded-3xl border border-border/70 bg-surface shadow-soft overflow-hidden">
               <div className="p-6">
-                <div className="text-xs uppercase tracking-widest text-gray-500 mb-4">The loop</div>
+                <div className="section-label mb-4">The loop</div>
                 <div className="grid gap-4">
                   {[
                     { t: "Context", d: "Remember what matters" },
@@ -657,29 +668,33 @@ export default function App() {
                     { t: "Verify", d: "Check and continue" },
                   ].map((x) => (
                     <div key={x.t} className="flex items-start gap-3">
-                      <div className="mt-0.5 h-9 w-9 rounded-xl bg-gray-50 border flex items-center justify-center">
+                      <div className="mt-0.5 h-9 w-9 rounded-xl bg-muted border border-border/60 flex items-center justify-center text-brand">
                         <ArrowRight className="h-4 w-4" aria-hidden="true" />
                       </div>
                       <div>
                         <div className="font-medium">{x.t}</div>
-                        <div className="text-sm text-gray-600">{x.d}</div>
+                        <div className="text-sm text-subtext">{x.d}</div>
                       </div>
                     </div>
                   ))}
                 </div>
               </div>
-              <div aria-hidden className="h-20 bg-gradient-to-r from-gray-50 via-white to-gray-50 border-t" />
+              <div
+                aria-hidden
+                className="h-20 bg-gradient-to-r from-brand/10 via-surface to-brand2/10 border-t border-border/60"
+              />
             </div>
           </div>
         </div>
       </section>
 
       {/* Industries */}
-      <section id="industries" className="bg-gray-50 border-t scroll-mt-24">
-        <div className="max-w-6xl mx-auto px-4 py-16">
-          <p className="text-xs uppercase tracking-widest text-gray-500 mb-3">Industries</p>
-          <h2 className="text-2xl md:text-3xl font-semibold mb-4">Where manual work quietly eats margin</h2>
-          <p className="text-gray-700 mb-8 max-w-3xl">
+      <section id="industries" className="bg-muted scroll-mt-24">
+        <div aria-hidden className="hairline" />
+        <div className="container-page section-pad">
+          <p className="section-label mb-3">Industries</p>
+          <h2 className="section-title mb-4">Where manual work quietly eats margin</h2>
+          <p className="text-subtext mb-8 max-w-3xl leading-relaxed">
             Different industries look different on the surface. The operational drag is usually the same: coordination,
             delays, and exceptions. Use these examples to recognise the pattern.
           </p>
@@ -695,10 +710,10 @@ export default function App() {
                   type="button"
                   onClick={() => setIndustryIdx(idx)}
                   className={
-                    "inline-flex items-center gap-2 px-3 py-2 rounded-full text-sm border transition-colors " +
+                    "inline-flex items-center gap-2 px-3 py-2 rounded-full text-sm border transition-colors focus:outline-none focus:ring-2 focus:ring-brand/30 focus:ring-offset-2 focus:ring-offset-bg " +
                     (active
-                      ? "bg-black text-white border-black"
-                      : "bg-white text-gray-800 border-gray-200 hover:bg-gray-50")
+                      ? "bg-gradient-to-r from-brand to-brand2 text-white border-transparent shadow-soft"
+                      : "bg-surface text-text border-border/70 hover:bg-bg")
                   }
                 >
                   <Icon className="h-4 w-4" aria-hidden="true" />
@@ -733,23 +748,23 @@ export default function App() {
                   <div key={x.key} className="w-full flex-none">
                     <Card className="rounded-3xl">
                       <CardHeader className="flex items-center gap-3">
-                        <div className="p-2 rounded-xl bg-white border">
+                        <div className="p-2 rounded-xl bg-brand/10 border border-brand/20 text-brand">
                           <Icon className="h-5 w-5" aria-hidden="true" />
                         </div>
                         <CardTitle className="text-base">{x.label}</CardTitle>
                       </CardHeader>
                       <CardContent className="grid md:grid-cols-2 gap-8 text-sm">
                         <div>
-                          <div className="text-xs uppercase tracking-widest text-gray-500 mb-3">Common friction</div>
-                          <ul className="text-gray-700 list-disc pl-5 space-y-2">
+                          <div className="section-label mb-3">Common friction</div>
+                          <ul className="text-subtext list-disc pl-5 space-y-2">
                             {x.friction.map((b) => (
                               <li key={b}>{b}</li>
                             ))}
                           </ul>
                         </div>
                         <div>
-                          <div className="text-xs uppercase tracking-widest text-gray-500 mb-3">What changes</div>
-                          <ul className="text-gray-700 list-disc pl-5 space-y-2">
+                          <div className="section-label mb-3">What changes</div>
+                          <ul className="text-subtext list-disc pl-5 space-y-2">
                             {x.change.map((b) => (
                               <li key={b}>{b}</li>
                             ))}
@@ -770,7 +785,7 @@ export default function App() {
                   aria-label={`Go to industry ${i + 1}`}
                   onClick={() => setIndustryIdx(i)}
                   className={
-                    "h-2 w-2 rounded-full transition-colors " + (i === industryIdx ? "bg-gray-900" : "bg-gray-300")
+                    "h-2 w-2 rounded-full transition-colors " + (i === industryIdx ? "bg-brand" : "bg-border")
                   }
                 />
               ))}
@@ -780,10 +795,11 @@ export default function App() {
       </section>
 
       {/* Why Perceptive */}
-      <section id="why" className="bg-white border-t scroll-mt-24">
-        <div className="max-w-6xl mx-auto px-4 py-16">
-          <p className="text-xs uppercase tracking-widest text-gray-500 mb-3">Why Perceptive</p>
-          <h2 className="text-2xl md:text-3xl font-semibold mb-8">Built for real operational reality</h2>
+      <section id="why" className="bg-surface scroll-mt-24">
+        <div aria-hidden className="hairline" />
+        <div className="container-page section-pad">
+          <p className="section-label mb-3">Why Perceptive</p>
+          <h2 className="section-title mb-8">Built for real operational reality</h2>
 
           <div className="grid md:grid-cols-2 gap-6">
             {[
@@ -808,17 +824,17 @@ export default function App() {
                 text: "The goal isn’t “more AI.” The goal is less unnecessary work—so people can create more value.",
               },
             ].map((w) => (
-              <div key={w.title} className="rounded-2xl border bg-gray-50 p-6">
+              <div key={w.title} className="rounded-2xl border border-border/70 bg-muted p-6">
                 <div className="flex items-start gap-3">
                   <div
-                    className="mt-0.5 h-7 w-7 rounded-full bg-gray-900 text-white flex items-center justify-center text-sm"
+                    className="mt-0.5 h-7 w-7 rounded-full bg-gradient-to-r from-brand to-brand2 text-white flex items-center justify-center text-sm"
                     aria-hidden="true"
                   >
                     ✓
                   </div>
                   <div>
                     <div className="font-medium mb-1">{w.title}</div>
-                    <div className="text-sm text-gray-700 leading-relaxed">{w.text}</div>
+                    <div className="text-sm text-subtext leading-relaxed">{w.text}</div>
                   </div>
                 </div>
               </div>
@@ -828,23 +844,24 @@ export default function App() {
       </section>
 
       {/* Offerings */}
-      <section id="offerings" className="bg-gray-50 border-t scroll-mt-24">
-        <div className="max-w-6xl mx-auto px-4 py-16">
-          <p className="text-xs uppercase tracking-widest text-gray-500 mb-3">Offerings</p>
-          <h2 className="text-2xl md:text-3xl font-semibold mb-8">Two ways to work with Perceptive</h2>
+      <section id="offerings" className="bg-muted scroll-mt-24">
+        <div aria-hidden className="hairline" />
+        <div className="container-page section-pad">
+          <p className="section-label mb-3">Offerings</p>
+          <h2 className="section-title mb-8">Two ways to work with Perceptive</h2>
 
           <div className="grid md:grid-cols-2 gap-6">
             <Card className="rounded-2xl">
               <CardHeader className="flex items-center gap-3">
-                <div className="p-2 rounded-xl bg-white border">
+                <div className="p-2 rounded-xl bg-brand/10 border border-brand/20 text-brand">
                   <Store className="h-5 w-5" aria-hidden="true" />
                 </div>
                 <CardTitle className="text-base">Retail agent systems (internal)</CardTitle>
               </CardHeader>
-              <CardContent className="text-sm text-gray-700 leading-relaxed">
+              <CardContent className="text-sm text-subtext leading-relaxed">
                 We build and operate agentic systems for retail operations internally. This keeps our work grounded in real
                 constraints: imperfect data, exceptions, coordination across teams, and the need for consistent execution.
-                <div className="mt-4 text-gray-700">
+                <div className="mt-4 text-subtext">
                   <span className="font-medium">Typical areas (examples, not a catalog):</span>
                   <div className="mt-2">Inventory & replenishment · Store operations · Vendor coordination · Pricing & promotions</div>
                 </div>
@@ -853,15 +870,15 @@ export default function App() {
 
             <Card className="rounded-2xl">
               <CardHeader className="flex items-center gap-3">
-                <div className="p-2 rounded-xl bg-white border">
+                <div className="p-2 rounded-xl bg-brand/10 border border-brand/20 text-brand">
                   <Building2 className="h-5 w-5" aria-hidden="true" />
                 </div>
                 <CardTitle className="text-base">Custom intelligence for your operations</CardTitle>
               </CardHeader>
-              <CardContent className="text-sm text-gray-700 leading-relaxed">
+              <CardContent className="text-sm text-subtext leading-relaxed">
                 We partner with businesses to design and implement intelligent systems tailored to your workflows, tools,
-                and goals—so operations become lighter and faster without forcing a rip‑and‑replace transformation.
-                <div className="mt-4 text-gray-700">
+                and goals—so operations become lighter and faster without forcing a rip-and-replace transformation.
+                <div className="mt-4 text-subtext">
                   <span className="font-medium">Typical areas:</span>
                   <div className="mt-2">Finance ops · Supply chain & logistics · Manufacturing ops · Shared services & internal workflows</div>
                 </div>
@@ -869,18 +886,18 @@ export default function App() {
             </Card>
           </div>
 
-          <div className="mt-8 rounded-2xl border bg-white p-6">
+          <div className="mt-8 rounded-2xl border border-border/70 bg-surface shadow-soft p-6">
             <div className="font-medium mb-4">Engagement shape (simple, not “architecture”)</div>
-            <div className="grid md:grid-cols-3 gap-4 text-sm text-gray-700">
-              <div className="rounded-2xl bg-gray-50 border p-5">
+            <div className="grid md:grid-cols-3 gap-4 text-sm text-subtext">
+              <div className="rounded-2xl bg-muted border border-border/70 p-5">
                 <div className="font-medium mb-1">Diagnose the drag</div>
                 <div>identify where time and decisions get stuck</div>
               </div>
-              <div className="rounded-2xl bg-gray-50 border p-5">
+              <div className="rounded-2xl bg-muted border border-border/70 p-5">
                 <div className="font-medium mb-1">Design + implement</div>
                 <div>embed intelligence into the workflow and tools</div>
               </div>
-              <div className="rounded-2xl bg-gray-50 border p-5">
+              <div className="rounded-2xl bg-muted border border-border/70 p-5">
                 <div className="font-medium mb-1">Operate + improve</div>
                 <div>measure outcomes, tune, expand to adjacent workflows</div>
               </div>
@@ -890,12 +907,13 @@ export default function App() {
       </section>
 
       {/* Contact */}
-      <section id="contact" className="bg-white border-t scroll-mt-24">
-        <div className="max-w-6xl mx-auto px-4 py-16 grid lg:grid-cols-2 gap-10 items-start">
+      <section id="contact" className="bg-surface scroll-mt-24">
+        <div aria-hidden className="hairline" />
+        <div className="container-page section-pad grid lg:grid-cols-2 gap-10 items-start">
           <div>
-            <p className="text-xs uppercase tracking-widest text-gray-500 mb-3">Contact</p>
-            <h2 className="text-2xl md:text-3xl font-semibold mb-4">Tell us what’s slowing you down</h2>
-            <p className="text-gray-700 max-w-xl">
+            <p className="section-label mb-3">Contact</p>
+            <h2 className="section-title mb-4">Tell us what’s slowing you down</h2>
+            <p className="text-subtext max-w-xl leading-relaxed">
               Share the workflow, the systems involved, and the outcome you want. We’ll reply with what we’d change—and
               what it would take to implement.
             </p>
@@ -937,9 +955,9 @@ export default function App() {
               {sent && <p className="text-sm text-emerald-600">Thanks! We’ll reply from team@perceptivelabs.in.</p>}
               {error && <p className="text-sm text-red-600">{error}</p>}
             </form>
-            <p className="text-sm text-gray-600 mt-4">
+            <p className="text-sm text-subtext mt-4">
               Prefer email?{" "}
-              <a className="underline" href="mailto:team@perceptivelabs.in">
+              <a className="underline hover:text-brand" href="mailto:team@perceptivelabs.in">
                 team@perceptivelabs.in
               </a>
             </p>
@@ -948,18 +966,19 @@ export default function App() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-gray-50 border-t">
-        <div className="max-w-6xl mx-auto px-4 py-10 grid md:grid-cols-3 gap-6 text-sm text-gray-600">
+      <footer className="bg-bg">
+        <div aria-hidden className="hairline" />
+        <div className="container-page py-10 grid md:grid-cols-3 gap-6 text-sm text-subtext">
           <div className="flex items-start gap-3">
             <img src="/logo.png" alt="Perceptive Labs" className="h-9 w-auto rounded" />
             <div>
-              <div className="font-semibold text-gray-900">Perceptive Labs</div>
+              <div className="font-semibold text-text">Perceptive Labs</div>
               <div>Intelligence for the business of tomorrow.</div>
             </div>
           </div>
 
           <div>
-            <div className="font-medium text-gray-900 mb-2">Quick links</div>
+            <div className="font-medium text-text mb-2">Quick links</div>
             <ul className="space-y-2">
               {[
                 ["#overview", "Overview"],
@@ -968,7 +987,7 @@ export default function App() {
                 ["#contact", "Contact"],
               ].map(([href, label]) => (
                 <li key={href}>
-                  <a href={href} className="hover:text-black">
+                  <a href={href} className="hover:text-brand">
                     {label}
                   </a>
                 </li>
@@ -977,9 +996,9 @@ export default function App() {
           </div>
 
           <div>
-            <div className="font-medium text-gray-900 mb-2">Contact</div>
+            <div className="font-medium text-text mb-2">Contact</div>
             <div>
-              <a className="underline hover:text-black" href="mailto:team@perceptivelabs.in">
+              <a className="underline hover:text-brand" href="mailto:team@perceptivelabs.in">
                 team@perceptivelabs.in
               </a>
             </div>

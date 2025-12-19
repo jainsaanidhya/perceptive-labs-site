@@ -2,4 +2,54 @@
 @tailwind components;
 @tailwind utilities;
 
-:root { color-scheme: light; }
+:root {
+  color-scheme: light;
+
+  /* Neutral system */
+  --bg: 240 20% 98%;
+  --surface: 0 0% 100%;
+  --muted: 240 18% 96%;
+  --border: 240 12% 90%;
+
+  --text: 222 47% 11%;
+  --subtext: 215 16% 46%;
+
+  /* Brand accents (modern, calm) */
+  --brand: 248 83% 60%;
+  --brand2: 188 94% 42%;
+}
+
+@layer base {
+  html {
+    @apply font-sans antialiased;
+    text-rendering: geometricPrecision;
+  }
+  body {
+    @apply bg-bg text-text;
+    font-feature-settings: "ss01" 1, "ss02" 1, "cv11" 1;
+  }
+  ::selection {
+    background: hsl(var(--brand) / 0.18);
+  }
+}
+
+@layer components {
+  .container-page {
+    @apply max-w-6xl mx-auto px-5 sm:px-6 lg:px-8;
+  }
+  .section-pad {
+    @apply py-14 sm:py-16 lg:py-20;
+  }
+  .section-label {
+    @apply text-xs uppercase tracking-widest text-subtext;
+  }
+  .section-title {
+    @apply text-2xl sm:text-3xl lg:text-4xl font-semibold tracking-tight;
+  }
+  .lead {
+    @apply text-subtext text-base sm:text-lg leading-relaxed;
+  }
+  .hairline {
+    @apply h-px w-full bg-gradient-to-r from-transparent via-brand/30 to-transparent;
+  }
+}
