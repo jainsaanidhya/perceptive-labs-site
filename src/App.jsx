@@ -315,8 +315,8 @@ export default function App() {
       <header className="sticky top-0 z-50 bg-surface/70 backdrop-blur border-b border-border/60">
         <div className="container-page py-3 flex items-center justify-between">
           <a href="#overview" className="flex items-center gap-2 group" onClick={() => setMenuOpen(false)}>
-            <img src="/logo.png" alt="Perceptive Labs" className="h-9 w-auto rounded" />
-            <span className="font-semibold text-lg group-hover:opacity-90">Perceptive Labs</span>
+            <img src="/logo.png" alt="Perceptive Labs" className="h-10 w-auto rounded" />
+            <span className="font-semibold text-lg sm:text-xl group-hover:opacity-90">Perceptive Labs</span>
           </a>
 
           <nav className="hidden md:flex items-center gap-6 text-sm">
@@ -367,55 +367,58 @@ export default function App() {
       </header>
 
       {/* Overview / Hero */}
-      <section id="overview" className="relative overflow-hidden bg-bg scroll-mt-24">
-        {/* subtle background */}
+      <section id="overview" className="relative overflow-hidden bg-slate-950 text-white scroll-mt-24">
+        {/* hero background (subtle, dynamic, minimal) */}
         <div aria-hidden className="pointer-events-none absolute inset-0">
-          <div className="absolute -top-48 left-1/2 h-72 w-[44rem] -translate-x-1/2 rounded-full bg-brand/12 blur-3xl" />
-          <div className="absolute -bottom-48 right-[-6rem] h-72 w-72 rounded-full bg-brand2/10 blur-3xl" />
-          <div className="absolute inset-0 bg-[linear-gradient(to_right,hsl(var(--brand)/0.10)_1px,transparent_1px),linear-gradient(to_bottom,hsl(var(--brand)/0.10)_1px,transparent_1px)] bg-[size:64px_64px] opacity-20" />
+          <div className="absolute inset-0 bg-gradient-to-b from-slate-950 via-slate-950 to-slate-900" />
+          <div className="absolute -top-56 left-1/2 h-80 w-[52rem] -translate-x-1/2 rounded-full bg-brand/20 blur-3xl" />
+          <div className="absolute -bottom-52 right-[-8rem] h-80 w-80 rounded-full bg-brand2/16 blur-3xl" />
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.06)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.06)_1px,transparent_1px)] bg-[size:72px_72px] opacity-30" />
         </div>
 
-        <div className="relative container-page pt-16 pb-14 sm:pt-20 sm:pb-16 lg:pt-24 lg:pb-20 grid lg:grid-cols-2 gap-12 items-start">
+        <div className="relative container-page pt-10 pb-12 sm:pt-14 sm:pb-14 lg:pt-16 lg:pb-16 grid lg:grid-cols-2 gap-12 items-start">
           <div>
-            <p className="section-label mb-4">Perceptive Labs</p>
-
-            <div className="inline-flex items-center gap-2 rounded-full border border-brand/20 bg-brand/10 px-3 py-1 text-xs text-brand mb-4">
-              <span className="h-1.5 w-1.5 rounded-full bg-brand" aria-hidden="true" />
-              Intelligence for the business of tomorrow.
+            <div className="mb-6">
+              <div className="text-base sm:text-lg font-semibold tracking-tight text-white/95">Perceptive Labs</div>
+              <div className="mt-1 text-lg sm:text-2xl font-semibold tracking-tight text-white/90">
+                Intelligence for the business of tomorrow.
+              </div>
             </div>
 
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-semibold leading-[1.05] tracking-tight mb-4">
-              Operations, without the drag.
+            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-semibold leading-[1.02] tracking-tight mb-5">
+              Operations, <span className="text-gradient">without the drag.</span>
             </h1>
 
-            <p className="text-subtext mb-7 max-w-xl">
-              We help businesses reduce manual work, improve operational efficiency, and turn data into decisions that
-              actually get executed—inside the tools and workflows you already run.
+            <p className="text-white/75 mb-8 max-w-xl text-base sm:text-lg leading-relaxed">
+              We help businesses <span className="font-semibold text-white">reduce manual work</span>, improve operational
+              efficiency, and turn data into{" "}
+              <span className="font-semibold text-white">decisions that actually get executed</span>—inside the tools and
+              workflows you already run.
             </p>
 
             <div className="grid gap-3 mb-8">
               <div className="flex items-start gap-3">
-                <div className="mt-0.5 p-2 rounded-xl bg-brand/10 border border-brand/20 text-brand">
+                <div className="mt-0.5 p-2 rounded-xl bg-white/5 border border-white/10 text-brand">
                   <Workflow className="h-4 w-4" aria-hidden="true" />
                 </div>
                 <div>
-                  <div className="text-sm font-medium">Remove busywork from critical workflows</div>
+                  <div className="text-sm sm:text-base font-medium text-white/90">Remove busywork from critical workflows</div>
                 </div>
               </div>
               <div className="flex items-start gap-3">
-                <div className="mt-0.5 p-2 rounded-xl bg-brand/10 border border-brand/20 text-brand">
+                <div className="mt-0.5 p-2 rounded-xl bg-white/5 border border-white/10 text-brand">
                   <Zap className="h-4 w-4" aria-hidden="true" />
                 </div>
                 <div>
-                  <div className="text-sm font-medium">Unblock execution across teams and systems</div>
+                  <div className="text-sm sm:text-base font-medium text-white/90">Unblock execution across teams and systems</div>
                 </div>
               </div>
               <div className="flex items-start gap-3">
-                <div className="mt-0.5 p-2 rounded-xl bg-brand/10 border border-brand/20 text-brand">
+                <div className="mt-0.5 p-2 rounded-xl bg-white/5 border border-white/10 text-brand">
                   <LayoutDashboard className="h-4 w-4" aria-hidden="true" />
                 </div>
                 <div>
-                  <div className="text-sm font-medium">
+                  <div className="text-sm sm:text-base font-medium text-white/90">
                     Let your software, tools, and dashboards adapt to you—not the other way around
                   </div>
                 </div>
@@ -428,14 +431,14 @@ export default function App() {
               </Button>
             </div>
 
-            <p className="mt-6 text-sm text-subtext">Retail-built. Designed for real operational reality.</p>
+            <p className="mt-6 text-sm text-white/60">Retail-built. Designed for real operational reality.</p>
           </div>
 
           {/* Decorative / visual block (no buttons, no claims) */}
-          <div className="md:pt-2">
-            <div className="rounded-3xl border border-border/70 bg-surface shadow-soft overflow-hidden">
+          <div>
+            <div className="rounded-3xl border border-white/10 bg-white/5 shadow-soft overflow-hidden">
               <div className="p-6">
-                <div className="section-label mb-4">A simple loop</div>
+                <div className="text-xs uppercase tracking-widest text-white/60 mb-4">How work closes</div>
                 <div className="grid gap-3">
                   {[
                     { t: "Observe", d: "Signals from operations" },
@@ -444,22 +447,19 @@ export default function App() {
                     { t: "Verify", d: "Check outcomes, continue" },
                   ].map((x, idx) => (
                     <div key={x.t} className="flex items-start gap-3">
-                      <div className="mt-0.5 h-7 w-7 rounded-full border border-border/60 bg-muted flex items-center justify-center text-xs text-subtext">
+                      <div className="mt-0.5 h-7 w-7 rounded-full border border-white/10 bg-white/5 flex items-center justify-center text-xs text-white/60">
                         {idx + 1}
                       </div>
                       <div className="flex-1">
-                        <div className="font-medium">{x.t}</div>
-                        <div className="text-sm text-subtext">{x.d}</div>
+                        <div className="font-medium text-white">{x.t}</div>
+                        <div className="text-sm text-white/65">{x.d}</div>
                       </div>
                     </div>
                   ))}
                 </div>
               </div>
 
-              <div
-                aria-hidden
-                className="h-20 bg-gradient-to-r from-brand/10 via-surface to-brand2/10 border-t border-border/60"
-              />
+              <div aria-hidden className="h-20 bg-gradient-to-r from-brand/25 via-white/0 to-brand2/25 border-t border-white/10" />
             </div>
           </div>
         </div>
@@ -468,14 +468,19 @@ export default function App() {
       {/* Reality */}
       <section id="reality" className="bg-surface scroll-mt-24">
         <div aria-hidden className="hairline" />
-        <div className="container-page section-pad grid lg:grid-cols-[0.95fr_1.05fr] gap-10 items-start">
+        <div className="container-page section-pad grid lg:grid-cols-[0.82fr_1.18fr] gap-10 items-start">
           <div className="lg:sticky lg:top-24">
-            <p className="section-label mb-3">Reality</p>
+            <p className="section-label mb-3 flex items-center gap-2">
+              <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-gradient-to-r from-brand to-brand2" />
+              Reality
+            </p>
             <h2 className="section-title mb-4">Why teams stay busy—and execution still slows</h2>
             <p className="text-subtext leading-relaxed mb-4 max-w-prose">
-              Most businesses have capable people and plenty of software. But day-to-day work still runs on follow-ups,
-              spreadsheets, manual checks, and coordination between tools—because systems don’t carry responsibility.
-              Over time, teams end up running the process instead of the process running itself.
+              Most businesses have capable people and plenty of software. But day-to-day work still runs on{" "}
+              <span className="font-semibold text-text">follow-ups</span>, spreadsheets, manual checks, and coordination
+              between tools—because{" "}
+              <span className="font-semibold text-text">systems don’t carry responsibility</span>. Over time, teams end
+              up running the process instead of the process running itself.
             </p>
             <p className="text-subtext max-w-prose">This is where time, margin, and momentum quietly leak.</p>
           </div>
@@ -518,14 +523,22 @@ export default function App() {
       </section>
 
       {/* Value */}
-      <section id="value" className="bg-muted scroll-mt-24">
+      <section id="value" className="relative overflow-hidden bg-muted scroll-mt-24">
         <div aria-hidden className="hairline" />
-        <div className="container-page section-pad">
-          <p className="section-label mb-3">Value</p>
+        <div aria-hidden className="pointer-events-none absolute inset-0">
+          <div className="absolute -top-40 left-[-9rem] h-64 w-64 rounded-full bg-brand/10 blur-3xl" />
+          <div className="absolute -bottom-40 right-[-7rem] h-64 w-64 rounded-full bg-brand2/10 blur-3xl" />
+        </div>
+        <div className="relative container-page section-pad">
+          <p className="section-label mb-3 flex items-center gap-2">
+            <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-gradient-to-r from-brand to-brand2" />
+            Value
+          </p>
           <h2 className="section-title mb-4">Turn workflows into self-running operations</h2>
           <p className="text-subtext mb-10 max-w-3xl leading-relaxed">
-            We redesign operational work so routine execution no longer depends on humans, decisions happen on time, and
-            people stay focused on judgment—not monitoring.
+            We redesign operational work so{" "}
+            <span className="font-semibold text-text">routine execution no longer depends on humans</span>,
+            <span className="font-semibold text-text"> decisions happen on time</span>, and people stay focused on judgment—not monitoring.
           </p>
 
           <div className="grid md:grid-cols-3 gap-6">
@@ -575,17 +588,26 @@ export default function App() {
             <div className="rounded-2xl border border-border/70 bg-surface shadow-soft p-6">
               <div className="font-medium mb-3">What teams typically notice</div>
               <ul className="text-sm text-subtext list-disc pl-5 space-y-2">
-                <li>Fewer handoffs and fewer “check with X” moments</li>
-                <li>Faster cycle times for recurring work</li>
-                <li>Exceptions surfaced early, with clear next actions</li>
-                <li>More time for strategy, growth, and customer outcomes</li>
+                <li>
+                  <span className="font-medium text-text">Fewer handoffs</span> and fewer “check with X” moments
+                </li>
+                <li>
+                  <span className="font-medium text-text">Faster cycle times</span> for recurring work
+                </li>
+                <li>
+                  <span className="font-medium text-text">Exceptions surfaced early</span>, with clear next actions
+                </li>
+                <li>
+                  <span className="font-medium text-text">More time</span> for strategy, growth, and customer outcomes
+                </li>
               </ul>
             </div>
             <div className="rounded-2xl border border-border/70 bg-surface shadow-soft p-6">
               <div className="font-medium mb-3">A simple principle</div>
               <p className="text-sm text-subtext leading-relaxed">
-                And instead of forcing teams to adapt to new tools, we help your existing software and dashboards adapt to
-                how your business actually works.
+                And instead of forcing teams to adapt to new tools, we help your{" "}
+                <span className="font-semibold text-text">existing software and dashboards adapt</span> to how your business
+                actually works.
               </p>
             </div>
           </div>
@@ -596,16 +618,20 @@ export default function App() {
       <section id="agentic" className="bg-surface scroll-mt-24">
         <div aria-hidden className="hairline" />
         <div className="container-page section-pad">
-          <p className="section-label mb-3">Agentic AI</p>
+          <p className="section-label mb-3 flex items-center gap-2">
+            <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-gradient-to-r from-brand to-brand2" />
+            Agentic AI
+          </p>
           <h2 className="section-title mb-4">Agentic AI, explained simply</h2>
 
           <div className="grid lg:grid-cols-[1.1fr_0.9fr] gap-10 items-start">
             <div>
               <p className="text-subtext leading-relaxed max-w-prose">
-                A capable employee doesn’t wait for step-by-step instructions. They remember context, understand what
-                matters, take the next action, and check the result. <br />
-                Agentic AI brings this same loop into software—so systems don’t just inform people, they can carry
-                responsibility for completing work.
+                A capable employee doesn’t wait for step-by-step instructions. They{" "}
+                <span className="font-semibold text-text">remember context</span>, understand what matters, take the next
+                action, and check the result. <br />
+                Agentic AI brings this same loop into software—so systems don’t just inform people, they can{" "}
+                <span className="font-semibold text-text">carry responsibility</span> for completing work.
               </p>
 
               <div className="mt-8 grid sm:grid-cols-2 gap-4">
@@ -641,10 +667,10 @@ export default function App() {
                 ))}
               </div>
 
-              <p className="mt-8 text-subtext">
+              <div className="mt-8 rounded-2xl border border-brand/20 bg-brand/5 p-5 text-sm text-subtext leading-relaxed">
                 <span className="font-medium text-text">One-line distinction:</span> Automation follows rules. Agentic systems handle
                 change and variability without collapsing back onto humans.
-              </p>
+              </div>
 
               <div className="mt-6 rounded-2xl border border-border/70 bg-surface shadow-soft p-6">
                 <div className="text-sm font-medium mb-3">What it isn’t</div>
@@ -689,14 +715,22 @@ export default function App() {
       </section>
 
       {/* Industries */}
-      <section id="industries" className="bg-muted scroll-mt-24">
+      <section id="industries" className="relative overflow-hidden bg-muted scroll-mt-24">
         <div aria-hidden className="hairline" />
-        <div className="container-page section-pad">
-          <p className="section-label mb-3">Industries</p>
+        <div aria-hidden className="pointer-events-none absolute inset-0">
+          <div className="absolute -top-44 right-[-10rem] h-72 w-72 rounded-full bg-brand2/8 blur-3xl" />
+          <div className="absolute -bottom-52 left-[-10rem] h-80 w-80 rounded-full bg-brand/8 blur-3xl" />
+        </div>
+        <div className="relative container-page section-pad">
+          <p className="section-label mb-3 flex items-center gap-2">
+            <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-gradient-to-r from-brand to-brand2" />
+            Industries
+          </p>
           <h2 className="section-title mb-4">Where manual work quietly eats margin</h2>
           <p className="text-subtext mb-8 max-w-3xl leading-relaxed">
-            Different industries look different on the surface. The operational drag is usually the same: coordination,
-            delays, and exceptions. Use these examples to recognise the pattern.
+            Different industries look different on the surface. The operational drag is usually the same:{" "}
+            <span className="font-semibold text-text">coordination, delays, and exceptions</span>. Use these examples to recognise the
+            pattern.
           </p>
 
           {/* tabs */}
@@ -710,7 +744,7 @@ export default function App() {
                   type="button"
                   onClick={() => setIndustryIdx(idx)}
                   className={
-                    "inline-flex items-center gap-2 px-3 py-2 rounded-full text-sm border transition-colors focus:outline-none focus:ring-2 focus:ring-brand/30 focus:ring-offset-2 focus:ring-offset-bg " +
+                    "inline-flex items-center gap-2 px-3 py-2 rounded-full text-sm border transition-colors focus:outline-none focus:ring-2 focus:ring-brand/30 focus:ring-offset-2 focus:ring-offset-muted " +
                     (active
                       ? "bg-gradient-to-r from-brand to-brand2 text-white border-transparent shadow-soft"
                       : "bg-surface text-text border-border/70 hover:bg-bg")
@@ -798,7 +832,10 @@ export default function App() {
       <section id="why" className="bg-surface scroll-mt-24">
         <div aria-hidden className="hairline" />
         <div className="container-page section-pad">
-          <p className="section-label mb-3">Why Perceptive</p>
+          <p className="section-label mb-3 flex items-center gap-2">
+            <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-gradient-to-r from-brand to-brand2" />
+            Why Perceptive
+          </p>
           <h2 className="section-title mb-8">Built for real operational reality</h2>
 
           <div className="grid md:grid-cols-2 gap-6">
@@ -847,7 +884,10 @@ export default function App() {
       <section id="offerings" className="bg-muted scroll-mt-24">
         <div aria-hidden className="hairline" />
         <div className="container-page section-pad">
-          <p className="section-label mb-3">Offerings</p>
+          <p className="section-label mb-3 flex items-center gap-2">
+            <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-gradient-to-r from-brand to-brand2" />
+            Offerings
+          </p>
           <h2 className="section-title mb-8">Two ways to work with Perceptive</h2>
 
           <div className="grid md:grid-cols-2 gap-6">
@@ -911,11 +951,15 @@ export default function App() {
         <div aria-hidden className="hairline" />
         <div className="container-page section-pad grid lg:grid-cols-2 gap-10 items-start">
           <div>
-            <p className="section-label mb-3">Contact</p>
+            <p className="section-label mb-3 flex items-center gap-2">
+              <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-gradient-to-r from-brand to-brand2" />
+              Contact
+            </p>
             <h2 className="section-title mb-4">Tell us what’s slowing you down</h2>
             <p className="text-subtext max-w-xl leading-relaxed">
-              Share the workflow, the systems involved, and the outcome you want. We’ll reply with what we’d change—and
-              what it would take to implement.
+              Share the <span className="font-semibold text-text">workflow</span>, the systems involved, and the{" "}
+              <span className="font-semibold text-text">outcome you want</span>. We’ll reply with what we’d change—and what it
+              would take to implement.
             </p>
           </div>
 

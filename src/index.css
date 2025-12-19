@@ -12,17 +12,25 @@
   --border: 240 12% 90%;
 
   --text: 222 47% 11%;
-  --subtext: 215 16% 46%;
+  /* Slightly darker for readability on light backgrounds */
+  --subtext: 215 18% 38%;
 
   /* Brand accents (modern, calm) */
-  --brand: 248 83% 60%;
-  --brand2: 188 94% 42%;
+  /* Blue → cyan gradient to work well with a black/white logo */
+  --brand: 222 90% 56%;
+  --brand2: 190 95% 45%;
 }
 
 @layer base {
   html {
     @apply font-sans antialiased;
     text-rendering: geometricPrecision;
+  }
+  h1, h2, h3 {
+    text-wrap: balance;
+  }
+  p {
+    text-wrap: pretty;
   }
   body {
     @apply bg-bg text-text;
@@ -41,7 +49,7 @@
     @apply py-14 sm:py-16 lg:py-20;
   }
   .section-label {
-    @apply text-xs uppercase tracking-widest text-subtext;
+    @apply text-xs uppercase tracking-widest text-subtext font-medium;
   }
   .section-title {
     @apply text-2xl sm:text-3xl lg:text-4xl font-semibold tracking-tight;
@@ -51,5 +59,9 @@
   }
   .hairline {
     @apply h-px w-full bg-gradient-to-r from-transparent via-brand/30 to-transparent;
+  }
+
+  .text-gradient {
+    @apply bg-gradient-to-r from-brand to-brand2 bg-clip-text text-transparent;
   }
 }
