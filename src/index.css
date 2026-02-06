@@ -5,15 +5,17 @@
 :root {
   color-scheme: light;
 
+  /* Keep these so cards/borders still look clean on white sections */
   --bg: 0 0% 100%;
   --surface: 0 0% 98%;
   --muted: 220 20% 97%;
   --border: 220 13% 91%;
 
+  /* Default text for the white-bottom part of the page */
   --text: 220 25% 10%;
   --subtext: 220 10% 40%;
 
-  /* Brand (keep yours) */
+  /* Brand */
   --brand: 221 83% 53%;
   --brand2: 263 70% 50%;
 }
@@ -25,7 +27,8 @@
   }
 
   body {
-    @apply bg-bg text-text;
+    /* IMPORTANT: no solid background color here */
+    @apply bg-transparent text-text;
     font-feature-settings: "ss01" 1, "ss02" 1, "cv11" 1;
   }
 
@@ -71,8 +74,21 @@
     @apply bg-bg/75 backdrop-blur-xl border border-border/70;
   }
 
-section[id] { scroll-margin-top: 6rem; }
-@media (min-width: 640px) {
-  section[id] { scroll-margin-top: 7rem; }
-}
+  /* ======== ON-DARK OVERRIDES (for hero on black) ======== */
+  .on-dark {
+    @apply text-white;
+  }
+  .on-dark .section-label {
+    @apply text-white/70;
+  }
+  .on-dark .lead {
+    @apply text-white/80;
+  }
+
+
+
+  section[id] { scroll-margin-top: 6rem; }
+  @media (min-width: 640px) {
+    section[id] { scroll-margin-top: 7rem; }
+  }
 }

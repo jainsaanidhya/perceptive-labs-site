@@ -240,19 +240,13 @@ export default function App() {
 
   return (
     <div className="min-h-screen text-text overflow-x-hidden pt-20 sm:pt-24 relative">
-      {/* Global background gradient (top tinted → bottom clean) */}
-      <div aria-hidden className="pointer-events-none fixed inset-0 -z-10">
-        <div className="absolute inset-0 bg-bg" />
-        <div className="absolute inset-0 bg-gradient-to-b from-brand/10 via-bg to-white" />
-        <div className="absolute -top-48 left-1/2 h-[520px] w-[520px] -translate-x-1/2 rounded-full bg-brand/20 blur-3xl opacity-60" />
-        <div className="absolute top-40 right-[-12rem] h-[520px] w-[520px] rounded-full bg-brand2/18 blur-3xl opacity-50" />
-        <div className="absolute bottom-[-18rem] left-[-12rem] h-[520px] w-[520px] rounded-full bg-brand/12 blur-3xl opacity-45" />
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(2,6,23,0.05)_1px,transparent_1px),linear-gradient(to_bottom,rgba(2,6,23,0.05)_1px,transparent_1px)] bg-[size:96px_96px] opacity-[0.14]" />
-      </div>
+      <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
+        <div className="absolute inset-0 bg-white" />
+    </div>
 
       {/* HEADER (fixed, bigger, always on top) */}
       <header className="fixed top-0 left-0 right-0 z-50 border-b border-border bg-bg/85 backdrop-blur-xl">
-        <div className="container-page h-20 sm:h-24 flex items-center justify-between">
+        <div className="w-full px-6 sm:px-10 lg:px-16 h-20 sm:h-24 flex items-center justify-between">
           <button onClick={() => scrollToId("top")} className="flex items-center gap-3">
             <img src="/logo.png" alt="Perceptive Labs" className="h-10 sm:h-12 w-auto rounded-md" />
             <div className="flex flex-col items-start leading-tight">
@@ -319,172 +313,175 @@ export default function App() {
       </header>
 
       {/* HERO */}
-      <section id="top" className="relative">
-        <div aria-hidden className="absolute inset-0 overflow-hidden">
-          <div className="absolute -top-72 left-1/2 h-[560px] w-[560px] -translate-x-1/2 rounded-full bg-brand/10 blur-3xl animate-float" />
-          <div className="absolute -top-24 right-[-10rem] h-[420px] w-[420px] rounded-full bg-brand2/10 blur-3xl animate-float" />
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(0,0,0,0.05),transparent_55%)]" />
-          <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(2,6,23,0.06)_1px,transparent_1px),linear-gradient(to_bottom,rgba(2,6,23,0.06)_1px,transparent_1px)] bg-[size:84px_84px] opacity-[0.18]" />
-        </div>
+      <div className="bg-black text-white">
 
-        <div className="relative container-page section-pad grid lg:grid-cols-2 gap-14 items-center">
-          <motion.div variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.2 }}>
-            <p className="section-label mb-4 flex items-center gap-2">
-              <Sparkles className="h-4 w-4 text-brand" />
-              Intelligence for the business of tomorrow
-            </p>
+        <section id="top" className="relative">
 
-            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-semibold tracking-tight leading-[1.02]">
-              Better operations that{" "}
-              <span className="text-gradient">decide</span> & {" "}
-              <span className="text-gradient">execute</span>.
-            </h1>
+          <div className="relative container-page section-pad grid lg:grid-cols-2 gap-14 items-center on-dark">
+            <motion.div variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.2 }}>
+              <p className="section-label mb-4 flex items-center gap-2">
+                <Sparkles className="h-4 w-4 text-brand" />
+                Intelligence for the business of tomorrow
+              </p>
 
-            <p className="lead mt-6 max-w-xl">
-              We embed intelligent automation into your existing systems so routine work stops depending,
-              decisions happen on time, and teams focus on judgment.
-            </p>
+              <h1 className="text-5xl sm:text-6xl lg:text-7xl font-semibold tracking-tight leading-[1.02]">
+                Better operations that{" "}
+                <span className="text-gradient">decide</span> & {" "}
+                <span className="text-gradient">execute</span>.
+              </h1>
 
-            <div className="mt-10 flex flex-col sm:flex-row gap-3">
-              <Button size="lg" onClick={() => scrollToId("contact")}>
-                Reach out to us <ArrowRight className="h-4 w-4" />
-              </Button>
-              <Button size="lg" variant="outline" onClick={() => scrollToId("what")}>
-                What we do
-              </Button>
-            </div>
+              <p className="lead mt-6 max-w-xl text-white">
+                We embed intelligent automation into your existing systems so routine work stops depending,
+                decisions happen on time, and teams focus on judgment.
+              </p>
 
-          </motion.div>
-
-          <motion.div variants={fade} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.2 }} className="relative">
-            <div className="rounded-3xl border border-border bg-bg shadow-card overflow-hidden max-w-md ml-auto">
-              <div className="p-4 border-b border-border flex items-center justify-between">
-                <div className="text-sm font-semibold">Perceptive Workflow Layer</div>
-                <div className="text-xs text-subtext">Signals → decisions → actions</div>
+              <div className="mt-10 flex flex-col sm:flex-row gap-3">
+                <Button size="lg" onClick={() => scrollToId("contact")}>
+                  Reach out to us <ArrowRight className="h-4 w-4" />
+                </Button>
+                <Button size="lg" variant="outline" onClick={() => scrollToId("what")}>
+                  What we do
+                </Button>
               </div>
 
-              <div className="p-6 grid gap-4">
-                <MiniRow icon={<Clock className="h-4 w-4" />} title="Work status" value="Approvals pending (3)" />
-                <MiniRow icon={<LineChart className="h-4 w-4" />} title="Signal" value="Sales spike in Zone B" status="active" />
-                <MiniRow icon={<Brain className="h-4 w-4" />} title="Decision" value="Increase replenishment by 18%" />
-                <MiniRow icon={<Workflow className="h-4 w-4" />} title="Execution" value="PO created • Vendor notified" status="success" />
-              </div>
+            </motion.div>
 
-              <div className="px-6 pb-6">
-                <div className="rounded-2xl bg-muted border border-border p-4 relative overflow-hidden">
-                  <div className="absolute inset-0 opacity-30 bg-gradient-to-r from-brand/20 via-transparent to-brand2/20 animate-shimmer" />
-                  <div className="relative">
-                    <div className="text-xs uppercase tracking-[0.16em] text-subtext mb-2">
-                      What teams feel
+            <motion.div variants={fade} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.2 }} className="relative">
+                <div
+                className="rounded-3xl bg-bg overflow-hidden max-w-md ml-auto relative"
+                style={{
+                  boxShadow:
+                    "0 0 0 1px rgba(255,255,255,0.22), 0 0 48px rgba(255,255,255,0.10), 0 40px 140px rgba(59,130,246,0.22), 0 20px 90px rgba(124,58,237,0.18)",
+                }}
+              >
+                <div className="p-4 border-b border-border flex items-center justify-between">
+                  <div className="text-sm font-semibold text-black">Perceptive Workflow Layer</div>
+                  <div className="text-xs text-subtext">Signals → decisions → actions</div>
+                </div>
+
+                <div className="p-6 grid gap-4">
+                  <MiniRow icon={<Clock className="h-4 w-4" />} title="Work status" value="Approvals pending (3)" />
+                  <MiniRow icon={<LineChart className="h-4 w-4" />} title="Signal" value="Sales spike in Zone B" status="active" />
+                  <MiniRow icon={<Brain className="h-4 w-4" />} title="Decision" value="Increase replenishment by 18%" />
+                  <MiniRow icon={<Workflow className="h-4 w-4" />} title="Execution" value="PO created • Vendor notified" status="success" />
+                </div>
+
+                <div className="px-6 pb-6">
+                  <div className="rounded-2xl bg-muted border border-border p-4 relative overflow-hidden">
+                    <div className="absolute inset-0 opacity-30 bg-gradient-to-r from-brand/20 via-transparent to-brand2/20 animate-shimmer" />
+                    <div className="relative">
+                      <div className="text-xs uppercase tracking-[0.16em] text-subtext mb-2">
+                        What teams feel
+                      </div>
+                      <ul className="text-sm text-subtext space-y-1.5">
+                        <li className="flex items-start gap-2">
+                          <CheckCircle2 className="h-4 w-4 text-brand mt-0.5" />
+                          Less chasing, fewer follow-ups
+                        </li>
+                        <li className="flex items-start gap-2">
+                          <CheckCircle2 className="h-4 w-4 text-brand mt-0.5" />
+                          Exceptions surfaced early
+                        </li>
+                        <li className="flex items-start gap-2">
+                          <CheckCircle2 className="h-4 w-4 text-brand mt-0.5" />
+                          Execution actually finishes
+                        </li>
+                      </ul>
                     </div>
-                    <ul className="text-sm text-subtext space-y-1.5">
-                      <li className="flex items-start gap-2">
-                        <CheckCircle2 className="h-4 w-4 text-brand mt-0.5" />
-                        Less chasing, fewer follow-ups
-                      </li>
-                      <li className="flex items-start gap-2">
-                        <CheckCircle2 className="h-4 w-4 text-brand mt-0.5" />
-                        Exceptions surfaced early
-                      </li>
-                      <li className="flex items-start gap-2">
-                        <CheckCircle2 className="h-4 w-4 text-brand mt-0.5" />
-                        Execution actually finishes
-                      </li>
-                    </ul>
                   </div>
                 </div>
+
               </div>
+            </motion.div>
+          </div>
+        </section>
 
+        {/* WHAT WE DO */}
+        <section id="what" className="bg-transparent">
+          <div aria-hidden className="h-px w-full bg-gradient-to-r from-transparent via-white/25 to-transparent" />
+          <div className="container-page section-pad">
+            <motion.div variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.2 }}>
+              <p className="section-label mb-4 text-white/70">What we do</p>
+              <h2 className="section-title mb-5">We build intelligent automation inside your existing systems.</h2>
+              <p className="lead max-w-3xl text-white/70">
+                Not a dashboard or replacement. We make your current tools dynamic, flexible, and intelligent.
+              </p>
+            </motion.div>
+
+            <div className="mt-12 grid md:grid-cols-3 gap-6">
+              <Pillar
+                icon={<Plug className="h-5 w-5" />}
+                title="Intelligent Automation"
+                text="Systems that learn & adapt to maximize efficiency, reduce errors, accelerate operations."
+              />
+              <Pillar
+                icon={<Brain className="h-5 w-5" />}
+                title="Enterprise Intelligence"
+                text="Transform your organizational knowledge into insights & measurable business outcomes."
+              />
+              <Pillar
+                icon={<Workflow className="h-5 w-5" />}
+                title="Reliable & Safe Execution"
+                text="Automated actions, reminders, escalations, & checks. Work closes on time, every time."/>
             </div>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* WHAT WE DO */}
-      <section id="what" className="bg-transparent">
-        <SectionDivider />
-        <div className="container-page section-pad">
-          <motion.div variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.2 }}>
-            <p className="section-label mb-4">What we do</p>
-            <h2 className="section-title mb-5">We build intelligent automation inside your existing systems.</h2>
-            <p className="lead max-w-3xl">
-              Not a dashboard or replacement. We make your current tools dynamic, flexible, and intelligent.
-            </p>
-          </motion.div>
-
-          <div className="mt-12 grid md:grid-cols-3 gap-6">
-            <Pillar
-              icon={<Plug className="h-5 w-5" />}
-              title="Intelligent Automation"
-              text="Systems that learn & adapt to maximize efficiency, reduce errors, accelerate operations."
-            />
-            <Pillar
-              icon={<Brain className="h-5 w-5" />}
-              title="Enterprise Intelligence"
-              text="Transform your organizational knowledge into insights & measurable business outcomes."
-            />
-            <Pillar
-              icon={<Workflow className="h-5 w-5" />}
-              title="Reliable & Safe Execution"
-              text="Automated actions, reminders, escalations, & checks. Work closes on time, every time."/>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* VALUE */}
-      <section id="value" className="bg-transparent">
-        <SectionDivider />
-        <div className="container-page section-pad">
-          <motion.div variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.2 }}>
-            <p className="section-label mb-4">Value</p>
-            <h2 className="section-title mb-5">Turn workflows into self-running operations</h2>
-            <p className="lead max-w-3xl">
-              Routine execution stops depending on people. Decisions happen on time. Your team stays focused on judgment not monitoring.
-            </p>
-          </motion.div>
+        {/* VALUE */}
+        <section id="value" className="bg-transparent">
+          <div aria-hidden className="h-px w-full bg-gradient-to-r from-transparent via-white/25 to-transparent" />
+          <div className="container-page section-pad">
+            <motion.div variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.2 }}>
+              <p className="section-label mb-4 text-white">Value</p>
+              <h2 className="section-title mb-5">Turn workflows into self-running operations</h2>
+              <p className="lead max-w-3xl">
+                Routine execution stops depending on people. Decisions happen on time. Your team stays focused on judgment not monitoring.
+              </p>
+            </motion.div>
 
-          <div className="mt-12 grid md:grid-cols-3 gap-6">
-            <Card className="rounded-3xl shadow-soft hover:shadow-card transition hover:-translate-y-1">
-              <CardHeader className="flex items-center gap-3">
-                <div className="h-10 w-10 rounded-2xl bg-muted border border-border flex items-center justify-center text-brand">
-                  <Zap className="h-5 w-5" />
-                </div>
-                <CardTitle>Cost & Time Efficiency</CardTitle>
-              </CardHeader>
-              <CardContent className="text-sm text-subtext leading-relaxed">
-                Replace manual effort & operational overhead with automation across teams.
-              </CardContent>
-            </Card>
+            <div className="mt-12 grid md:grid-cols-3 gap-6">
+              <Card className="rounded-3xl bg-bg text-text shadow-soft hover:shadow-card transition hover:-translate-y-1">
+                <CardHeader className="flex items-center gap-3">
+                  <div className="h-10 w-10 rounded-2xl bg-muted border border-border flex items-center justify-center text-brand">
+                    <Zap className="h-5 w-5" />
+                  </div>
+                  <CardTitle>Cost & Time Efficiency</CardTitle>
+                </CardHeader>
+                <CardContent className="text-sm text-subtext leading-relaxed">
+                  Replace manual effort & operational overhead with automation across teams.
+                </CardContent>
+              </Card>
 
-            <Card className="rounded-3xl shadow-soft hover:shadow-card transition hover:-translate-y-1">
-              <CardHeader className="flex items-center gap-3">
-                <div className="h-10 w-10 rounded-2xl bg-muted border border-border flex items-center justify-center text-brand">
-                  <ArrowRight className="h-5 w-5" />
-                </div>
-                <CardTitle>Data-Driven Decisions</CardTitle>
-              </CardHeader>
-              <CardContent className="text-sm text-subtext leading-relaxed">
-                Decisions backed by data not bias. Transparent, auditable, and consistent.
-              </CardContent>
-            </Card>
+             <Card className="rounded-3xl bg-bg text-text shadow-soft hover:shadow-card transition hover:-translate-y-1">
+                <CardHeader className="flex items-center gap-3">
+                  <div className="h-10 w-10 rounded-2xl bg-muted border border-border flex items-center justify-center text-brand">
+                    <ArrowRight className="h-5 w-5" />
+                  </div>
+                  <CardTitle>Data-Driven Decisions</CardTitle>
+                </CardHeader>
+                <CardContent className="text-sm text-subtext leading-relaxed">
+                  Decisions backed by data not bias. Transparent, auditable, and consistent.
+                </CardContent>
+              </Card>
 
-            <Card className="rounded-3xl shadow-soft hover:shadow-card transition hover:-translate-y-1">
-              <CardHeader className="flex items-center gap-3">
-                <div className="h-10 w-10 rounded-2xl bg-muted border border-border flex items-center justify-center text-brand">
-                  <TrendingUp className="h-5 w-5" />
-                </div>
-                <CardTitle>Compounding efficiency</CardTitle>
-              </CardHeader>
-              <CardContent className="text-sm text-subtext leading-relaxed">
-                Every action, rule, and workflow raises the baseline so the entire business moves faster, every day.
+              <Card className="rounded-3xl bg-bg text-text shadow-soft hover:shadow-card transition hover:-translate-y-1">
+                <CardHeader className="flex items-center gap-3">
+                  <div className="h-10 w-10 rounded-2xl bg-muted border border-border flex items-center justify-center text-brand">
+                    <TrendingUp className="h-5 w-5" />
+                  </div>
+                  <CardTitle>Compounding efficiency</CardTitle>
+                </CardHeader>
+                <CardContent className="text-sm text-subtext leading-relaxed">
+                  Every action, rule, and workflow raises the baseline so the entire business moves faster, every day.
 
-              </CardContent>
-            </Card>
+                </CardContent>
+              </Card>
+            </div>
+
+
           </div>
-
-
-        </div>
-      </section>
+        </section>
+      </div>
 
       {/* INDUSTRIES */}
       <section id="industries" className="relative overflow-hidden bg-transparent">
@@ -746,7 +743,10 @@ export default function App() {
 
 function SectionDivider() {
   return (
-    <div aria-hidden className="h-px w-full bg-gradient-to-r from-transparent via-brand/25 to-transparent" />
+    <div
+      aria-hidden
+      className="h-px w-full bg-gradient-to-r from-transparent via-brand/30 to-transparent"
+    />
   );
 }
 
@@ -761,13 +761,13 @@ function Pillar({ icon, title, text }) {
       initial="hidden"
       whileInView="show"
       viewport={{ once: true, amount: 0.2 }}
-      className="rounded-3xl border border-border bg-bg p-6 shadow-soft hover:shadow-card transition hover:-translate-y-1"
+      className="rounded-3xl border border-border bg-bg text-text p-6 shadow-soft hover:shadow-card transition hover:-translate-y-1"
     >
       <div className="flex items-center gap-3 mb-4">
         <div className="h-10 w-10 rounded-2xl bg-muted border border-border flex items-center justify-center text-brand">
           {icon}
         </div>
-        <div className="font-semibold">{title}</div>
+        <div className="font-semibold text-black">{title}</div>
       </div>
       <p className="text-sm text-subtext leading-relaxed">{text}</p>
     </motion.div>
@@ -783,7 +783,7 @@ function WhyCard({ icon, title, text }) {
           {icon}
         </div>
         <div className="min-w-0">
-          <div className="font-semibold mb-1">{title}</div>
+          <div className="font-semibold mb-1 ">{title}</div>
           <div className="text-sm text-subtext leading-relaxed">{text}</div>
         </div>
       </div>
@@ -806,10 +806,10 @@ function MiniRow({ icon, title, value, status }) {
     <div className="rounded-2xl border border-border bg-surface p-4 flex items-start justify-between gap-4">
       <div className="min-w-0">
         <div className="flex items-center gap-2 text-xs uppercase tracking-[0.14em] text-subtext mb-1">
-          <span className="text-brand">{icon}</span>
+          <span className="text-brand ">{icon}</span>
           {title}
         </div>
-        <div className="text-sm font-medium text-text truncate">{value}</div>
+        <div className="text-sm font-medium text-text truncate ">{value}</div>
       </div>
 
       {status && (
