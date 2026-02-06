@@ -1,17 +1,19 @@
-import React from 'react'
+import React from "react";
 
-export function Card({ className='', ...props }) {
-  return <div className={`border border-border/70 bg-surface shadow-soft ${className}`} {...props} />
+export function Card({ className = "", ...props }) {
+  return (
+    <div className={`rounded-3xl border border-border bg-bg shadow-soft ${className}`} {...props} />
+  );
 }
 
-export function CardHeader({ className='', ...props }) {
-  return <div className={`p-4 border-b border-border/60 ${className}`} {...props} />
+export function CardHeader({ className = "", ...props }) {
+  return <div className={`p-6 pb-3 ${className}`} {...props} />;
 }
 
-export function CardTitle({ className='', ...props }) {
-  return <div className={`font-semibold ${className}`} {...props} />
+export function CardTitle({ className = "", ...props }) {
+  return <h3 className={`text-base sm:text-lg font-semibold tracking-tight ${className}`} {...props} />;
 }
 
-export function CardContent({ className='', ...props }) {
-  return <div className={`p-4 ${className}`} {...props} />
+export function CardContent({ className = "", ...props }) {
+  return <div className={`p-6 pt-0 ${className}`} {...props} />;
 }

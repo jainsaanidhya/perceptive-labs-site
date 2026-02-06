@@ -1,190 +1,60 @@
+// src/App.jsx
 import React, { useMemo, useRef, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "./components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "./components/ui/card";
 import { Input } from "./components/ui/input";
 import { Textarea } from "./components/ui/textarea";
+import { Linkedin, Mail } from "lucide-react";
 import {
   ArrowRight,
-  Brain,
-  Building2,
-  Cpu,
-  LayoutDashboard,
-  LineChart,
   Menu,
-  Package,
-  Plug,
-  Store,
-  Truck,
-  Users,
-  Wallet,
-  Workflow,
-  TrendingUp,
-  Zap,
-  Shield,
   X,
+  Sparkles,
+  Workflow,
+  Brain,
+  Plug,
+  Shield,
+  CheckCircle2,
+  Zap,
+  LineChart,
+  Clock,
+  Store,
+  Package,
+  Truck,
+  Wallet,
+  Building2,
+  HeartPulse,
+  TrendingUp,
 } from "lucide-react";
 
+const fadeUp = {
+  hidden: { opacity: 0, y: 18 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.7, ease: "easeOut" } },
+};
+
+const fade = {
+  hidden: { opacity: 0 },
+  show: { opacity: 1, transition: { duration: 0.7 } },
+};
+
 export default function App() {
-  // ===== form state =====
+  const WORKER_URL = "https://perceptive-contact.jainsaanidhya.workers.dev/";
+
+  // nav + UI
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  // form state
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [message, setMessage] = useState("");
-  const [menuOpen, setMenuOpen] = useState(false);
 
   // form status
   const [sending, setSending] = useState(false);
   const [sent, setSent] = useState(false);
   const [error, setError] = useState("");
 
-  const WORKER_URL = "https://perceptive-contact.jainsaanidhya.workers.dev/"; // replace with your Worker endpoint
-
-  // ===== helpers =====
-  const prefersReducedMotion = () =>
-    typeof window !== "undefined" &&
-    !!window.matchMedia &&
-    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-  const scrollToId = (id) => {
-    const el = document.getElementById(id);
-    el?.scrollIntoView({ behavior: prefersReducedMotion() ? "auto" : "smooth", block: "start" });
-  };
-
-  const handleTalk = () => {
-    setMenuOpen(false);
-    scrollToId("contact");
-  };
-
-  const nav = useMemo(
-    () => [
-      { href: "#overview", label: "Overview" },
-      { href: "#reality", label: "Reality" },
-      { href: "#value", label: "Value" },
-      { href: "#agentic", label: "Agentic AI" },
-      { href: "#industries", label: "Industries" },
-      { href: "#why", label: "Why Perceptive" },
-      { href: "#offerings", label: "Offerings" },
-      { href: "#contact", label: "Contact" },
-    ],
-    []
-  );
-
-  // POST the form to your Worker (which sends the email via Resend/SMTP)
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError("");
-    setSent(false);
-    setSending(true);
-    try {
-      const res = await fetch(WORKER_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json", Accept: "application/json" },
-        body: JSON.stringify({
-          name,
-          email,
-          message,
-          _origin: window.location.href,
-        }),
-      });
-
-      if (!res.ok) {
-        // Try to surface server detail if present
-        let detail = "";
-        try {
-          const j = await res.json();
-          detail = j.detail || j.error || "";
-        } catch {}
-        throw new Error(detail || `HTTP ${res.status}`);
-      }
-
-      setSent(true);
-      setName("");
-      setEmail("");
-      setMessage("");
-    } catch (err) {
-      setError("Couldn’t send. Please try again or email team@perceptivelabs.in.");
-      console.error(err);
-    } finally {
-      setSending(false);
-    }
-  };
-
-  // ===== Reality accordions =====
-  const realityItems = useMemo(
-    () => [
-      {
-        n: "01",
-        icon: <Plug className="h-5 w-5" aria-hidden="true" />,
-        title: "Manual work exists to connect systems",
-        body: (
-          <>
-            <p>
-              When tools don’t speak in actions, people become the bridge—copying information,
-              reconciling numbers, and keeping multiple versions of “truth” aligned.
-            </p>
-            <p className="mt-3 text-subtext">
-              <span className="font-medium text-text">Common signs:</span> repeated updates,
-              parallel trackers, daily checklists that never end.
-            </p>
-          </>
-        ),
-      },
-      {
-        n: "02",
-        icon: <LineChart className="h-5 w-5" aria-hidden="true" />,
-        title: "Decisions arrive after the moment has passed",
-        body: (
-          <>
-            <p>
-              Reports get reviewed in batches. By the time a decision is taken, the situation has
-              already changed—and the business becomes reactive by default.
-            </p>
-            <p className="mt-3 text-subtext">
-              <span className="font-medium text-text">Common signs:</span> late reorder
-              decisions, delayed pricing moves, slow response to demand shifts.
-            </p>
-          </>
-        ),
-      },
-      {
-        n: "03",
-        icon: <Zap className="h-5 w-5" aria-hidden="true" />,
-        title: "Exceptions become the default work",
-        body: (
-          <>
-            <p>
-              Automation handles the happy path. Real operations live in exceptions—mismatches,
-              delays, missing inputs, edge cases—and that’s what consumes the team.
-            </p>
-            <p className="mt-3 text-subtext">
-              <span className="font-medium text-text">Common signs:</span> firefighting,
-              constant escalations, “why did this happen again?” loops.
-            </p>
-          </>
-        ),
-      },
-      {
-        n: "04",
-        icon: <Users className="h-5 w-5" aria-hidden="true" />,
-        title: "Skilled people get trapped in coordination",
-        body: (
-          <>
-            <p>
-              Your best operators become workflow managers—routing tasks, chasing approvals,
-              updating stakeholders—while real value creation gets squeezed out.
-            </p>
-            <p className="mt-3 text-subtext">
-              <span className="font-medium text-text">Common signs:</span> more meetings,
-              more follow-ups, less true progress.
-            </p>
-          </>
-        ),
-      },
-    ],
-    []
-  );
-  const [openRealityIdx, setOpenRealityIdx] = useState(0);
-
-  // ===== Industries carousel =====
+  // industries carousel
   const INDUSTRIES = useMemo(
     () => [
       {
@@ -193,7 +63,7 @@ export default function App() {
         Icon: Store,
         friction: [
           "Stockouts and overstock from delayed signals",
-          "Store/warehouse/vendor coordination done manually",
+          "Store / warehouse coordination done manually",
           "Promotions and pricing execution depends on follow-ups",
         ],
         change: [
@@ -207,12 +77,12 @@ export default function App() {
         Icon: Package,
         friction: [
           "Planning changes faster than systems adapt",
-          "WIP visibility is delayed; bottlenecks discovered late",
+          "WIP visibility is delayed; bottlenecks found late",
           "Quality/compliance follow-through depends on people",
         ],
         change: [
           "Faster response to constraints and shifts",
-          "Exceptions get structured, routed, and resolved earlier",
+          "Exceptions are structured, routed, and resolved earlier",
         ],
       },
       {
@@ -246,7 +116,7 @@ export default function App() {
       {
         key: "healthcare",
         label: "Healthcare Ops",
-        Icon: Shield,
+        Icon: HeartPulse,
         friction: [
           "Scheduling/billing/claims create heavy coordination",
           "Operational data sits across tools",
@@ -274,12 +144,36 @@ export default function App() {
     ],
     []
   );
-  const [industryIdx, setIndustryIdx] = useState(0);
 
+  const [industryIdx, setIndustryIdx] = useState(0);
   const swipeStartX = useRef(0);
   const swipeLastX = useRef(0);
   const swiping = useRef(false);
   const swipeThreshold = 48;
+
+  const prefersReducedMotion = () =>
+    typeof window !== "undefined" &&
+    !!window.matchMedia &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  const scrollToId = (id) => {
+    const el = document.getElementById(id);
+    el?.scrollIntoView({
+      behavior: prefersReducedMotion() ? "auto" : "smooth",
+      block: "start",
+    });
+  };
+
+  const nav = useMemo(
+    () => [
+      { id: "what", label: "What we do" },
+      { id: "value", label: "Value" },
+      { id: "industries", label: "Industries" },
+      { id: "why", label: "Why Perceptive" },
+      { id: "contact", label: "Contact" },
+    ],
+    []
+  );
 
   const getX = (e) =>
     "touches" in e
@@ -300,34 +194,84 @@ export default function App() {
   const onIndustryEnd = () => {
     if (!swiping.current) return;
     const delta = swipeLastX.current - swipeStartX.current;
-    if (delta > swipeThreshold) {
-      setIndustryIdx((i) => (i - 1 + INDUSTRIES.length) % INDUSTRIES.length);
-    }
-    if (delta < -swipeThreshold) {
-      setIndustryIdx((i) => (i + 1) % INDUSTRIES.length);
-    }
+    if (delta > swipeThreshold) setIndustryIdx((i) => (i - 1 + INDUSTRIES.length) % INDUSTRIES.length);
+    if (delta < -swipeThreshold) setIndustryIdx((i) => (i + 1) % INDUSTRIES.length);
     swiping.current = false;
   };
 
-  return (
-    <div className="min-h-screen bg-bg text-text overflow-x-hidden break-words scroll-smooth">
-      {/* Top bar */}
-      <header className="sticky top-0 z-50 bg-surface/70 backdrop-blur border-b border-border/60">
-        <div className="container-page py-3 flex items-center justify-between">
-          <a href="#overview" className="flex items-center gap-2 group" onClick={() => setMenuOpen(false)}>
-            <img src="/logo.png" alt="Perceptive Labs" className="h-10 w-auto rounded" />
-            <span className="font-semibold text-lg sm:text-xl group-hover:opacity-90">Perceptive Labs</span>
-          </a>
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError("");
+    setSent(false);
+    setSending(true);
 
-          <nav className="hidden md:flex items-center gap-6 text-sm">
-            {nav.map((i) => (
-              <a
-                key={i.href}
-                href={i.href}
-                className="hover:text-brand focus:outline-none focus:ring-2 focus:ring-brand/30 focus:ring-offset-2 focus:ring-offset-bg rounded"
+    try {
+      const res = await fetch(WORKER_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({
+          name,
+          email,
+          message,
+          _origin: window.location.href,
+        }),
+      });
+
+      if (!res.ok) {
+        let detail = "";
+        try {
+          const j = await res.json();
+          detail = j.detail || j.error || "";
+        } catch {}
+        throw new Error(detail || `HTTP ${res.status}`);
+      }
+
+      setSent(true);
+      setName("");
+      setEmail("");
+      setMessage("");
+    } catch (err) {
+      console.error(err);
+      setError("Couldn’t send. Please try again or email team@perceptivelabs.in.");
+    } finally {
+      setSending(false);
+    }
+  };
+
+  return (
+    <div className="min-h-screen text-text overflow-x-hidden pt-20 sm:pt-24 relative">
+      {/* Global background gradient (top tinted → bottom clean) */}
+      <div aria-hidden className="pointer-events-none fixed inset-0 -z-10">
+        <div className="absolute inset-0 bg-bg" />
+        <div className="absolute inset-0 bg-gradient-to-b from-brand/10 via-bg to-white" />
+        <div className="absolute -top-48 left-1/2 h-[520px] w-[520px] -translate-x-1/2 rounded-full bg-brand/20 blur-3xl opacity-60" />
+        <div className="absolute top-40 right-[-12rem] h-[520px] w-[520px] rounded-full bg-brand2/18 blur-3xl opacity-50" />
+        <div className="absolute bottom-[-18rem] left-[-12rem] h-[520px] w-[520px] rounded-full bg-brand/12 blur-3xl opacity-45" />
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(2,6,23,0.05)_1px,transparent_1px),linear-gradient(to_bottom,rgba(2,6,23,0.05)_1px,transparent_1px)] bg-[size:96px_96px] opacity-[0.14]" />
+      </div>
+
+      {/* HEADER (fixed, bigger, always on top) */}
+      <header className="fixed top-0 left-0 right-0 z-50 border-b border-border bg-bg/85 backdrop-blur-xl">
+        <div className="container-page h-20 sm:h-24 flex items-center justify-between">
+          <button onClick={() => scrollToId("top")} className="flex items-center gap-3">
+            <img src="/logo.png" alt="Perceptive Labs" className="h-10 sm:h-12 w-auto rounded-md" />
+            <div className="flex flex-col items-start leading-tight">
+              <span className="font-semibold tracking-tight text-sm sm:text-base">Perceptive Labs</span>
+              <span className="hidden sm:block text-xs text-subtext">
+                Intelligence for the business of tomorrow
+              </span>
+            </div>
+          </button>
+
+          <nav className="hidden md:flex items-center gap-8 text-sm text-subtext">
+            {nav.map((n) => (
+              <button
+                key={n.id}
+                onClick={() => scrollToId(n.id)}
+                className="hover:text-text transition"
               >
-                {i.label}
-              </a>
+                {n.label}
+              </button>
             ))}
           </nav>
 
@@ -337,404 +281,225 @@ export default function App() {
               className="md:hidden"
               onClick={() => setMenuOpen((v) => !v)}
               aria-label={menuOpen ? "Close menu" : "Open menu"}
-              aria-controls="mobile-nav"
-              aria-expanded={menuOpen}
             >
               {menuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             </Button>
-            <Button className="rounded-2xl" onClick={handleTalk}>
-              Talk to us
+
+            <Button onClick={() => scrollToId("contact")}>
+              Reach out to us <ArrowRight className="h-4 w-4" />
             </Button>
           </div>
         </div>
 
-        {menuOpen && (
-          <div id="mobile-nav" className="md:hidden border-t border-border/60">
-            <div className="container-page py-3 grid gap-1 text-sm">
-              {nav.map((i) => (
-                <a
-                  key={i.href}
-                  href={i.href}
-                  className="py-2 rounded focus:outline-none focus:ring-2 focus:ring-brand/30 focus:ring-offset-2 focus:ring-offset-bg"
-                  onClick={() => setMenuOpen(false)}
-                >
-                  {i.label}
-                </a>
-              ))}
-            </div>
-          </div>
-        )}
+        <AnimatePresence>
+          {menuOpen && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              className="md:hidden border-t border-border bg-bg overflow-hidden"
+            >
+              <div className="container-page py-4 grid gap-3 text-sm">
+                {nav.map((n) => (
+                  <button
+                    key={n.id}
+                    onClick={() => {
+                      setMenuOpen(false);
+                      scrollToId(n.id);
+                    }}
+                    className="text-left py-2 text-subtext hover:text-text"
+                  >
+                    {n.label}
+                  </button>
+                ))}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </header>
 
-      {/* Overview / Hero */}
-      <section id="overview" className="relative overflow-hidden bg-slate-950 text-white scroll-mt-24">
-        {/* hero background (subtle, dynamic, minimal) */}
-        <div aria-hidden className="pointer-events-none absolute inset-0">
-          <div className="absolute inset-0 bg-gradient-to-b from-slate-950 via-slate-950 to-slate-900" />
-          <div className="absolute -top-56 left-1/2 h-80 w-[52rem] -translate-x-1/2 rounded-full bg-brand/20 blur-3xl" />
-          <div className="absolute -bottom-52 right-[-8rem] h-80 w-80 rounded-full bg-brand2/16 blur-3xl" />
-          <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.06)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.06)_1px,transparent_1px)] bg-[size:72px_72px] opacity-30" />
+      {/* HERO */}
+      <section id="top" className="relative">
+        <div aria-hidden className="absolute inset-0 overflow-hidden">
+          <div className="absolute -top-72 left-1/2 h-[560px] w-[560px] -translate-x-1/2 rounded-full bg-brand/10 blur-3xl animate-float" />
+          <div className="absolute -top-24 right-[-10rem] h-[420px] w-[420px] rounded-full bg-brand2/10 blur-3xl animate-float" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(0,0,0,0.05),transparent_55%)]" />
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(2,6,23,0.06)_1px,transparent_1px),linear-gradient(to_bottom,rgba(2,6,23,0.06)_1px,transparent_1px)] bg-[size:84px_84px] opacity-[0.18]" />
         </div>
 
-        <div className="relative container-page pt-10 pb-12 sm:pt-14 sm:pb-14 lg:pt-16 lg:pb-16 grid lg:grid-cols-2 gap-12 items-start">
-          <div>
-            <div className="mb-6">
-              <div className="text-base sm:text-lg font-semibold tracking-tight text-white/95">Perceptive Labs</div>
-              <div className="mt-1 text-lg sm:text-2xl font-semibold tracking-tight text-white/90">
-                Intelligence for the business of tomorrow.
-              </div>
-            </div>
-
-            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-semibold leading-[1.02] tracking-tight mb-5">
-              Operations, <span className="text-gradient">without the drag.</span>
-            </h1>
-
-            <p className="text-white/75 mb-8 max-w-xl text-base sm:text-lg leading-relaxed">
-              We help businesses <span className="font-semibold text-white">reduce manual work</span>, improve operational
-              efficiency, and turn data into{" "}
-              <span className="font-semibold text-white">decisions that actually get executed</span>—inside the tools and
-              workflows you already run.
+        <div className="relative container-page section-pad grid lg:grid-cols-2 gap-14 items-center">
+          <motion.div variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.2 }}>
+            <p className="section-label mb-4 flex items-center gap-2">
+              <Sparkles className="h-4 w-4 text-brand" />
+              Intelligence for the business of tomorrow
             </p>
 
-            <div className="grid gap-3 mb-8">
-              <div className="flex items-start gap-3">
-                <div className="mt-0.5 p-2 rounded-xl bg-white/5 border border-white/10 text-brand">
-                  <Workflow className="h-4 w-4" aria-hidden="true" />
-                </div>
-                <div>
-                  <div className="text-sm sm:text-base font-medium text-white/90">Remove busywork from critical workflows</div>
-                </div>
-              </div>
-              <div className="flex items-start gap-3">
-                <div className="mt-0.5 p-2 rounded-xl bg-white/5 border border-white/10 text-brand">
-                  <Zap className="h-4 w-4" aria-hidden="true" />
-                </div>
-                <div>
-                  <div className="text-sm sm:text-base font-medium text-white/90">Unblock execution across teams and systems</div>
-                </div>
-              </div>
-              <div className="flex items-start gap-3">
-                <div className="mt-0.5 p-2 rounded-xl bg-white/5 border border-white/10 text-brand">
-                  <LayoutDashboard className="h-4 w-4" aria-hidden="true" />
-                </div>
-                <div>
-                  <div className="text-sm sm:text-base font-medium text-white/90">
-                    Let your software, tools, and dashboards adapt to you—not the other way around
-                  </div>
-                </div>
-              </div>
-            </div>
+            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-semibold tracking-tight leading-[1.02]">
+              Better operations that{" "}
+              <span className="text-gradient">decide</span> & {" "}
+              <span className="text-gradient">execute</span>.
+            </h1>
 
-            <div className="flex flex-col sm:flex-row gap-3">
-              <Button size="lg" className="rounded-2xl" onClick={handleTalk}>
-                Talk to us <ArrowRight className="h-4 w-4" aria-hidden="true" />
+            <p className="lead mt-6 max-w-xl">
+              We embed intelligent automation into your existing systems so routine work stops depending,
+              decisions happen on time, and teams focus on judgment.
+            </p>
+
+            <div className="mt-10 flex flex-col sm:flex-row gap-3">
+              <Button size="lg" onClick={() => scrollToId("contact")}>
+                Reach out to us <ArrowRight className="h-4 w-4" />
+              </Button>
+              <Button size="lg" variant="outline" onClick={() => scrollToId("what")}>
+                What we do
               </Button>
             </div>
 
-            <p className="mt-6 text-sm text-white/60">Retail-built. Designed for real operational reality.</p>
-          </div>
+          </motion.div>
 
-          {/* Decorative / visual block (no buttons, no claims) */}
-          <div className="lg:mt-12">
-            <div className="rounded-3xl border border-white/10 bg-white/5 shadow-soft overflow-hidden">
-              <div className="p-6">
-                <div className="text-xs uppercase tracking-widest text-white/60 mb-4">How work closes</div>
-                <div className="grid gap-3">
-                  {[
-                    { t: "Observe", d: "Signals from operations" },
-                    { t: "Decide", d: "Context-aware next steps" },
-                    { t: "Act", d: "Execution inside existing tools" },
-                    { t: "Verify", d: "Check outcomes, continue" },
-                  ].map((x, idx) => (
-                    <div key={x.t} className="flex items-start gap-3">
-                      <div className="mt-0.5 h-7 w-7 rounded-full border border-white/10 bg-white/5 flex items-center justify-center text-xs text-white/60">
-                        {idx + 1}
-                      </div>
-                      <div className="flex-1">
-                        <div className="font-medium text-white">{x.t}</div>
-                        <div className="text-sm text-white/65">{x.d}</div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
+          <motion.div variants={fade} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.2 }} className="relative">
+            <div className="rounded-3xl border border-border bg-bg shadow-card overflow-hidden max-w-md ml-auto">
+              <div className="p-4 border-b border-border flex items-center justify-between">
+                <div className="text-sm font-semibold">Perceptive Workflow Layer</div>
+                <div className="text-xs text-subtext">Signals → decisions → actions</div>
               </div>
 
-              <div aria-hidden className="h-20 bg-gradient-to-r from-brand/25 via-white/0 to-brand2/25 border-t border-white/10" />
-            </div>
-          </div>
-        </div>
-      </section>
+              <div className="p-6 grid gap-4">
+                <MiniRow icon={<Clock className="h-4 w-4" />} title="Work status" value="Approvals pending (3)" />
+                <MiniRow icon={<LineChart className="h-4 w-4" />} title="Signal" value="Sales spike in Zone B" status="active" />
+                <MiniRow icon={<Brain className="h-4 w-4" />} title="Decision" value="Increase replenishment by 18%" />
+                <MiniRow icon={<Workflow className="h-4 w-4" />} title="Execution" value="PO created • Vendor notified" status="success" />
+              </div>
 
-      {/* Reality */}
-      <section id="reality" className="bg-surface scroll-mt-24">
-        <div aria-hidden className="hairline" />
-        <div className="container-page section-pad grid lg:grid-cols-[0.82fr_1.18fr] gap-10 items-start">
-          <div className="lg:sticky lg:top-24">
-            <p className="section-label mb-3 flex items-center gap-2">
-              <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-gradient-to-r from-brand to-brand2" />
-              Reality
-            </p>
-            <h2 className="section-title mb-4">Why teams stay busy—and execution still slows</h2>
-            <p className="text-subtext leading-relaxed mb-4 max-w-prose">
-              Most businesses have capable people and plenty of software. But day-to-day work still runs on{" "}
-              <span className="font-semibold text-text">follow-ups</span>, spreadsheets, manual checks, and coordination
-              between tools—because{" "}
-              <span className="font-semibold text-text">systems don’t carry responsibility</span>. Over time, teams end
-              up running the process instead of the process running itself.
-            </p>
-            <p className="text-subtext max-w-prose">This is where time, margin, and momentum quietly leak.</p>
-          </div>
-
-          <div className="space-y-3">
-            {realityItems.map((it, idx) => {
-              const isOpen = idx === openRealityIdx;
-              return (
-                <div key={it.title} className="rounded-2xl border border-border/70 bg-surface shadow-sm overflow-hidden">
-                  <button
-                    type="button"
-                    className="w-full px-5 py-4 flex items-start justify-between gap-4 text-left"
-                    onClick={() => setOpenRealityIdx((cur) => (cur === idx ? -1 : idx))}
-                    aria-expanded={isOpen}
-                  >
-                    <div className="flex items-center gap-3 min-w-0">
-                      <div className="hidden sm:flex h-9 w-9 rounded-xl bg-brand/10 border border-brand/20 text-brand items-center justify-center">
-                        {it.icon}
-                      </div>
-                      <div className="min-w-0">
-                        <div className="flex items-start gap-3">
-                          <span className="text-xs text-subtext tabular-nums mt-0.5">{it.n}</span>
-                          <span className="font-medium leading-snug">{it.title}</span>
-                        </div>
-                      </div>
+              <div className="px-6 pb-6">
+                <div className="rounded-2xl bg-muted border border-border p-4 relative overflow-hidden">
+                  <div className="absolute inset-0 opacity-30 bg-gradient-to-r from-brand/20 via-transparent to-brand2/20 animate-shimmer" />
+                  <div className="relative">
+                    <div className="text-xs uppercase tracking-[0.16em] text-subtext mb-2">
+                      What teams feel
                     </div>
-                    <span
-                      className="shrink-0 h-8 w-8 rounded-full border border-brand/20 bg-brand/10 flex items-center justify-center text-brand"
-                      aria-hidden="true"
-                    >
-                      {isOpen ? "–" : "+"}
-                    </span>
-                  </button>
-                  {isOpen && <div className="px-5 pb-5 text-sm text-subtext leading-relaxed">{it.body}</div>}
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* Value */}
-      <section id="value" className="relative overflow-hidden bg-muted scroll-mt-24">
-        <div aria-hidden className="hairline" />
-        <div aria-hidden className="pointer-events-none absolute inset-0">
-          <div className="absolute -top-40 left-[-9rem] h-64 w-64 rounded-full bg-brand/10 blur-3xl" />
-          <div className="absolute -bottom-40 right-[-7rem] h-64 w-64 rounded-full bg-brand2/10 blur-3xl" />
-        </div>
-        <div className="relative container-page section-pad">
-          <p className="section-label mb-3 flex items-center gap-2">
-            <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-gradient-to-r from-brand to-brand2" />
-            Value
-          </p>
-          <h2 className="section-title mb-4">Turn workflows into self-running operations</h2>
-          <p className="text-subtext mb-10 max-w-3xl leading-relaxed">
-            We redesign operational work so{" "}
-            <span className="font-semibold text-text">routine execution no longer depends on humans</span>,
-            <span className="font-semibold text-text"> decisions happen on time</span>, and people stay focused on judgment—not monitoring.
-          </p>
-
-          <div className="grid md:grid-cols-3 gap-6">
-            {[
-              {
-                icon: <Workflow className="h-5 w-5" aria-hidden="true" />,
-                title: "Reduce manual work at the source",
-                body: (
-                  <>
-                    We identify where humans are acting as “glue” between systems and replace that glue with reliable
-                    flow—so routine actions stop requiring follow-ups and copy/paste work.
-                  </>
-                ),
-              },
-              {
-                icon: <ArrowRight className="h-5 w-5" aria-hidden="true" />,
-                title: "Convert data into actions",
-                body: (
-                  <>
-                    We don’t stop at insights. We build intelligence that turns signals into decisions and decisions into
-                    execution—so data produces movement, not slides.
-                  </>
-                ),
-              },
-              {
-                icon: <TrendingUp className="h-5 w-5" aria-hidden="true" />,
-                title: "Make efficiency compounding",
-                body: (
-                  <>
-                    When work runs consistently, cycles shorten, errors drop, and teams gain capacity without adding
-                    headcount. Operations become lighter—and faster over time.
-                  </>
-                ),
-              },
-            ].map((p) => (
-              <Card key={p.title} className="rounded-2xl">
-                <CardHeader className="flex items-center gap-3">
-                  <div className="p-2 rounded-xl bg-brand/10 border border-brand/20 text-brand">{p.icon}</div>
-                  <CardTitle className="text-base">{p.title}</CardTitle>
-                </CardHeader>
-                <CardContent className="text-sm text-subtext leading-relaxed">{p.body}</CardContent>
-              </Card>
-            ))}
-          </div>
-
-          <div className="mt-10 grid lg:grid-cols-2 gap-6">
-            <div className="rounded-2xl border border-border/70 bg-surface shadow-soft p-6">
-              <div className="font-medium mb-3">What teams typically notice</div>
-              <ul className="text-sm text-subtext list-disc pl-5 space-y-2">
-                <li>
-                  <span className="font-medium text-text">Fewer handoffs</span> and fewer “check with X” moments
-                </li>
-                <li>
-                  <span className="font-medium text-text">Faster cycle times</span> for recurring work
-                </li>
-                <li>
-                  <span className="font-medium text-text">Exceptions surfaced early</span>, with clear next actions
-                </li>
-                <li>
-                  <span className="font-medium text-text">More time</span> for strategy, growth, and customer outcomes
-                </li>
-              </ul>
-            </div>
-            <div className="rounded-2xl border border-border/70 bg-surface shadow-soft p-6">
-              <div className="font-medium mb-3">A simple principle</div>
-              <p className="text-sm text-subtext leading-relaxed">
-                And instead of forcing teams to adapt to new tools, we help your{" "}
-                <span className="font-semibold text-text">existing software and dashboards adapt</span> to how your business
-                actually works.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Agentic AI */}
-      <section id="agentic" className="bg-surface scroll-mt-24">
-        <div aria-hidden className="hairline" />
-        <div className="container-page section-pad">
-          <p className="section-label mb-3 flex items-center gap-2">
-            <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-gradient-to-r from-brand to-brand2" />
-            Agentic AI
-          </p>
-          <h2 className="section-title mb-4">Agentic AI, explained simply</h2>
-
-          <div className="grid lg:grid-cols-[1.1fr_0.9fr] gap-10 items-start">
-            <div>
-              <p className="text-subtext leading-relaxed max-w-prose">
-                A capable employee doesn’t wait for step-by-step instructions. They{" "}
-                <span className="font-semibold text-text">remember context</span>, understand what matters, take the next
-                action, and check the result. <br />
-                Agentic AI brings this same loop into software—so systems don’t just inform people, they can{" "}
-                <span className="font-semibold text-text">carry responsibility</span> for completing work.
-              </p>
-
-              <div className="mt-8 grid sm:grid-cols-2 gap-4">
-                {[
-                  {
-                    icon: <Brain className="h-5 w-5" aria-hidden="true" />,
-                    title: "Memory",
-                    text: "keeps context over time—what happened, what was decided, what matters",
-                  },
-                  {
-                    icon: <Cpu className="h-5 w-5" aria-hidden="true" />,
-                    title: "Reasoning",
-                    text: "interprets the situation and chooses the next best step",
-                  },
-                  {
-                    icon: <Plug className="h-5 w-5" aria-hidden="true" />,
-                    title: "Tool use",
-                    text: "works across real business systems (not in a separate interface)",
-                  },
-                  {
-                    icon: <Workflow className="h-5 w-5" aria-hidden="true" />,
-                    title: "Action + verification",
-                    text: "acts, checks the outcome, and continues until complete",
-                  },
-                ].map((a) => (
-                  <div key={a.title} className="rounded-2xl border border-border/70 bg-muted p-5">
-                    <div className="flex items-center gap-3 mb-2">
-                      <div className="p-2 rounded-xl bg-surface border border-border/70 text-brand">{a.icon}</div>
-                      <div className="font-medium">{a.title}:</div>
-                    </div>
-                    <div className="text-sm text-subtext leading-relaxed">{a.text}</div>
+                    <ul className="text-sm text-subtext space-y-1.5">
+                      <li className="flex items-start gap-2">
+                        <CheckCircle2 className="h-4 w-4 text-brand mt-0.5" />
+                        Less chasing, fewer follow-ups
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <CheckCircle2 className="h-4 w-4 text-brand mt-0.5" />
+                        Exceptions surfaced early
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <CheckCircle2 className="h-4 w-4 text-brand mt-0.5" />
+                        Execution actually finishes
+                      </li>
+                    </ul>
                   </div>
-                ))}
-              </div>
-
-              <div className="mt-8 rounded-2xl border border-brand/20 bg-brand/5 p-5 text-sm text-subtext leading-relaxed">
-                <span className="font-medium text-text">One-line distinction:</span> Automation follows rules. Agentic systems handle
-                change and variability without collapsing back onto humans.
-              </div>
-
-              <div className="mt-6 rounded-2xl border border-border/70 bg-surface shadow-soft p-6">
-                <div className="text-sm font-medium mb-3">What it isn’t</div>
-                <ul className="text-sm text-subtext list-disc pl-5 space-y-2">
-                  <li>Not a chatbot</li>
-                  <li>Not another dashboard</li>
-                  <li>Not “advice” that still needs manual execution to become real</li>
-                </ul>
-              </div>
-            </div>
-
-            {/* simple visual metaphor */}
-            <div className="rounded-3xl border border-border/70 bg-surface shadow-soft overflow-hidden">
-              <div className="p-6">
-                <div className="section-label mb-4">The loop</div>
-                <div className="grid gap-4">
-                  {[
-                    { t: "Context", d: "Remember what matters" },
-                    { t: "Decide", d: "Choose the next step" },
-                    { t: "Act", d: "Execute in your tools" },
-                    { t: "Verify", d: "Check and continue" },
-                  ].map((x) => (
-                    <div key={x.t} className="flex items-start gap-3">
-                      <div className="mt-0.5 h-9 w-9 rounded-xl bg-muted border border-border/60 flex items-center justify-center text-brand">
-                        <ArrowRight className="h-4 w-4" aria-hidden="true" />
-                      </div>
-                      <div>
-                        <div className="font-medium">{x.t}</div>
-                        <div className="text-sm text-subtext">{x.d}</div>
-                      </div>
-                    </div>
-                  ))}
                 </div>
               </div>
-              <div
-                aria-hidden
-                className="h-20 bg-gradient-to-r from-brand/10 via-surface to-brand2/10 border-t border-border/60"
-              />
+
             </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* WHAT WE DO */}
+      <section id="what" className="bg-transparent">
+        <SectionDivider />
+        <div className="container-page section-pad">
+          <motion.div variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.2 }}>
+            <p className="section-label mb-4">What we do</p>
+            <h2 className="section-title mb-5">We build intelligent automation inside your existing systems.</h2>
+            <p className="lead max-w-3xl">
+              Not a dashboard or replacement. We make your current tools dynamic, flexible, and intelligent.
+            </p>
+          </motion.div>
+
+          <div className="mt-12 grid md:grid-cols-3 gap-6">
+            <Pillar
+              icon={<Plug className="h-5 w-5" />}
+              title="Intelligent Automation"
+              text="Systems that learn & adapt to maximize efficiency, reduce errors, accelerate operations."
+            />
+            <Pillar
+              icon={<Brain className="h-5 w-5" />}
+              title="Enterprise Intelligence"
+              text="Transform your organizational knowledge into insights & measurable business outcomes."
+            />
+            <Pillar
+              icon={<Workflow className="h-5 w-5" />}
+              title="Reliable & Safe Execution"
+              text="Automated actions, reminders, escalations, & checks. Work closes on time, every time."/>
           </div>
         </div>
       </section>
 
-      {/* Industries */}
-      <section id="industries" className="relative overflow-hidden bg-muted scroll-mt-24">
-        <div aria-hidden className="hairline" />
-        <div aria-hidden className="pointer-events-none absolute inset-0">
-          <div className="absolute -top-44 right-[-10rem] h-72 w-72 rounded-full bg-brand2/8 blur-3xl" />
-          <div className="absolute -bottom-52 left-[-10rem] h-80 w-80 rounded-full bg-brand/8 blur-3xl" />
-        </div>
-        <div className="relative container-page section-pad">
-          <p className="section-label mb-3 flex items-center gap-2">
-            <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-gradient-to-r from-brand to-brand2" />
-            Industries
-          </p>
-          <h2 className="section-title mb-4">Where manual work quietly eats margin</h2>
-          <p className="text-subtext mb-8 max-w-3xl leading-relaxed">
-            Different industries look different on the surface. The operational drag is usually the same:{" "}
-            <span className="font-semibold text-text">coordination, delays, and exceptions</span>. Use these examples to recognise the
-            pattern.
-          </p>
+      {/* VALUE */}
+      <section id="value" className="bg-transparent">
+        <SectionDivider />
+        <div className="container-page section-pad">
+          <motion.div variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.2 }}>
+            <p className="section-label mb-4">Value</p>
+            <h2 className="section-title mb-5">Turn workflows into self-running operations</h2>
+            <p className="lead max-w-3xl">
+              Routine execution stops depending on people. Decisions happen on time. Your team stays focused on judgment not monitoring.
+            </p>
+          </motion.div>
 
-          {/* tabs */}
-          <div className="flex flex-wrap gap-2 mb-6">
+          <div className="mt-12 grid md:grid-cols-3 gap-6">
+            <Card className="rounded-3xl shadow-soft hover:shadow-card transition hover:-translate-y-1">
+              <CardHeader className="flex items-center gap-3">
+                <div className="h-10 w-10 rounded-2xl bg-muted border border-border flex items-center justify-center text-brand">
+                  <Zap className="h-5 w-5" />
+                </div>
+                <CardTitle>Cost & Time Efficiency</CardTitle>
+              </CardHeader>
+              <CardContent className="text-sm text-subtext leading-relaxed">
+                Replace manual effort & operational overhead with automation across teams.
+              </CardContent>
+            </Card>
+
+            <Card className="rounded-3xl shadow-soft hover:shadow-card transition hover:-translate-y-1">
+              <CardHeader className="flex items-center gap-3">
+                <div className="h-10 w-10 rounded-2xl bg-muted border border-border flex items-center justify-center text-brand">
+                  <ArrowRight className="h-5 w-5" />
+                </div>
+                <CardTitle>Data-Driven Decisions</CardTitle>
+              </CardHeader>
+              <CardContent className="text-sm text-subtext leading-relaxed">
+                Decisions backed by data not bias. Transparent, auditable, and consistent.
+              </CardContent>
+            </Card>
+
+            <Card className="rounded-3xl shadow-soft hover:shadow-card transition hover:-translate-y-1">
+              <CardHeader className="flex items-center gap-3">
+                <div className="h-10 w-10 rounded-2xl bg-muted border border-border flex items-center justify-center text-brand">
+                  <TrendingUp className="h-5 w-5" />
+                </div>
+                <CardTitle>Compounding efficiency</CardTitle>
+              </CardHeader>
+              <CardContent className="text-sm text-subtext leading-relaxed">
+                Every action, rule, and workflow raises the baseline so the entire business moves faster, every day.
+
+              </CardContent>
+            </Card>
+          </div>
+
+
+        </div>
+      </section>
+
+      {/* INDUSTRIES */}
+      <section id="industries" className="relative overflow-hidden bg-transparent">
+        <SectionDivider />
+        <div className="relative container-page section-pad">
+          <motion.div variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.2 }}>
+            <p className="section-label mb-4">Industries</p>
+            <h2 className="section-title mb-5">Where manual work quietly eats margin</h2>
+            <p className="lead max-w-3xl">
+              Different industries look different on the surface. The operational drag is usually the same: coordination,
+              delays, and exceptions. Use these examples to recognise the pattern.
+            </p>
+          </motion.div>
+
+          <div className="mt-10 flex flex-wrap gap-2">
             {INDUSTRIES.map((x, idx) => {
               const active = idx === industryIdx;
               const Icon = x.Icon;
@@ -744,22 +509,21 @@ export default function App() {
                   type="button"
                   onClick={() => setIndustryIdx(idx)}
                   className={
-                    "inline-flex items-center gap-2 px-3 py-2 rounded-full text-sm border transition-colors focus:outline-none focus:ring-2 focus:ring-brand/30 focus:ring-offset-2 focus:ring-offset-muted " +
+                    "inline-flex items-center gap-2 px-3 py-2 rounded-full text-sm border transition-colors focus:outline-none focus:ring-2 focus:ring-brand/30 focus:ring-offset-2 focus:ring-offset-bg " +
                     (active
                       ? "bg-gradient-to-r from-brand to-brand2 text-white border-transparent shadow-soft"
                       : "bg-surface text-text border-border/70 hover:bg-bg")
                   }
                 >
-                  <Icon className="h-4 w-4" aria-hidden="true" />
+                  <Icon className="h-4 w-4" />
                   {x.label}
                 </button>
               );
             })}
           </div>
 
-          {/* swipeable slides */}
           <div
-            className="relative overflow-hidden rounded-3xl select-none"
+            className="mt-6 relative overflow-hidden rounded-3xl select-none"
             style={{ touchAction: "pan-y" }}
             onTouchStart={onIndustryStart}
             onTouchMove={onIndustryMove}
@@ -782,10 +546,10 @@ export default function App() {
                   <div key={x.key} className="w-full flex-none">
                     <Card className="rounded-3xl">
                       <CardHeader className="flex items-center gap-3">
-                        <div className="p-2 rounded-xl bg-brand/10 border border-brand/20 text-brand">
-                          <Icon className="h-5 w-5" aria-hidden="true" />
+                        <div className="h-10 w-10 rounded-2xl bg-brand/10 border border-brand/20 text-brand flex items-center justify-center">
+                          <Icon className="h-5 w-5" />
                         </div>
-                        <CardTitle className="text-base">{x.label}</CardTitle>
+                        <CardTitle>{x.label}</CardTitle>
                       </CardHeader>
                       <CardContent className="grid md:grid-cols-2 gap-8 text-sm">
                         <div>
@@ -818,9 +582,7 @@ export default function App() {
                   type="button"
                   aria-label={`Go to industry ${i + 1}`}
                   onClick={() => setIndustryIdx(i)}
-                  className={
-                    "h-2 w-2 rounded-full transition-colors " + (i === industryIdx ? "bg-brand" : "bg-border")
-                  }
+                  className={"h-2 w-2 rounded-full transition-colors " + (i === industryIdx ? "bg-brand" : "bg-border")}
                 />
               ))}
             </div>
@@ -828,231 +590,240 @@ export default function App() {
         </div>
       </section>
 
-      {/* Why Perceptive */}
-      <section id="why" className="bg-surface scroll-mt-24">
-        <div aria-hidden className="hairline" />
+      {/* WHY PERCEPTIVE */}
+      <section id="why" className="bg-transparent">
+        <SectionDivider />
         <div className="container-page section-pad">
-          <p className="section-label mb-3 flex items-center gap-2">
-            <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-gradient-to-r from-brand to-brand2" />
-            Why Perceptive
-          </p>
-          <h2 className="section-title mb-8">Built for real operational reality</h2>
+          <motion.div variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.2 }}>
+            <p className="section-label mb-4">Why Perceptive</p>
+            <h2 className="section-title mb-5">An innovative partner for building tomorrow’s operations</h2>
+            <p className="lead max-w-3xl">
+              We combine consulting clarity with product quality.
+            </p>
+          </motion.div>
 
-          <div className="grid md:grid-cols-2 gap-6">
-            {[
-              {
-                icon: <Workflow className="h-5 w-5" aria-hidden="true" />,
-                title: "Operations-first (not demo-first)",
-                text: "We start from the workflow, the constraints, and the handoffs—not from a model capability list.",
-              },
-              {
-                icon: <LayoutDashboard className="h-5 w-5" aria-hidden="true" />,
-                title: "Works with what you already run",
-                text: "We integrate into existing systems and tools—so your software and dashboards adapt to your operations, not the other way around.",
-              },
-              {
-                icon: <Zap className="h-5 w-5" aria-hidden="true" />,
-                title: "Designed for exceptions",
-                text: "Real operations live in edge cases. We build so workflows don’t collapse when reality changes.",
-              },
-              {
-                icon: <Building2 className="h-5 w-5" aria-hidden="true" />,
-                title: "Builders and partners",
-                text: "We build agent systems internally (retail-first) and also implement custom intelligence for client operations.",
-              },
-              {
-                icon: <Users className="h-5 w-5" aria-hidden="true" />,
-                title: "Human value stays central",
-                text: "The goal isn’t “more AI.” The goal is less unnecessary work—so people can create more value.",
-              },
-            ].map((w) => (
-              <div key={w.title} className="relative rounded-2xl border border-border/70 bg-muted p-6 overflow-hidden">
-                <div aria-hidden className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-brand to-brand2 opacity-70" />
-                <div aria-hidden className="pointer-events-none absolute -top-10 -right-10 h-28 w-28 rounded-full bg-brand/10 blur-2xl" />
-                <div className="flex items-start gap-4">
-                  <div className="mt-0.5 p-2.5 rounded-2xl bg-surface border border-border/70 text-brand shadow-sm">
-                    {w.icon}
-                  </div>
-                  <div className="min-w-0">
-                    <div className="font-medium mb-1">{w.title}</div>
-                    <div className="text-sm text-subtext leading-relaxed">{w.text}</div>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Offerings */}
-      <section id="offerings" className="bg-muted scroll-mt-24">
-        <div aria-hidden className="hairline" />
-        <div className="container-page section-pad">
-          <p className="section-label mb-3 flex items-center gap-2">
-            <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-gradient-to-r from-brand to-brand2" />
-            Offerings
-          </p>
-          <h2 className="section-title mb-8">Two ways to work with Perceptive</h2>
-
-          <div className="grid md:grid-cols-2 gap-6">
-            <Card className="rounded-2xl">
-              <CardHeader className="flex items-center gap-3">
-                <div className="p-2 rounded-xl bg-brand/10 border border-brand/20 text-brand">
-                  <Store className="h-5 w-5" aria-hidden="true" />
-                </div>
-                <CardTitle className="text-base">Retail agent systems (internal)</CardTitle>
-              </CardHeader>
-              <CardContent className="text-sm text-subtext leading-relaxed">
-                We build and operate agentic systems for retail operations internally. This keeps our work grounded in real
-                constraints: imperfect data, exceptions, coordination across teams, and the need for consistent execution.
-                <div className="mt-4 text-subtext">
-                  <span className="font-medium">Typical areas (examples, not a catalog):</span>
-                  <div className="mt-2">Inventory & replenishment · Store operations · Vendor coordination · Pricing & promotions</div>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card className="rounded-2xl">
-              <CardHeader className="flex items-center gap-3">
-                <div className="p-2 rounded-xl bg-brand/10 border border-brand/20 text-brand">
-                  <Building2 className="h-5 w-5" aria-hidden="true" />
-                </div>
-                <CardTitle className="text-base">Custom intelligence for your operations</CardTitle>
-              </CardHeader>
-              <CardContent className="text-sm text-subtext leading-relaxed">
-                We partner with businesses to design and implement intelligent systems tailored to your workflows, tools,
-                and goals—so operations become lighter and faster without forcing a rip-and-replace transformation.
-                <div className="mt-4 text-subtext">
-                  <span className="font-medium">Typical areas:</span>
-                  <div className="mt-2">Finance ops · Supply chain & logistics · Manufacturing ops · Shared services & internal workflows</div>
-                </div>
-              </CardContent>
-            </Card>
+          <div className="mt-12 grid md:grid-cols-2 gap-6">
+            <WhyCard
+              icon={<Workflow className="h-5 w-5" />}
+              title="Operations-first"
+              text="We start from reality: handoffs, exceptions, constraints—not demo slides."
+            />
+            <WhyCard
+              icon={<Plug className="h-5 w-5" />}
+              title="Works with what you already run"
+              text="We integrate into existing tools so adoption is natural and execution happens where work lives."
+            />
+            <WhyCard
+              icon={<Shield className="h-5 w-5" />}
+              title="Built for trust"
+              text="Clear audit trails, explainable decisions, and human control where judgment matters."
+            />
+            <WhyCard
+              icon={<Brain className="h-5 w-5" />}
+              title="Designed for change"
+              text="Real businesses evolve. Our systems are built to adapt—without falling back to manual work."
+            />
           </div>
 
-          <div className="mt-8 rounded-2xl border border-border/70 bg-surface shadow-soft p-6">
-            <div className="font-medium mb-4">Engagement shape (simple, not “architecture”)</div>
-            <div className="grid md:grid-cols-3 gap-4 text-sm text-subtext">
-              <div className="rounded-2xl bg-muted border border-border/70 p-5">
-                <div className="font-medium mb-1">Diagnose the drag</div>
-                <div>identify where time and decisions get stuck</div>
-              </div>
-              <div className="rounded-2xl bg-muted border border-border/70 p-5">
-                <div className="font-medium mb-1">Design + implement</div>
-                <div>embed intelligence into the workflow and tools</div>
-              </div>
-              <div className="rounded-2xl bg-muted border border-border/70 p-5">
-                <div className="font-medium mb-1">Operate + improve</div>
-                <div>measure outcomes, tune, expand to adjacent workflows</div>
-              </div>
+          <div className="mt-12 rounded-3xl border border-border bg-surface shadow-soft p-8">
+            <div className="font-semibold mb-2">How we work (4 stages)</div>
+            <p className="text-sm text-subtext mb-6">
+              A structured process that keeps it simple for leaders—and effective for teams.
+            </p>
+
+            <div className="grid lg:grid-cols-4 gap-4">
+              <Stage n="01" title="Intro meeting" text="Discuss your operations, goals, and where work gets stuck." />
+              <Stage n="02" title="Case study + plan" text="We send a clear write-up: opportunities, scope, and a 5–10 year vision path." />
+              <Stage n="03" title="Demo" text="A practical demo mapped to your workflow (not generic AI)." />
+              <Stage n="04" title="Build & deploy" text="We ship the system and iterate until outcomes are real and measurable." />
             </div>
           </div>
+
+
+          <div className="mt-10 flex flex-col sm:flex-row gap-3">
+            <Button size="lg" onClick={() => scrollToId("contact")}>
+              Reach out to us <ArrowRight className="h-4 w-4" />
+            </Button>
+            <Button size="lg" variant="outline" onClick={() => scrollToId("industries")}>
+              View industries
+            </Button>
+          </div>
         </div>
       </section>
 
-      {/* Contact */}
-      <section id="contact" className="bg-surface scroll-mt-24">
-        <div aria-hidden className="hairline" />
-        <div className="container-page section-pad grid lg:grid-cols-2 gap-10 items-start">
-          <div>
-            <p className="section-label mb-3 flex items-center gap-2">
-              <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-gradient-to-r from-brand to-brand2" />
-              Contact
+      {/* CONTACT */}
+      <section id="contact" className="bg-transparent">
+        <SectionDivider />
+        <div className="container-page section-pad grid lg:grid-cols-2 gap-12 items-start">
+          <motion.div variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.2 }}>
+            <p className="section-label mb-4">Contact</p>
+            <h2 className="section-title mb-6">Reach out to us.</h2>
+            <p className="lead max-w-xl">
+              Tell us what’s slowing you down. We’ll reply with what we would change—and what it would take to implement.
             </p>
-            <h2 className="section-title mb-4">Tell us what’s slowing you down</h2>
-            <p className="text-subtext max-w-xl leading-relaxed">
-              Share the <span className="font-semibold text-text">workflow</span>, the systems involved, and the{" "}
-              <span className="font-semibold text-text">outcome you want</span>. We’ll reply with what we’d change—and what it
-              would take to implement.
-            </p>
-          </div>
 
-          <div>
-            <form className="grid gap-4" onSubmit={handleSubmit}>
-              <Input
-                name="name"
-                autoComplete="name"
-                placeholder="Your name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                className="rounded-2xl"
-                required
-              />
-              <Input
-                type="email"
-                name="email"
-                autoComplete="email"
-                inputMode="email"
-                placeholder="Work email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="rounded-2xl"
-                required
-              />
-              <Textarea
-                name="message"
-                placeholder="Workflow + tools involved + outcome you want."
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-                className="rounded-2xl"
-                required
-              />
-              <Button type="submit" className="rounded-2xl" disabled={sending}>
-                {sending ? "Sending..." : "Send"}
-              </Button>
-              {sent && <p className="text-sm text-emerald-600">Thanks! We’ll reply from team@perceptivelabs.in.</p>}
-              {error && <p className="text-sm text-red-600">{error}</p>}
-            </form>
-            <p className="text-sm text-subtext mt-4">
-              Prefer email?{" "}
-              <a className="underline hover:text-brand" href="mailto:team@perceptivelabs.in">
+            <div className="mt-8 rounded-3xl border border-border bg-surface p-6 shadow-soft">
+              <div className="text-sm font-semibold mb-1">Email</div>
+              <a href="mailto:team@perceptivelabs.in" className="text-subtext hover:text-brand underline">
                 team@perceptivelabs.in
               </a>
-            </p>
-          </div>
+              <div className="mt-4 text-sm text-subtext">
+                For faster replies, share:
+                <ul className="mt-2 list-disc pl-5 space-y-1">
+                  <li>the workflow</li>
+                  <li>tools involved</li>
+                  <li>what “better” looks like</li>
+                </ul>
+              </div>
+            </div>
+          </motion.div>
+
+          <motion.div variants={fade} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.2 }}>
+            <Card className="rounded-3xl shadow-card">
+              <CardHeader>
+                <CardTitle>Send a message</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <form className="grid gap-4" onSubmit={handleSubmit}>
+                  <Input placeholder="Your name" value={name} onChange={(e) => setName(e.target.value)} required />
+                  <Input placeholder="Work email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+                  <Textarea
+                    placeholder="Workflow + tools involved + outcome you want"
+                    value={message}
+                    onChange={(e) => setMessage(e.target.value)}
+                    required
+                  />
+                  <Button type="submit" disabled={sending} className="w-full">
+                    {sending ? "Sending..." : "Reach out to us"}
+                  </Button>
+
+                  {sent && <p className="text-sm text-emerald-600">Thanks! We’ll reply from team@perceptivelabs.in.</p>}
+                  {error && <p className="text-sm text-red-600">{error}</p>}
+                </form>
+              </CardContent>
+            </Card>
+          </motion.div>
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="bg-bg">
-        <div aria-hidden className="hairline" />
-        <div className="container-page py-10 grid md:grid-cols-3 gap-6 text-sm text-subtext">
-          <div className="flex items-start gap-3">
-            <img src="/logo.png" alt="Perceptive Labs" className="h-9 w-auto rounded" />
+      {/* FOOTER */}
+      <footer className="border-t border-border bg-transparent">
+        <div className="container-page py-12 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 text-sm text-subtext">
+          <div className="flex items-center gap-3">
+            <img src="/logo.png" alt="Perceptive Labs" className="h-9 w-auto rounded-md" />
             <div>
-              <div className="font-semibold text-text">Perceptive Labs</div>
+              <div className="font-semibold text-text">Perceptive Labs Private Limited</div>
               <div>Intelligence for the business of tomorrow.</div>
             </div>
           </div>
 
-          <div>
-            <div className="font-medium text-text mb-2">Quick links</div>
-            <ul className="space-y-2">
-              {[
-                ["#overview", "Overview"],
-                ["#industries", "Industries"],
-                ["#offerings", "Offerings"],
-                ["#contact", "Contact"],
-              ].map(([href, label]) => (
-                <li key={href}>
-                  <a href={href} className="hover:text-brand">
-                    {label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
+          <div className="flex items-center gap-3">
+            <a
+              href="mailto:team@perceptivelabs.in"
+              aria-label="Email Perceptive Labs"
+              className="h-10 w-10 rounded-full border border-border bg-white flex items-center justify-center text-subtext hover:text-text hover:border-black/30 transition"
+            >
+              <Mail className="h-5 w-5" />
+            </a>
 
-          <div>
-            <div className="font-medium text-text mb-2">Contact</div>
-            <div>
-              <a className="underline hover:text-brand" href="mailto:team@perceptivelabs.in">
-                team@perceptivelabs.in
-              </a>
-            </div>
+            <a
+              href="https://www.linkedin.com/company/perceptive-labs/"
+              target="_blank"
+              rel="noreferrer"
+              aria-label="Perceptive Labs LinkedIn"
+              className="h-10 w-10 rounded-full border border-border bg-white flex items-center justify-center text-subtext hover:text-text hover:border-black/30 transition"
+            >
+              <Linkedin className="h-5 w-5" />
+            </a>
           </div>
         </div>
       </footer>
+    </div>
+  );
+}
+
+/* ---------- small UI blocks ---------- */
+
+function SectionDivider() {
+  return (
+    <div aria-hidden className="h-px w-full bg-gradient-to-r from-transparent via-brand/25 to-transparent" />
+  );
+}
+
+function Chip({ children }) {
+  return <div className="px-3 py-2 rounded-2xl border border-border bg-surface text-subtext">{children}</div>;
+}
+
+function Pillar({ icon, title, text }) {
+  return (
+    <motion.div
+      variants={fadeUp}
+      initial="hidden"
+      whileInView="show"
+      viewport={{ once: true, amount: 0.2 }}
+      className="rounded-3xl border border-border bg-bg p-6 shadow-soft hover:shadow-card transition hover:-translate-y-1"
+    >
+      <div className="flex items-center gap-3 mb-4">
+        <div className="h-10 w-10 rounded-2xl bg-muted border border-border flex items-center justify-center text-brand">
+          {icon}
+        </div>
+        <div className="font-semibold">{title}</div>
+      </div>
+      <p className="text-sm text-subtext leading-relaxed">{text}</p>
+    </motion.div>
+  );
+}
+
+function WhyCard({ icon, title, text }) {
+  return (
+    <div className="relative rounded-3xl border border-border bg-surface p-6 overflow-hidden">
+      <div aria-hidden className="pointer-events-none absolute -top-10 -right-10 h-28 w-28 rounded-full bg-brand/10 blur-2xl" />
+      <div className="flex items-start gap-4">
+        <div className="mt-0.5 h-11 w-11 rounded-2xl bg-bg border border-border flex items-center justify-center text-brand shadow-sm">
+          {icon}
+        </div>
+        <div className="min-w-0">
+          <div className="font-semibold mb-1">{title}</div>
+          <div className="text-sm text-subtext leading-relaxed">{text}</div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function Stage({ n, title, text }) {
+  return (
+    <div className="rounded-3xl bg-muted border border-border p-5">
+      <div className="text-xs text-subtext tracking-[0.18em] mb-2">{n}</div>
+      <div className="font-semibold mb-1">{title}</div>
+      <div className="text-sm text-subtext leading-relaxed">{text}</div>
+    </div>
+  );
+}
+
+function MiniRow({ icon, title, value, status }) {
+  return (
+    <div className="rounded-2xl border border-border bg-surface p-4 flex items-start justify-between gap-4">
+      <div className="min-w-0">
+        <div className="flex items-center gap-2 text-xs uppercase tracking-[0.14em] text-subtext mb-1">
+          <span className="text-brand">{icon}</span>
+          {title}
+        </div>
+        <div className="text-sm font-medium text-text truncate">{value}</div>
+      </div>
+
+      {status && (
+        <span
+          className={
+            "text-xs px-3 py-1 rounded-full border whitespace-nowrap " +
+            (status === "active"
+              ? "bg-brand/10 border-brand/20 text-brand"
+              : "bg-emerald-50 border-emerald-200 text-emerald-700")
+          }
+        >
+          {status === "active" ? "Now" : "Done"}
+        </span>
+      )}
     </div>
   );
 }

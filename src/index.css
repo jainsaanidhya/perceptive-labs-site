@@ -5,20 +5,17 @@
 :root {
   color-scheme: light;
 
-  /* Neutral system */
-  --bg: 240 20% 98%;
-  --surface: 0 0% 100%;
-  --muted: 240 18% 96%;
-  --border: 240 12% 90%;
+  --bg: 0 0% 100%;
+  --surface: 0 0% 98%;
+  --muted: 220 20% 97%;
+  --border: 220 13% 91%;
 
-  --text: 222 47% 11%;
-  /* Slightly darker for readability on light backgrounds */
-  --subtext: 215 18% 38%;
+  --text: 220 25% 10%;
+  --subtext: 220 10% 40%;
 
-  /* Brand accents (modern, calm) */
-  /* Blue → cyan gradient to work well with a black/white logo */
-  --brand: 222 90% 56%;
-  --brand2: 190 95% 45%;
+  /* Brand (keep yours) */
+  --brand: 221 83% 53%;
+  --brand2: 263 70% 50%;
 }
 
 @layer base {
@@ -26,16 +23,20 @@
     @apply font-sans antialiased;
     text-rendering: geometricPrecision;
   }
-  h1, h2, h3 {
-    text-wrap: balance;
-  }
-  p {
-    text-wrap: pretty;
-  }
+
   body {
     @apply bg-bg text-text;
     font-feature-settings: "ss01" 1, "ss02" 1, "cv11" 1;
   }
+
+  h1, h2, h3 {
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
   ::selection {
     background: hsl(var(--brand) / 0.18);
   }
@@ -45,23 +46,33 @@
   .container-page {
     @apply max-w-6xl mx-auto px-5 sm:px-6 lg:px-8;
   }
+
   .section-pad {
-    @apply py-14 sm:py-16 lg:py-20;
+    @apply py-16 sm:py-20 lg:py-28;
   }
+
   .section-label {
-    @apply text-xs uppercase tracking-widest text-subtext font-medium;
+    @apply text-xs uppercase tracking-[0.18em] text-subtext font-medium;
   }
+
   .section-title {
-    @apply text-2xl sm:text-3xl lg:text-4xl font-semibold tracking-tight;
+    @apply text-3xl sm:text-4xl lg:text-5xl font-semibold tracking-tight;
   }
+
   .lead {
     @apply text-subtext text-base sm:text-lg leading-relaxed;
-  }
-  .hairline {
-    @apply h-px w-full bg-gradient-to-r from-transparent via-brand/30 to-transparent;
   }
 
   .text-gradient {
     @apply bg-gradient-to-r from-brand to-brand2 bg-clip-text text-transparent;
   }
+
+  .glass {
+    @apply bg-bg/75 backdrop-blur-xl border border-border/70;
+  }
+
+section[id] { scroll-margin-top: 6rem; }
+@media (min-width: 640px) {
+  section[id] { scroll-margin-top: 7rem; }
+}
 }
