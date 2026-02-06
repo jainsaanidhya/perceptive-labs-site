@@ -724,7 +724,7 @@ export default function App() {
             </a>
 
             <a
-              href="https://www.linkedin.com/company/perceptive-labs/"
+              href="https://www.linkedin.com/company/perceptivelabs/"
               target="_blank"
               rel="noreferrer"
               aria-label="Perceptive Labs LinkedIn"
