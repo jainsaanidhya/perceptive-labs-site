@@ -347,8 +347,9 @@ export default function App() {
             </motion.div>
 
             <motion.div variants={fade} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.2 }} className="relative">
+
                 <div
-                className="rounded-3xl bg-bg overflow-hidden max-w-md ml-auto relative"
+                className="rounded-3xl bg-bg overflow-hidden max-w-md ml-auto relative shadow-soft hover:shadow-card transition hover:-translate-y-1"
                 style={{
                   boxShadow:
                     "0 0 0 1px rgba(255,255,255,0.22), 0 0 48px rgba(255,255,255,0.10), 0 40px 140px rgba(59,130,246,0.22), 0 20px 90px rgba(124,58,237,0.18)",
@@ -401,9 +402,9 @@ export default function App() {
           <div aria-hidden className="h-px w-full bg-gradient-to-r from-transparent via-white/25 to-transparent" />
           <div className="container-page section-pad">
             <motion.div variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.2 }}>
-              <p className="section-label mb-4 text-white/70">What we do</p>
+              <p className="section-label mb-4 text-white">What we do</p>
               <h2 className="section-title mb-5">We build intelligent automation inside your existing systems.</h2>
-              <p className="lead max-w-3xl text-white/70">
+              <p className="lead max-w-3xl text-white/80">
                 Not a dashboard or replacement. We make your current tools dynamic, flexible, and intelligent.
               </p>
             </motion.div>
@@ -434,7 +435,7 @@ export default function App() {
             <motion.div variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.2 }}>
               <p className="section-label mb-4 text-white">Value</p>
               <h2 className="section-title mb-5">Turn workflows into self-running operations</h2>
-              <p className="lead max-w-3xl">
+              <p className="lead max-w-3xl text-white/80">
                 Routine execution stops depending on people. Decisions happen on time. Your team stays focused on judgment not monitoring.
               </p>
             </motion.div>
@@ -756,13 +757,7 @@ function Chip({ children }) {
 
 function Pillar({ icon, title, text }) {
   return (
-    <motion.div
-      variants={fadeUp}
-      initial="hidden"
-      whileInView="show"
-      viewport={{ once: true, amount: 0.2 }}
-      className="rounded-3xl border border-border bg-bg text-text p-6 shadow-soft hover:shadow-card transition hover:-translate-y-1"
-    >
+    <div className="rounded-3xl border border-border bg-bg text-text p-6 shadow-soft hover:shadow-card transition hover:-translate-y-1">
       <div className="flex items-center gap-3 mb-4">
         <div className="h-10 w-10 rounded-2xl bg-muted border border-border flex items-center justify-center text-brand">
           {icon}
@@ -770,13 +765,13 @@ function Pillar({ icon, title, text }) {
         <div className="font-semibold text-black">{title}</div>
       </div>
       <p className="text-sm text-subtext leading-relaxed">{text}</p>
-    </motion.div>
+    </div>
   );
 }
 
 function WhyCard({ icon, title, text }) {
   return (
-    <div className="relative rounded-3xl border border-border bg-surface p-6 overflow-hidden">
+    <div className="relative rounded-3xl border border-border bg-surface p-6 overflow-hidden shadow-soft hover:shadow-card transition hover:-translate-y-1">
       <div aria-hidden className="pointer-events-none absolute -top-10 -right-10 h-28 w-28 rounded-full bg-brand/10 blur-2xl" />
       <div className="flex items-start gap-4">
         <div className="mt-0.5 h-11 w-11 rounded-2xl bg-bg border border-border flex items-center justify-center text-brand shadow-sm">
@@ -798,6 +793,36 @@ function Stage({ n, title, text }) {
       <div className="font-semibold mb-1">{title}</div>
       <div className="text-sm text-subtext leading-relaxed">{text}</div>
     </div>
+  );
+}
+
+function FadeUp({ children, className = "", delay = 0 }) {
+  return (
+    <motion.div
+      className={className}
+      variants={fadeUp}
+      initial="hidden"
+      whileInView="show"
+      viewport={{ once: true, amount: 0.2 }}
+      transition={{ delay }}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
+function FadeIn({ children, className = "", delay = 0 }) {
+  return (
+    <motion.div
+      className={className}
+      variants={fade}
+      initial="hidden"
+      whileInView="show"
+      viewport={{ once: true, amount: 0.2 }}
+      transition={{ delay }}
+    >
+      {children}
+    </motion.div>
   );
 }
 
