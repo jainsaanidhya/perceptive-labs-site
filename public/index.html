@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Perceptive Labs — Intelligence for the business of tomorrow</title>
+<meta name="description" content="Perceptive Labs embeds intelligent automation into existing systems so routine work stops depending on people, decisions happen on time, and teams focus on judgment."/>
+<link rel="canonical" href="https://perceptivelabs.in/"/>
+<meta property="og:title" content="Perceptive Labs — Intelligence for the business of tomorrow"/>
+<meta property="og:description" content="We embed intelligent automation into your existing systems so routine work stops depending on people, decisions happen on time, and teams focus on judgment."/>
+<meta property="og:image" content="/og.png"/>
+<meta property="og:url" content="https://perceptivelabs.in/"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<link rel="icon" href="/favicon.ico"/>
+<link rel="apple-touch-icon" href="/apple-touch-icon.png"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800;900&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased;text-rendering:geometricPrecision}
+body{font-family:'Geist',system-ui,sans-serif;background:#06070a;color:#fff;overflow-x:hidden;line-height:1.6}
+img{display:block;max-width:100%}
+a{text-decoration:none;color:inherit}
+button,input,textarea{font:inherit}
+::selection{background:#3b6eff;color:#fff}
+:root{
+  --black:#050507;--ink:#0b0c0f;--ink-2:#14161b;--white:#ffffff;--off:#f7f8fb;--off-2:#eef1f5;
+  --line:rgba(255,255,255,.08);--line-strong:rgba(255,255,255,.16);--line-dark:rgba(5,7,12,.1);
+  --muted:rgba(255,255,255,.56);--muted-dark:rgba(11,12,15,.62);
+  --accent:#3b6eff;--accent-soft:rgba(59,110,255,.12);--accent-glow:rgba(59,110,255,.28);
+  --green:#49d17d;--max:1180px;--nav-h:74px;
+  --ease:cubic-bezier(.16,1,.3,1);
+  --shadow-dark:0 40px 80px rgba(0,0,0,.45);--shadow-light:0 24px 70px rgba(14,16,22,.08);
+}
+.wrap{max-width:var(--max);margin:0 auto;padding:0 clamp(1.25rem,4vw,2.5rem)}
+.sr-only{position:absolute;width:1px;height:1px;clip:rect(0,0,0,0);overflow:hidden;white-space:nowrap}
+body::before{
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+  opacity:.02;mix-blend-mode:overlay;
+}
+.dot-grid{position:absolute;inset:0;pointer-events:none;background-image:radial-gradient(circle,rgba(255,255,255,.11) 1px,transparent 1px);background-size:28px 28px}
+.dot-grid--light{background-image:radial-gradient(circle,rgba(10,12,18,.10) 1px,transparent 1px);opacity:.55}
+.orb{position:absolute;border-radius:50%;filter:blur(90px);pointer-events:none}
+
+/* nav */
+.nav{position:fixed;top:0;left:0;right:0;z-index:900;height:var(--nav-h);border-bottom:1px solid rgba(11,12,15,.08);background:rgba(255,255,255,.92);backdrop-filter:blur(22px) saturate(1.4);-webkit-backdrop-filter:blur(22px) saturate(1.4);transition:border-color .25s ease,box-shadow .25s ease}
+.nav.scrolled{border-color:rgba(11,12,15,.13);box-shadow:0 4px 24px rgba(11,12,15,.05)}
+.nav__inner{max-width:var(--max);height:100%;margin:0 auto;padding:0 clamp(1.25rem,4vw,2.5rem);display:flex;align-items:center;justify-content:space-between;gap:2rem}
+.nav__logo{display:flex;align-items:center;gap:.875rem;flex-shrink:0}
+.nav__logo img{height:42px;width:auto;border-radius:8px}
+.nav__logo-stack{display:flex;flex-direction:column;gap:.08rem;line-height:1.2}
+.nav__logo-text{font-size:.9rem;font-weight:650;letter-spacing:-.02em;color:#0b0c0f}
+.nav__logo-sub{font-size:.71rem;color:rgba(11,12,15,.4);letter-spacing:.005em}
+.nav__links{display:flex;align-items:center;gap:1.4rem}
+.nav__link{font-size:.84rem;font-weight:500;color:rgba(11,12,15,.52);transition:color .18s ease}
+.nav__link:hover{color:#0b0c0f}
+.nav__cta{display:inline-flex;align-items:center;gap:.45rem;padding:.58rem 1.1rem;border-radius:10px;background:#0b0c0f;color:#fff;font-size:.84rem;font-weight:650;transition:transform .2s var(--ease),background .18s ease}
+.nav__cta:hover{transform:translateY(-1px);background:#1e2028}
+.icon-arrow{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.nav__burger{display:none;flex-direction:column;gap:5px;width:24px;padding:4px 0;background:none;border:none;cursor:pointer}
+.nav__burger span{display:block;height:1.5px;border-radius:999px;background:#0b0c0f;transition:all .3s var(--ease)}
+.nav__mobile{display:none;position:fixed;inset:0;z-index:850;background:rgba(255,255,255,.97);backdrop-filter:blur(18px);flex-direction:column;align-items:center;justify-content:center;gap:1.6rem;opacity:0;pointer-events:none;transition:opacity .25s ease}
+.nav__mobile.open{opacity:1;pointer-events:auto}
+.nav__mobile a,.nav__mobile button{font-size:clamp(1.35rem,5vw,2.2rem);font-weight:650;color:rgba(11,12,15,.45);background:none;border:none;cursor:pointer}
+.nav__mobile a:hover,.nav__mobile button:hover{color:#0b0c0f}
+.nav__mobile-close{position:absolute;top:1.3rem;right:1.5rem;font-size:1.5rem;color:rgba(11,12,15,.3);background:none;border:none;cursor:pointer}
+@media(max-width:1080px){.nav__links{gap:1rem}.nav__logo-sub{display:none}}
+@media(max-width:900px){.nav__links,.nav__cta{display:none}.nav__burger,.nav__mobile{display:flex}}
+@media(max-width:860px){.nav__inner{padding:0 1.1rem}.nav__logo img{height:36px}.nav__logo-text{font-size:.83rem}}
+
+/* sections */
+section{position:relative}
+.section{padding:clamp(5.4rem,9vw,8.8rem) 0}
+.section--dark{background:radial-gradient(circle at top right,rgba(59,110,255,.12) 0%,transparent 28%),linear-gradient(180deg,#050507 0%,#090a0d 100%);color:#fff}
+.section--light{background:radial-gradient(circle at top left,rgba(59,110,255,.08) 0%,transparent 26%),linear-gradient(180deg,#fbfbfc 0%,#f2f4f7 100%);color:var(--ink);border-top:1px solid rgba(5,7,12,.06);border-bottom:1px solid rgba(5,7,12,.06)}
+.section-head{margin-bottom:3rem;position:relative;z-index:2;max-width:900px}
+.section-eyebrow{display:inline-flex;align-items:center;gap:.55rem;font-size:.72rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;margin-bottom:1rem}
+.section--dark .section-eyebrow{color:rgba(255,255,255,.38)}
+.section--light .section-eyebrow{color:rgba(11,12,15,.38)}
+.section-title{font-size:clamp(2rem,5vw,3.6rem);font-weight:760;letter-spacing:-.04em;line-height:1.04}
+.section--dark .section-title{color:#fff}
+.section--light .section-title{color:var(--ink)}
+.section-sub{font-size:clamp(.96rem,1.6vw,1.06rem);line-height:1.68;max-width:60ch;margin-top:.85rem}
+.section--dark .section-sub{color:var(--muted)}
+.section--light .section-sub{color:var(--muted-dark)}
+@media(max-width:640px){.section{padding:clamp(3.6rem,8vw,5.4rem) 0}.section-title{font-size:clamp(1.75rem,7vw,2.8rem)}.section-sub{font-size:.94rem}}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;gap:.55rem;padding:.82rem 1.35rem;border-radius:12px;font-size:.9rem;font-weight:650;letter-spacing:.01em;transition:transform .2s var(--ease),border-color .2s ease,background .2s ease,opacity .2s ease}
+.btn:hover{transform:translateY(-1px)}
+.btn-white{background:#fff;color:#050507;box-shadow:0 14px 30px rgba(255,255,255,.08)}.btn-white:hover{opacity:.95}
+.btn-ghost-dark{border:1px solid rgba(255,255,255,.14);color:rgba(255,255,255,.78);background:rgba(255,255,255,.03)}.btn-ghost-dark:hover{border-color:rgba(255,255,255,.28);color:#fff}
+.btn-accent{background:var(--accent);color:#fff;box-shadow:0 14px 34px var(--accent-glow)}.btn-accent:hover{background:#2f5ce8}
+.btn-dark{background:var(--ink);color:#fff;box-shadow:0 14px 34px rgba(10,12,18,.12)}.btn-dark:hover{opacity:.94}
+.btn-ghost-light{border:1px solid rgba(11,12,15,.12);color:rgba(11,12,15,.72);background:#fff}.btn-ghost-light:hover{border-color:rgba(11,12,15,.24);color:var(--ink)}
+
+/* hero */
+.hero{position:relative;overflow:hidden;background:radial-gradient(circle at 78% 18%,rgba(59,110,255,.18) 0%,transparent 24%),radial-gradient(circle at 18% 0%,rgba(255,255,255,.04) 0%,transparent 20%),linear-gradient(180deg,#050507 0%,#090a0d 100%);padding:calc(var(--nav-h) + clamp(3.2rem,8vw,6.5rem)) 0 clamp(4rem,9vw,7.2rem)}
+.hero .dot-grid{mask-image:radial-gradient(ellipse 88% 80% at 50% 0%,black 42%,transparent 100%);opacity:.68}
+.hero .orb-1{width:560px;height:560px;top:-220px;right:-100px;background:radial-gradient(circle,rgba(59,110,255,.16) 0%,transparent 72%)}
+.hero .orb-2{width:340px;height:340px;left:-80px;bottom:40px;background:radial-gradient(circle,rgba(255,255,255,.06) 0%,transparent 72%)}
+.hero__grid{position:relative;z-index:2;display:grid;grid-template-columns:1.04fr .96fr;gap:2.6rem;align-items:center}
+.hero__label{display:inline-flex;align-items:center;gap:.55rem;padding:.45rem .9rem;border-radius:999px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);color:rgba(255,255,255,.62);font-size:.78rem;font-weight:600;letter-spacing:.02em;margin-bottom:1.35rem}
+.hero__label::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 6px rgba(59,110,255,.14)}
+.hero__title{font-size:clamp(3rem,7vw,5.7rem);font-weight:780;letter-spacing:-.05em;line-height:.98;max-width:10ch}
+.hero__title .hl{background:linear-gradient(90deg,#fff 0%,#9cb8ff 44%,#5b84ff 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero__sub{margin-top:1.35rem;max-width:46ch;font-size:clamp(1rem,1.7vw,1.11rem);line-height:1.72;color:rgba(255,255,255,.6)}
+.hero__actions{display:flex;align-items:center;gap:1rem;flex-wrap:wrap;margin-top:2.25rem}
+.hero__workflow{display:flex;justify-content:flex-end}
+.workflow-card{width:min(100%,530px);border-radius:22px;border:1px solid rgba(255,255,255,.1);background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.025)),rgba(255,255,255,.02);backdrop-filter:blur(24px);box-shadow:0 0 0 1px rgba(255,255,255,.05),var(--shadow-dark),0 0 110px rgba(59,110,255,.08);overflow:hidden}
+.workflow-card__head{display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;padding:1.1rem 1.2rem;border-bottom:1px solid rgba(255,255,255,.08)}
+.workflow-card__eyebrow{font-size:.74rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.36)}
+.workflow-card__title{margin-top:.35rem;font-size:1.02rem;font-weight:650;letter-spacing:-.02em;color:#fff}
+.workflow-live{display:inline-flex;align-items:center;gap:.45rem;font-size:.72rem;font-weight:650;color:#8ce4b0}
+.workflow-live::before{content:'';width:6px;height:6px;border-radius:50%;background:#49d17d;box-shadow:0 0 0 6px rgba(73,209,125,.14)}
+.workflow-card__body{padding:1.05rem;display:grid;gap:.7rem}
+.flow-row{display:grid;grid-template-columns:auto 1fr auto;gap:.8rem;align-items:flex-start;padding:.95rem 1rem;border-radius:14px;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.065);transition:border-color .25s ease,transform .25s var(--ease)}
+.flow-row:hover{border-color:rgba(255,255,255,.13);transform:translateY(-1px)}
+.flow-row__icon{width:32px;height:32px;border-radius:10px;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.07)}
+.flow-row__icon svg{width:15px;height:15px;stroke:rgba(255,255,255,.56);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.flow-row__label{font-size:.68rem;font-weight:650;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:.18rem}
+.flow-row__value{font-size:.88rem;color:rgba(255,255,255,.88);line-height:1.45}
+.flow-row__badge{margin-top:.12rem;font-size:.68rem;font-weight:700;padding:.25rem .62rem;border-radius:8px;white-space:nowrap}
+.badge-blue{background:rgba(59,110,255,.12);color:#8fb0ff;border:1px solid rgba(59,110,255,.18)}
+.badge-green{background:rgba(73,209,125,.1);color:#7be4a2;border:1px solid rgba(73,209,125,.18)}
+.workflow-card__foot{padding:1rem 1.1rem 1.15rem;border-top:1px solid rgba(255,255,255,.08);background:linear-gradient(180deg,rgba(255,255,255,.03),rgba(255,255,255,.02))}
+.workflow-feel__label{font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.34);margin-bottom:.8rem}
+.workflow-feel__grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem}
+.workflow-feel__item{padding:.9rem .95rem;border-radius:12px;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.06);font-size:.8rem;font-weight:580;line-height:1.42;color:rgba(255,255,255,.84)}
+@media(max-width:980px){.hero__grid{grid-template-columns:1fr;gap:3rem}.hero__workflow{justify-content:stretch}.workflow-card{width:100%}}
+@media(max-width:760px){.hero__title{font-size:clamp(2.6rem,9vw,3.8rem);max-width:100%}}
+@media(max-width:580px){.workflow-feel__grid{grid-template-columns:1fr 1fr}.hero__actions{flex-direction:column;align-items:stretch}.hero__actions .btn{justify-content:center;width:100%}}
+@media(max-width:400px){.workflow-feel__grid{grid-template-columns:1fr}}
+
+/* ─── THE PROBLEM ────────────────────────────────────────────────── */
+.problem-section{
+  position:relative;overflow:hidden;
+  background:linear-gradient(180deg,#050507 0%,#090a0d 100%);
+  padding:clamp(5rem,9vw,8.5rem) 0;
+  border-top:1px solid rgba(255,255,255,.04);
+}
+.problem-section .dot-grid{mask-image:radial-gradient(ellipse 70% 100% at 50% 50%,black,transparent);opacity:.3}
+.problem-orb{position:absolute;width:700px;height:700px;border-radius:50%;background:radial-gradient(circle,rgba(248,113,113,.06) 0%,transparent 65%);filter:blur(70px);pointer-events:none;top:50%;left:50%;transform:translate(-50%,-50%)}
+.problem-inner{position:relative;z-index:2;display:grid;grid-template-columns:1fr 1fr;gap:clamp(3rem,6vw,6rem);align-items:center}
+.problem-eyebrow{display:inline-flex;align-items:center;gap:.5rem;font-size:.72rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:rgba(248,113,113,.75);margin-bottom:1.2rem}
+.problem-eyebrow::before{content:'';width:6px;height:6px;border-radius:50%;background:#f87171;box-shadow:0 0 0 5px rgba(248,113,113,.14);flex-shrink:0}
+.problem-headline{font-size:clamp(1.9rem,4vw,3rem);font-weight:760;letter-spacing:-.04em;line-height:1.08;color:#fff}
+.problem-headline em{font-style:normal;background:linear-gradient(90deg,#f87171,#fca5a5);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.problem-body{margin-top:1.1rem;font-size:clamp(.96rem,1.5vw,1.04rem);line-height:1.74;color:rgba(255,255,255,.45);max-width:44ch}
+.problem-costs{display:grid;gap:.6rem;margin-top:2rem}
+.problem-cost{display:flex;align-items:center;gap:.85rem;padding:.85rem 1rem;border-radius:14px;border:1px solid rgba(248,113,113,.1);background:rgba(248,113,113,.035);font-size:.9rem;color:rgba(255,255,255,.65);line-height:1.5;transition:border-color .25s ease,background .25s ease}
+.problem-cost:hover{border-color:rgba(248,113,113,.22);background:rgba(248,113,113,.07)}
+.problem-cost__icon{width:34px;height:34px;border-radius:10px;flex-shrink:0;display:flex;align-items:center;justify-content:center;background:rgba(248,113,113,.08);border:1px solid rgba(248,113,113,.15)}
+.problem-cost__icon svg{width:15px;height:15px;stroke:#f87171;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.problem-cost strong{color:#fff;font-weight:600}
+
+/* right-side card — fake inbox */
+.problem-card{border-radius:22px;border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.025);overflow:hidden;box-shadow:0 30px 70px rgba(0,0,0,.4)}
+.problem-card__head{padding:.85rem 1.1rem;border-bottom:1px solid rgba(255,255,255,.06);display:flex;align-items:center;justify-content:space-between}
+.problem-card__title{font-size:.78rem;font-weight:650;color:rgba(255,255,255,.38);letter-spacing:.02em}
+.problem-card__status{display:inline-flex;align-items:center;gap:.4rem;font-size:.68rem;font-weight:700;color:#f87171}
+.problem-card__status::before{content:'';width:5px;height:5px;border-radius:50%;background:#f87171;box-shadow:0 0 0 4px rgba(248,113,113,.16)}
+.problem-rows{display:grid;gap:0}
+.problem-row{display:flex;align-items:flex-start;gap:.85rem;padding:.95rem 1.1rem;border-bottom:1px solid rgba(255,255,255,.04)}
+.problem-row:last-child{border-bottom:none}
+.problem-row__avatar{width:30px;height:30px;border-radius:50%;flex-shrink:0;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;font-size:.68rem;font-weight:700;color:rgba(255,255,255,.38);margin-top:.1rem}
+.problem-row__body{flex:1;min-width:0}
+.problem-row__name{font-size:.75rem;font-weight:650;color:rgba(255,255,255,.48);margin-bottom:.18rem}
+.problem-row__msg{font-size:.84rem;color:rgba(255,255,255,.72);line-height:1.5}
+.problem-row__time{font-size:.67rem;color:rgba(255,255,255,.2);margin-top:.25rem;font-family:'Geist Mono',monospace}
+.problem-row__tag{flex-shrink:0;margin-top:.1rem;font-size:.63rem;font-weight:700;padding:.2rem .5rem;border-radius:6px;white-space:nowrap;letter-spacing:.04em;text-transform:uppercase}
+.tag-stuck{background:rgba(248,113,113,.1);color:#fca5a5;border:1px solid rgba(248,113,113,.18)}
+.tag-waiting{background:rgba(251,191,36,.07);color:#fcd34d;border:1px solid rgba(251,191,36,.15)}
+.tag-missed{background:rgba(255,255,255,.05);color:rgba(255,255,255,.38);border:1px solid rgba(255,255,255,.09)}
+.problem-card__foot{padding:.85rem 1.1rem;border-top:1px solid rgba(255,255,255,.06);background:rgba(248,113,113,.03);display:flex;align-items:center;gap:.6rem;font-size:.78rem;color:rgba(248,113,113,.55)}
+.problem-card__foot svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+
+@media(max-width:900px){.problem-inner{grid-template-columns:1fr;gap:2.5rem}.problem-body{max-width:100%}}
+@media(max-width:580px){.problem-costs{gap:.45rem}.problem-cost{padding:.75rem .85rem;font-size:.86rem}}
+
+/* what */
+.what-light{overflow:hidden}
+.what-light .dot-grid{mask-image:linear-gradient(180deg,black 0%,transparent 100%)}
+.what-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;position:relative;z-index:2}
+.light-card{position:relative;overflow:hidden;border-radius:22px;border:1px solid rgba(11,12,15,.08);background:rgba(255,255,255,.88);box-shadow:var(--shadow-light);padding:2rem;transition:transform .25s var(--ease),border-color .25s ease,box-shadow .25s ease;display:flex;flex-direction:column}
+.light-card:hover{transform:translateY(-5px);border-color:rgba(59,110,255,.2);box-shadow:0 28px 70px rgba(14,16,22,.13),0 0 0 1px rgba(59,110,255,.1)}
+.light-card::before{content:'';position:absolute;inset:0 auto auto 0;width:100%;height:2px;background:linear-gradient(90deg,transparent,rgba(59,110,255,.45),transparent);opacity:0;transition:opacity .3s ease}
+.light-card:hover::before{opacity:1}
+.light-card__icon{width:48px;height:48px;border-radius:16px;display:flex;align-items:center;justify-content:center;background:rgba(59,110,255,.07);border:1px solid rgba(59,110,255,.13);color:var(--accent);margin-bottom:1.4rem;transition:background .25s ease,border-color .25s ease}
+.light-card:hover .light-card__icon{background:rgba(59,110,255,.13);border-color:rgba(59,110,255,.22)}
+.light-card__icon svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.light-card__title{font-size:1.08rem;font-weight:720;letter-spacing:-.025em;color:var(--ink);margin-bottom:.55rem}
+.light-card__text{font-size:.93rem;line-height:1.74;color:rgba(11,12,15,.58);flex:1}
+.light-card__tag{margin-top:1.2rem;display:inline-flex;align-items:center;gap:.4rem;font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);opacity:.7}
+@media(max-width:920px){.what-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:580px){.what-grid{grid-template-columns:1fr}}
+
+/* product */
+.product-shell{position:relative;z-index:2;border-radius:28px;border:1px solid rgba(255,255,255,.08);background:linear-gradient(180deg,rgba(255,255,255,.03),rgba(255,255,255,.015));box-shadow:var(--shadow-dark);overflow:hidden}
+.product-shell::before{content:'';position:absolute;inset:0 auto auto 0;width:100%;height:1px;background:linear-gradient(90deg,transparent,rgba(59,110,255,.42),transparent)}
+.product-grid{display:grid;grid-template-columns:1fr .95fr}
+.product-copy{padding:clamp(2rem,4vw,3rem);border-right:1px solid rgba(255,255,255,.08)}
+.product-tag{display:inline-flex;align-items:center;gap:.45rem;padding:.38rem .82rem;border-radius:999px;font-size:.72rem;font-weight:700;letter-spacing:.11em;text-transform:uppercase;color:#88a8ff;background:rgba(59,110,255,.09);border:1px solid rgba(59,110,255,.18)}
+.product-name{margin-top:1.1rem;font-size:clamp(2rem,4vw,3rem);font-weight:780;letter-spacing:-.045em;line-height:1}
+.product-sub{margin-top:.85rem;max-width:38ch;font-size:1rem;line-height:1.76;color:rgba(255,255,255,.58)}
+.product-features{display:grid;gap:.75rem;margin:1.5rem 0 1.9rem}
+.product-feature{display:flex;align-items:flex-start;gap:.7rem;font-size:.9rem;line-height:1.56;color:rgba(255,255,255,.82)}
+.product-feature::before{content:'';width:7px;height:7px;border-radius:50%;margin-top:.55rem;flex-shrink:0;background:var(--accent);box-shadow:0 0 0 7px rgba(59,110,255,.12)}
+.product-actions{display:flex;gap:.9rem;flex-wrap:wrap}
+.product-side{padding:clamp(1.8rem,4vw,3rem);display:flex;flex-direction:column;justify-content:center;gap:1rem}
+.invoice-mock{border-radius:18px;border:1px solid rgba(255,255,255,.09);background:rgba(255,255,255,.03);overflow:hidden;box-shadow:0 20px 50px rgba(0,0,0,.3)}
+.invoice-head{display:flex;align-items:center;justify-content:space-between;padding:.95rem 1.15rem;border-bottom:1px solid rgba(255,255,255,.08)}
+.invoice-head__title{font-size:.8rem;font-weight:650;color:rgba(255,255,255,.72)}
+.invoice-head__tag{font-size:.68rem;font-weight:700;padding:.22rem .55rem;border-radius:7px;border:1px solid rgba(73,209,125,.18);background:rgba(73,209,125,.1);color:#8ae6af}
+.invoice-body{padding:1rem 1.15rem;display:grid;gap:.55rem}
+.invoice-row{display:flex;justify-content:space-between;align-items:center;gap:1rem;font-size:.8rem}
+.invoice-row__label{font-family:'Geist Mono',monospace;color:rgba(255,255,255,.35)}
+.invoice-row__value{font-weight:550;color:rgba(255,255,255,.8)}
+.invoice-row--total{margin-top:.45rem;padding-top:.8rem;border-top:1px solid rgba(255,255,255,.08)}
+.invoice-row--total .invoice-row__value{font-size:.95rem;color:#fff}
+.invoice-foot{padding:.85rem 1.15rem;border-top:1px solid rgba(255,255,255,.08);font-size:.75rem;color:#8fb0ff;font-family:'Geist Mono',monospace}
+.product-note{border-radius:16px;border:1px dashed rgba(255,255,255,.12);padding:1rem 1.05rem;color:rgba(255,255,255,.42);font-size:.82rem;background:rgba(255,255,255,.015)}
+@media(max-width:920px){.product-grid{grid-template-columns:1fr}.product-copy{border-right:none;border-bottom:1px solid rgba(255,255,255,.08)}.product-side{padding:1.5rem}}
+@media(max-width:580px){.product-actions{flex-direction:column}.product-actions .btn{justify-content:center}.product-name{font-size:clamp(1.7rem,7vw,2.5rem)}}
+
+/* value */
+.value-section-inner{position:relative;z-index:2}
+.value-intro{display:grid;grid-template-columns:1fr 1fr;gap:2rem;align-items:end;margin-bottom:3.5rem}
+@media(max-width:760px){.value-intro{grid-template-columns:1fr;gap:1.2rem;margin-bottom:2.5rem}}
+.value-strip{display:grid;grid-template-columns:repeat(3,1fr);border-radius:24px;overflow:hidden;border:1px solid rgba(11,12,15,.08);box-shadow:0 24px 60px rgba(14,16,22,.08);position:relative;z-index:2}
+@media(max-width:760px){.value-strip{grid-template-columns:1fr;border-radius:20px}}
+.value-item{padding:2.4rem 2rem;background:#fff;position:relative;transition:background .25s ease}
+.value-item:hover{background:#fafbff}
+.value-item + .value-item{border-left:1px solid rgba(11,12,15,.07)}
+@media(max-width:760px){.value-item + .value-item{border-left:none;border-top:1px solid rgba(11,12,15,.07)}}
+.value-item::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--accent),#6b9bff);opacity:0;transition:opacity .3s ease}
+.value-item:hover::before{opacity:1}
+.value-item__n{font-size:3.2rem;font-weight:800;letter-spacing:-.06em;background:linear-gradient(135deg,rgba(59,110,255,.15),rgba(59,110,255,.04));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1;margin-bottom:1rem;font-family:'Geist Mono',monospace}
+.value-item__title{font-size:1.05rem;font-weight:730;letter-spacing:-.025em;color:var(--ink);margin-bottom:.55rem}
+.value-item__text{font-size:.9rem;line-height:1.74;color:rgba(11,12,15,.56)}
+.value-pill{display:inline-flex;align-items:center;gap:.4rem;margin-top:1.2rem;padding:.35rem .75rem;border-radius:999px;font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;background:rgba(59,110,255,.07);color:var(--accent);border:1px solid rgba(59,110,255,.12)}
+
+/* industries */
+.industries-tabs{display:flex;gap:.55rem;flex-wrap:wrap;margin-bottom:2rem}
+.industries-tab{display:inline-flex;align-items:center;gap:.45rem;padding:.55rem .95rem;border-radius:999px;font-size:.83rem;font-weight:600;color:rgba(255,255,255,.48);border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.03);transition:all .2s ease;cursor:pointer}
+.industries-tab svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.industries-tab:hover{color:#fff;border-color:rgba(255,255,255,.22)}
+.industries-tab.active{background:#fff;color:#050507;border-color:#fff}
+.industries-panel{display:none;border-radius:24px;border:1px solid rgba(255,255,255,.08);background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.02));box-shadow:var(--shadow-dark);overflow:hidden}
+.industries-panel.active{display:grid;grid-template-columns:1fr 1fr}
+.industries-col{padding:clamp(1.6rem,3vw,2.3rem)}
+.industries-col + .industries-col{border-left:1px solid rgba(255,255,255,.08)}
+.industries-label{font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:1rem}
+.industries-list{display:grid;gap:.9rem}
+.industries-item{display:flex;align-items:flex-start;gap:.7rem;font-size:.88rem;line-height:1.56;color:rgba(255,255,255,.76)}
+.industries-item-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;margin-top:.5rem}
+.dot-red{background:#f87171;box-shadow:0 0 0 7px rgba(248,113,113,.08)}
+.dot-green{background:#49d17d;box-shadow:0 0 0 7px rgba(73,209,125,.08)}
+@media(max-width:640px){.industries-tabs{gap:.35rem}.industries-tab{font-size:.76rem;padding:.48rem .72rem}}
+@media(max-width:860px){.industries-panel.active{grid-template-columns:1fr}.industries-col + .industries-col{border-left:none;border-top:1px solid rgba(255,255,255,.08)}}
+
+/* why */
+.why-layout{display:grid;grid-template-columns:.95fr 1.05fr;gap:1.25rem;position:relative;z-index:2}
+.why-lead,.why-card,.process-shell{border-radius:24px;border:1px solid rgba(11,12,15,.08);background:rgba(255,255,255,.86);box-shadow:var(--shadow-light)}
+.why-lead{padding:clamp(1.8rem,3vw,2.4rem)}
+.why-lead__title{font-size:1.28rem;font-weight:740;letter-spacing:-.03em;color:var(--ink);max-width:18ch}
+.why-lead__text{margin-top:.85rem;font-size:.94rem;line-height:1.72;color:rgba(11,12,15,.62);max-width:40ch}
+.why-side{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem}
+.why-card{padding:1.45rem 1.35rem;transition:transform .25s var(--ease),box-shadow .25s ease,border-color .25s ease;position:relative;overflow:hidden}
+.why-card:hover{transform:translateY(-3px);border-color:rgba(59,110,255,.14);box-shadow:0 16px 40px rgba(14,16,22,.1)}
+.why-card__icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;background:rgba(59,110,255,.07);border:1px solid rgba(59,110,255,.1);margin-bottom:.85rem}
+.why-card__icon svg{width:16px;height:16px;stroke:var(--accent);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.why-card__title{font-size:1rem;font-weight:720;letter-spacing:-.02em;color:var(--ink);margin-bottom:.45rem}
+.why-card__text{font-size:.87rem;line-height:1.64;color:rgba(11,12,15,.62)}
+.process-shell{margin-top:1.25rem;padding:1.5rem 1.4rem;position:relative;overflow:hidden}
+.process-shell::before{content:'';position:absolute;inset:0 auto auto 0;width:100%;height:1px;background:linear-gradient(90deg,transparent,rgba(59,110,255,.35),transparent)}
+.process-head{display:flex;align-items:end;justify-content:space-between;gap:1rem;flex-wrap:wrap;margin-bottom:1.1rem}
+.process-title{font-size:.98rem;font-weight:720;letter-spacing:-.02em;color:var(--ink)}
+.process-sub{font-size:.85rem;color:rgba(11,12,15,.52)}
+.process-stages{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(11,12,15,.08);border-radius:16px;overflow:hidden}
+.process-stage{padding:1.2rem 1rem;background:rgba(255,255,255,.9)}
+.process-stage__n{font-size:.72rem;font-family:'Geist Mono',monospace;color:rgba(11,12,15,.28);margin-bottom:.85rem}
+.process-stage__title{font-size:.88rem;font-weight:700;color:var(--ink);margin-bottom:.32rem}
+.process-stage__text{font-size:.8rem;line-height:1.6;color:rgba(11,12,15,.55)}
+.why-actions{margin-top:1.5rem;display:flex;gap:.9rem;flex-wrap:wrap}
+@media(max-width:960px){.why-layout{grid-template-columns:1fr}}
+@media(max-width:760px){.why-side{grid-template-columns:1fr 1fr}.process-stages{grid-template-columns:1fr 1fr}}
+@media(max-width:520px){.why-side{grid-template-columns:1fr}.process-stages{grid-template-columns:1fr}.why-actions{flex-direction:column}.why-actions .btn{justify-content:center}}
+@media(max-width:580px){.process-head{flex-direction:column;align-items:flex-start;gap:.3rem}}
+
+/* contact */
+.contact-shell{position:relative;z-index:2;display:grid;grid-template-columns:1fr 1fr;gap:2rem;align-items:start}
+.contact-copy{max-width:46ch}
+.contact-box{margin-top:2rem;padding:1.4rem;border-radius:18px;border:1px solid rgba(255,255,255,.09);background:rgba(255,255,255,.03)}
+.contact-box__label{font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:.45rem}
+.contact-email{font-size:1rem;color:#8fb0ff;font-weight:600;word-break:break-all}
+.contact-hint{margin-top:.95rem;font-size:.85rem;line-height:1.68;color:rgba(255,255,255,.45)}
+.contact-hint ul{margin-top:.5rem;padding-left:1.2rem;display:grid;gap:.28rem}
+.contact-form{border-radius:24px;border:1px solid rgba(255,255,255,.09);background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.02));padding:1.45rem;box-shadow:var(--shadow-dark)}
+.form-field{display:grid;gap:.45rem;margin-bottom:.95rem}
+.form-label{font-size:.8rem;font-weight:600;color:rgba(255,255,255,.42)}
+.form-input,.form-textarea{width:100%;padding:.9rem 1rem;border-radius:14px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.04);color:#fff;outline:none;transition:border-color .2s ease,background .2s ease}
+.form-input::placeholder,.form-textarea::placeholder{color:rgba(255,255,255,.22)}
+.form-input:focus,.form-textarea:focus{border-color:rgba(59,110,255,.52);background:rgba(59,110,255,.05)}
+.form-textarea{min-height:128px;resize:vertical;line-height:1.68}
+.form-submit{width:100%;display:inline-flex;align-items:center;justify-content:center;gap:.55rem;padding:.95rem 1rem;border-radius:14px;background:#fff;color:#050507;font-size:.9rem;font-weight:700;border:none;transition:transform .2s var(--ease),opacity .2s ease}
+.form-submit:hover{transform:translateY(-1px);opacity:.95}
+.form-submit:disabled{opacity:.55;cursor:not-allowed;transform:none}
+.form-message{display:none;margin-top:.7rem;padding:.8rem .95rem;border-radius:12px;font-size:.84rem}
+.form-message.success{display:block;background:rgba(73,209,125,.09);border:1px solid rgba(73,209,125,.18);color:#86eab0}
+.form-message.error{display:block;background:rgba(248,113,113,.08);border:1px solid rgba(248,113,113,.18);color:#ff9595}
+@media(max-width:860px){.contact-shell{grid-template-columns:1fr}}
+@media(max-width:580px){.contact-form{padding:1.1rem}.contact-copy{max-width:100%}}
+
+/* footer */
+.footer{border-top:1px solid rgba(255,255,255,.07);background:#050507;padding:2.2rem 0 3rem}
+.footer-inner{display:flex;align-items:center;justify-content:space-between;gap:1.2rem;flex-wrap:wrap}
+.footer-left{display:flex;align-items:center;gap:.85rem}
+.footer-name{font-size:.88rem;font-weight:650;letter-spacing:-.01em}
+.footer-tag{font-size:.76rem;color:rgba(255,255,255,.34)}
+.footer-right{display:flex;align-items:center;gap:.8rem}
+.footer-link{width:38px;height:38px;border-radius:12px;border:1px solid rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.48);transition:all .2s ease}
+.footer-link:hover{border-color:rgba(255,255,255,.22);color:#fff}
+.footer-link svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.footer-copy{width:100%;margin-top:1.4rem;padding-top:1.4rem;border-top:1px solid rgba(255,255,255,.05);display:flex;align-items:center;justify-content:space-between;gap:.8rem;flex-wrap:wrap;font-size:.76rem;color:rgba(255,255,255,.26)}
+@media(max-width:560px){.footer-inner{flex-direction:column;align-items:flex-start;gap:.85rem}.footer-copy{flex-direction:column;align-items:flex-start;gap:.4rem}}
+
+/* reveal */
+.reveal{opacity:1;transform:none}
+.reveal.animate{opacity:0;transform:translateY(22px);transition:opacity .72s var(--ease),transform .72s var(--ease)}
+.reveal.animate.in{opacity:1;transform:none}
+.reveal-delay-1{transition-delay:.08s}
+.reveal-delay-2{transition-delay:.16s}
+.reveal-delay-3{transition-delay:.24s}
+.reveal-delay-4{transition-delay:.32s}
+</style>
+</head>
+<body>
+
+<header class="nav" id="nav">
+  <div class="nav__inner">
+    <a href="#top" class="nav__logo" aria-label="Perceptive Labs home">
+      <img src="/public/logo.png" alt="Perceptive Labs"/>
+      <div class="nav__logo-stack">
+        <span class="nav__logo-text">Perceptive Labs</span>
+        <span class="nav__logo-sub">Intelligence for the business of tomorrow</span>
+      </div>
+    </a>
+    <nav class="nav__links" aria-label="Main navigation">
+      <a href="#what" class="nav__link">What we do</a>
+      <a href="#problem" class="nav__link">Problem</a>
+      <a href="#industries" class="nav__link">Industries</a>
+      <a href="#value" class="nav__link">Value</a>
+      <a href="#product" class="nav__link">Products</a>
+      <a href="#why" class="nav__link">Why Perceptive</a>
+    </nav>
+    <a href="#contact" class="nav__cta">
+      Reach out to us
+      <svg class="icon-arrow" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+    </a>
+    <button class="nav__burger" id="navBurger" aria-label="Open navigation" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<div class="nav__mobile" id="navMobile" aria-hidden="true">
+  <button class="nav__mobile-close" id="navClose" aria-label="Close navigation">✕</button>
+  <a href="#problem" class="nav__mobile-link">The Problem</a>
+  <a href="#what" class="nav__mobile-link">What we do</a>
+  <a href="#product" class="nav__mobile-link">Products</a>
+  <a href="#value" class="nav__mobile-link">Value</a>
+  <a href="#industries" class="nav__mobile-link">Industries</a>
+  <a href="#why" class="nav__mobile-link">Why Perceptive</a>
+  <a href="#contact" class="nav__mobile-link">Contact</a>
+</div>
+
+<main>
+  <section class="hero" id="top">
+    <div class="dot-grid" aria-hidden="true"></div>
+    <div class="orb orb-1" aria-hidden="true"></div>
+    <div class="orb orb-2" aria-hidden="true"></div>
+    <div class="wrap hero__grid">
+      <div class="hero__copy">
+        <div class="hero__label reveal">Get Experts Managing Your Business 24/7</div>
+        <h1 class="hero__title reveal reveal-delay-1">Better operations that <span class="hl">decide</span> &amp; <span class="hl">execute</span>.</h1>
+        <p class="hero__sub reveal reveal-delay-2">
+          Perceptive Labs helps you reduce manual work, improve decisions, and run more efficient operations with more clarity and control.
+          Build systems that handle routine work automatically so your team can focus on what actually matters.
+        </p>
+        <div class="hero__actions reveal reveal-delay-3">
+          <a href="#contact" class="btn btn-white">
+            Reach out to us
+            <svg class="icon-arrow" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </a>
+          <a href="#what" class="btn btn-ghost-dark">What we do</a>
+        </div>
+      </div>
+      <div class="hero__workflow reveal reveal-delay-2">
+        <div class="workflow-card" aria-label="Perceptive workflow layer example">
+          <div class="workflow-card__head">
+            <div>
+              <div class="workflow-card__eyebrow">Perceptive Workflow Layer</div>
+              <div class="workflow-card__title">Signals → decisions → actions</div>
+            </div>
+            <span class="workflow-live">Live</span>
+          </div>
+          <div class="workflow-card__body">
+            <div class="flow-row">
+              <div class="flow-row__icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 14"/></svg></div>
+              <div><div class="flow-row__label">Work status</div><div class="flow-row__value">Approvals pending (3)</div></div>
+            </div>
+            <div class="flow-row">
+              <div class="flow-row__icon"><svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 20 9 4 6 12 2 12"/></svg></div>
+              <div><div class="flow-row__label">Signal</div><div class="flow-row__value">Sales spike in Zone B</div></div>
+              <span class="flow-row__badge badge-blue">Now</span>
+            </div>
+            <div class="flow-row">
+              <div class="flow-row__icon"><svg viewBox="0 0 24 24"><path d="M9.5 9a3 3 0 1 1 5.1 2.1c-1 1-2.6 1.5-2.6 3"/><circle cx="12" cy="12" r="10"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+              <div><div class="flow-row__label">Decision</div><div class="flow-row__value">Increase replenishment by 18%</div></div>
+            </div>
+            <div class="flow-row">
+              <div class="flow-row__icon"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+              <div><div class="flow-row__label">Execution</div><div class="flow-row__value">PO created • Vendor notified</div></div>
+              <span class="flow-row__badge badge-green">Done</span>
+            </div>
+          </div>
+          <div class="workflow-card__foot">
+            <div class="workflow-feel__label">What teams feel</div>
+            <div class="workflow-feel__grid">
+              <div class="workflow-feel__item">Less chasing, fewer follow-ups</div>
+              <div class="workflow-feel__item">Exceptions surfaced early</div>
+              <div class="workflow-feel__item">Execution actually finishes</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--light what-light" id="what">
+    <div class="dot-grid dot-grid--light" aria-hidden="true"></div>
+    <div class="wrap">
+      <div class="section-head">
+        <span class="section-eyebrow reveal">What we do</span>
+        <h2 class="section-title reveal reveal-delay-1">We make workflows smarter, faster, and less manual.</h2>
+        <p class="section-sub reveal reveal-delay-2">We build systems that understand what’s happening in your business. Take the right actions. Support decisions with data. Keep work moving. Actual Execution.</p>
+      </div>
+      <div class="what-grid">
+        <div class="light-card reveal reveal-delay-1">
+          <div class="light-card__icon"><svg viewBox="0 0 24 24"><path d="M13 2L3 14h8l-1 8 11-14h-8l0-6z"/></svg></div>
+          <div class="light-card__title">Intelligent automation</div>
+          <p class="light-card__text">Intelligent systems that think, learn &amp; act. Transforming operations into smart and adaptable self-operating processes.</p>
+          <div class="light-card__tag">
+            <svg viewBox="0 0 24 24" width="11" height="11" stroke="currentColor" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Humans focus on Value
+          </div>
+        </div>
+        <div class="light-card reveal reveal-delay-2">
+          <div class="light-card__icon"><svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 20 9 4 6 12 2 12"/></svg></div>
+          <div class="light-card__title">Enterprise Intelligence</div>
+          <p class="light-card__text">Combine data, AI, and your expertise to transform your organizational knowledge into measurable business outcomes.</p>
+          <div class="light-card__tag">
+            <svg viewBox="0 0 24 24" width="11" height="11" stroke="currentColor" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Early, not reactive
+          </div>
+        </div>
+        <div class="light-card reveal reveal-delay-3">
+          <div class="light-card__icon"><svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>
+          <div class="light-card__title">Reliable execution</div>
+          <p class="light-card__text">Work doesn't get stuck in follow-ups. Systems carry the workload so teams focus on the part that needs judgment.</p>
+          <div class="light-card__tag">
+            <svg viewBox="0 0 24 24" width="11" height="11" stroke="currentColor" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Consistent, not dependent
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── THE PROBLEM ─────────────────────────────────────────────── -->
+  <section class="problem-section" id="problem">
+    <div class="dot-grid" aria-hidden="true"></div>
+    <div class="problem-orb" aria-hidden="true"></div>
+    <div class="wrap">
+      <div class="problem-inner">
+
+        <div class="problem-copy">
+          <div class="problem-eyebrow reveal">The Problem</div>
+          <h2 class="problem-headline reveal reveal-delay-1">
+            Businesses dont have a <em>technology problem.</em> They have an <em>execution problem</em>.
+          </h2>
+          <p class="problem-body reveal reveal-delay-2">
+            Work gets done when people remember to do it, chase it, or manually push it forward. That's not a system, that's a dependency. And it costs more than most teams realise.
+          </p>
+        </div>
+
+        <div class="problem-visual reveal reveal-delay-2">
+          <div class="problem-card">
+            <div class="problem-rows">
+              <div class="problem-row">
+                <div class="problem-row__avatar">RS</div>
+                <div class="problem-row__body">
+                  <div class="problem-row__name">Rahul S. · Procurement</div>
+                  <div class="problem-row__msg">Anyone know the status of the vendor approval from last week? Still waiting.</div>
+
+                </div>
+                <span class="problem-row__tag tag-stuck">Stuck</span>
+              </div>
+              <div class="problem-row">
+                <div class="problem-row__avatar">PM</div>
+                <div class="problem-row__body">
+                  <div class="problem-row__name">Priya M. · Finance</div>
+                  <div class="problem-row__msg">Invoice INV-2341 still not posted. Waiting on someone to manually enter it.</div>
+
+                </div>
+                <span class="problem-row__tag tag-waiting">Waiting</span>
+              </div>
+              <div class="problem-row">
+                <div class="problem-row__avatar">SJ</div>
+                <div class="problem-row__body">
+                  <div class="problem-row__name">Sneha J. · Logistics</div>
+                  <div class="problem-row__msg">Sent a reminder to 3 vendors. Still no update. Will follow up again tomorrow.</div>
+                </div>
+                <span class="problem-row__tag tag-stuck">Chasing</span>
+              </div>
+            </div>
+            <div class="problem-card__foot">
+              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              This is what execution looks like without intelligent systems.
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--dark" id="industries">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="section-eyebrow reveal">Industries</span>
+        <h2 class="section-title reveal reveal-delay-1">Where manual work quietly eats margin.</h2>
+        <p class="section-sub reveal reveal-delay-2">Different industries, same pattern: coordination overhead, delayed signals, and exceptions that show up too late.</p>
+      </div>
+      <div class="industries-tabs" role="tablist" aria-label="Industry examples">
+        <button class="industries-tab active" role="tab" aria-selected="true" data-tab="retail"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Retail</button>
+        <button class="industries-tab" role="tab" aria-selected="false" data-tab="manufacturing"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>Manufacturing</button>
+        <button class="industries-tab" role="tab" aria-selected="false" data-tab="logistics"><svg viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>Logistics</button>
+        <button class="industries-tab" role="tab" aria-selected="false" data-tab="finance"><svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>Finance Ops</button>
+        <button class="industries-tab" role="tab" aria-selected="false" data-tab="internal"><svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="2"/><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/></svg>Internal Ops</button>
+      </div>
+      <div id="tab-retail" class="industries-panel active" role="tabpanel">
+        <div class="industries-col"><div class="industries-label">Common friction</div><div class="industries-list"><div class="industries-item"><span class="industries-item-dot dot-red"></span>Stockouts and overstock happen because signals arrive too late.</div><div class="industries-item"><span class="industries-item-dot dot-red"></span>Store and warehouse coordination still depends on manual nudges.</div><div class="industries-item"><span class="industries-item-dot dot-red"></span>Pricing and promotion execution disappears into follow-up chains.</div></div></div>
+        <div class="industries-col"><div class="industries-label">What changes</div><div class="industries-list"><div class="industries-item"><span class="industries-item-dot dot-green"></span>Signals surface earlier, decisions happen with context, and execution starts faster.</div><div class="industries-item"><span class="industries-item-dot dot-green"></span>Humans handle exceptions while routine coordination stops stealing attention.</div></div></div>
+      </div>
+      <div id="tab-manufacturing" class="industries-panel" role="tabpanel">
+        <div class="industries-col"><div class="industries-label">Common friction</div><div class="industries-list"><div class="industries-item"><span class="industries-item-dot dot-red"></span>Planning changes faster than systems and teams can respond.</div><div class="industries-item"><span class="industries-item-dot dot-red"></span>WIP visibility is delayed, so bottlenecks become obvious too late.</div><div class="industries-item"><span class="industries-item-dot dot-red"></span>Quality and compliance checks still rely on manual discipline.</div></div></div>
+        <div class="industries-col"><div class="industries-label">What changes</div><div class="industries-list"><div class="industries-item"><span class="industries-item-dot dot-green"></span>Exceptions are surfaced earlier and routed with the right context.</div><div class="industries-item"><span class="industries-item-dot dot-green"></span>Teams respond faster to shifts without creating new coordination overhead.</div></div></div>
+      </div>
+      <div id="tab-logistics" class="industries-panel" role="tabpanel">
+        <div class="industries-col"><div class="industries-label">Common friction</div><div class="industries-list"><div class="industries-item"><span class="industries-item-dot dot-red"></span>Vendors, transporters, and warehouses still require constant chasing.</div><div class="industries-item"><span class="industries-item-dot dot-red"></span>Delays surface late and trigger firefighting across teams.</div><div class="industries-item"><span class="industries-item-dot dot-red"></span>Exception handling consumes the energy that should go into planning.</div></div></div>
+        <div class="industries-col"><div class="industries-label">What changes</div><div class="industries-list"><div class="industries-item"><span class="industries-item-dot dot-green"></span>More proactive handling of disruptions before they cascade through the workflow.</div><div class="industries-item"><span class="industries-item-dot dot-green"></span>Less manual tracking, fewer escalation loops, and clearer ownership.</div></div></div>
+      </div>
+      <div id="tab-finance" class="industries-panel" role="tabpanel">
+        <div class="industries-col"><div class="industries-label">Common friction</div><div class="industries-list"><div class="industries-item"><span class="industries-item-dot dot-red"></span>Reconciliation, validation, and review are still heavy on repeated manual work.</div><div class="industries-item"><span class="industries-item-dot dot-red"></span>Approvals and follow-ups slow closure and reduce visibility.</div><div class="industries-item"><span class="industries-item-dot dot-red"></span>Teams spend more time finding issues than resolving them.</div></div></div>
+        <div class="industries-col"><div class="industries-label">What changes</div><div class="industries-list"><div class="industries-item"><span class="industries-item-dot dot-green"></span>Exception-first workflows keep attention on the items that actually need review.</div><div class="industries-item"><span class="industries-item-dot dot-green"></span>Close cycles become smoother because the routine work is handled upstream.</div></div></div>
+      </div>
+      <div id="tab-internal" class="industries-panel" role="tabpanel">
+        <div class="industries-col"><div class="industries-label">Common friction</div><div class="industries-list"><div class="industries-item"><span class="industries-item-dot dot-red"></span>Requests bounce between teams through tickets, approvals, and reminders.</div><div class="industries-item"><span class="industries-item-dot dot-red"></span>Status reporting becomes its own layer of work.</div><div class="industries-item"><span class="industries-item-dot dot-red"></span>Progress depends on people constantly pulling updates from each other.</div></div></div>
+        <div class="industries-col"><div class="industries-label">What changes</div><div class="industries-list"><div class="industries-item"><span class="industries-item-dot dot-green"></span>Work routes itself with clearer triggers, ownership, and visibility.</div><div class="industries-item"><span class="industries-item-dot dot-green"></span>Updates stop relying on chase loops and start flowing with the work itself.</div></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--light" id="value">
+    <div class="dot-grid dot-grid--light" aria-hidden="true"></div>
+    <div class="wrap">
+      <div class="value-section-inner">
+        <div class="value-intro">
+          <div>
+            <span class="section-eyebrow reveal">Value</span>
+            <h2 class="section-title reveal reveal-delay-1">Calmer operations. Cleaner execution.</h2>
+          </div>
+          <p class="section-sub reveal reveal-delay-2" style="margin-top:0">When operations improve, everything improves. Faster Decisions, Reduced Errors, Costs go down, Output becomes more predictable. Teams spend less time on low-value work</p>
+        </div>
+        <div class="value-strip">
+          <div class="value-item reveal reveal-delay-1">
+            <div class="value-item__n">01</div>
+            <div class="value-item__title">Less operational drag</div>
+            <p class="value-item__text">Routine effort stops accumulating in inboxes, follow-ups, and repeated checking. Work moves with clearer triggers and fewer delays.</p>
+            <div class="value-pill"><svg viewBox="0 0 24 24" width="10" height="10" stroke="currentColor" fill="none" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Fewer bottlenecks</div>
+          </div>
+          <div class="value-item reveal reveal-delay-2">
+            <div class="value-item__n">02</div>
+            <div class="value-item__title">Better decisions, sooner</div>
+            <p class="value-item__text">Signals surface earlier, context stays attached, and teams can act before delays become expensive.</p>
+            <div class="value-pill"><svg viewBox="0 0 24 24" width="10" height="10" stroke="currentColor" fill="none" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Proactive, not reactive</div>
+          </div>
+          <div class="value-item reveal reveal-delay-3">
+            <div class="value-item__n">03</div>
+            <div class="value-item__title">Execution that actually finishes</div>
+            <p class="value-item__text">Approvals happen, follow-through stays visible, and work is less likely to disappear into coordination loops.</p>
+            <div class="value-pill"><svg viewBox="0 0 24 24" width="10" height="10" stroke="currentColor" fill="none" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Consistent completion</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+
+  <section class="section section--dark" id="product">
+    <div class="wrap">
+      <div class="product-shell reveal">
+        <div class="product-grid">
+          <div class="product-copy">
+            <div class="product-tag">Product</div>
+            <div class="product-name">Khata Clerk</div>
+            <p class="product-sub">Invoice and bill automation for Indian businesses. Upload documents, extract the right fields, and move cleaner records into the finance workflows teams already run.</p>
+            <div class="product-features">
+              <div class="product-feature">Extract invoices, bills, PDFs, scans, and images</div>
+              <div class="product-feature">Structure fields for finance workflows</div>
+              <div class="product-feature">Speed up review, validation, and posting</div>
+              <div class="product-feature">Cut manual entry without changing the whole system</div>
+            </div>
+            <div class="product-actions">
+              <a href="https://khataclerk.com" target="_blank" rel="noopener noreferrer" class="btn btn-accent">
+                Visit Khata Clerk
+                <svg class="icon-arrow" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+              </a>
+              <a href="#contact" class="btn btn-ghost-dark">Ask about implementation</a>
+            </div>
+          </div>
+          <div class="product-side">
+            <div class="invoice-mock">
+              <div class="invoice-head">
+                <span class="invoice-head__title">Tax Invoice · INV-2026-0342</span>
+                <span class="invoice-head__tag">Extracted</span>
+              </div>
+              <div class="invoice-body">
+                <div class="invoice-row"><span class="invoice-row__label">vendor</span><span class="invoice-row__value">Gujarat Traders</span></div>
+                <div class="invoice-row"><span class="invoice-row__label">gstin</span><span class="invoice-row__value">24AADCG7890M1ZX</span></div>
+                <div class="invoice-row"><span class="invoice-row__label">date</span><span class="invoice-row__value">13-Feb-2026</span></div>
+                <div class="invoice-row"><span class="invoice-row__label">cgst 9%</span><span class="invoice-row__value">₹4,050</span></div>
+                <div class="invoice-row"><span class="invoice-row__label">sgst 9%</span><span class="invoice-row__value">₹4,050</span></div>
+                <div class="invoice-row invoice-row--total"><span class="invoice-row__label">total</span><span class="invoice-row__value">₹53,100</span></div>
+              </div>
+              <div class="invoice-foot">Posted to downstream finance workflow</div>
+            </div>
+            <div class="product-note">Built by Perceptive Labs for finance operations that still lose time to manual document handling.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+
+  <section class="section section--light" id="why">
+    <div class="dot-grid dot-grid--light" aria-hidden="true"></div>
+    <div class="wrap">
+      <div class="section-head">
+        <span class="section-eyebrow reveal">Why Perceptive</span>
+        <h2 class="section-title reveal reveal-delay-1">An operations-first partner.</h2>
+        <p class="section-sub reveal reveal-delay-2">We combine consulting clarity with product thinking. We don’t start with AI. </p>
+      </div>
+      <div class="why-layout">
+        <div class="why-lead reveal reveal-delay-1">
+          <div class="why-lead__title">Designed with taste</div>
+          <div class="why-lead__title">Built around operations.</div>
+          <div class="why-lead__title">For your business.</div>
+          <div class="why-lead__title">To hold up in real use.</div>
+          <p class="why-lead__text">We start with how your business actually runs. Where work slows down, decisions get delayed, effort is wasted. Built around real operations, not theory
+          </p>
+          <div class="why-actions">
+            <a href="#contact" class="btn btn-dark">Reach out to us<svg class="icon-arrow" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+            <a href="#industries" class="btn btn-ghost-light">View industries</a>
+          </div>
+        </div>
+        <div class="why-side">
+          <div class="why-card reveal reveal-delay-2">
+            <div class="why-card__icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg></div>
+            <div class="why-card__title">Operations-first</div>
+            <div class="why-card__text">We begin with handoffs, exceptions, and day-to-day reality not abstract AI claims.</div>
+          </div>
+          <div class="why-card reveal reveal-delay-3">
+            <div class="why-card__icon"><svg viewBox="0 0 24 24"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg></div>
+            <div class="why-card__title">Works with what you run</div>
+            <div class="why-card__text">The goal is intelligence inside existing workflows, not a replacement journey.</div>
+          </div>
+          <div class="why-card reveal reveal-delay-3">
+            <div class="why-card__icon"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+            <div class="why-card__title">Built for trust</div>
+            <div class="why-card__text">Clear action, visible outcomes, and judgment where human oversight should stay in the loop.</div>
+          </div>
+          <div class="why-card reveal reveal-delay-4">
+            <div class="why-card__icon"><svg viewBox="0 0 24 24"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></div>
+            <div class="why-card__title">Designed for change</div>
+            <div class="why-card__text">Real businesses shift. Good systems adapt without throwing teams back.</div>
+          </div>
+        </div>
+      </div>
+      <div class="process-shell reveal reveal-delay-2">
+        <div class="process-head">
+          <div class="process-title">How we work</div>
+          <div class="process-sub">Keep it serious, simple</div>
+        </div>
+        <div class="process-stages">
+          <div class="process-stage"><div class="process-stage__n">01</div><div class="process-stage__title">Intro meeting</div><div class="process-stage__text">What’s happening today, and where it breaks</div></div>
+          <div class="process-stage"><div class="process-stage__n">02</div><div class="process-stage__title">Case study + plan</div><div class="process-stage__text">What should happen instead and what better execution could look like.</div></div>
+          <div class="process-stage"><div class="process-stage__n">03</div><div class="process-stage__title">Demo</div><div class="process-stage__text">A Real demo tied to your workflow, not a generic showcase.</div></div>
+          <div class="process-stage"><div class="process-stage__n">04</div><div class="process-stage__title">Build &amp; deploy</div><div class="process-stage__text">We make sure the system improves execution not another layer to manage.</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--dark" id="contact">
+    <div class="wrap">
+      <div class="contact-shell">
+        <div class="contact-copy">
+          <span class="section-eyebrow reveal">Contact</span>
+          <h2 class="section-title reveal reveal-delay-1">Reach out to us.</h2>
+          <p class="section-sub reveal reveal-delay-2">Tell us what is slowing the workflow down. We'll tell you where the leverage is and what it could look like to implement.</p>
+          <div class="contact-box reveal reveal-delay-3">
+            <div class="contact-box__label">Email</div>
+            <a href="/cdn-cgi/l/email-protection#f581909498b5859087969085819c839099949786db9c9b" class="contact-email"><span class="__cf_email__" data-cfemail="7f0b1a1e123f0f1a0d1c1a0f0b16091a131e1d0c511611">team@perceptivelabs.in</span></a>
+            <div class="contact-hint">
+              For faster replies, share:
+              <ul><li>the workflow</li><li>the tools involved</li><li>what "better" looks like</li></ul>
+            </div>
+          </div>
+        </div>
+        <div class="contact-form reveal reveal-delay-2">
+          <form id="contactForm" novalidate>
+            <div class="form-field"><label class="form-label" for="name">Your name</label><input class="form-input" type="text" id="name" name="name" placeholder="Name" required/></div>
+            <div class="form-field"><label class="form-label" for="email">Work email</label><input class="form-input" type="email" id="email" name="email" placeholder="you@company.com" required/></div>
+            <div class="form-field"><label class="form-label" for="message">Message</label><textarea class="form-textarea" id="message" name="message" placeholder="Workflow + tools involved + outcome you want" required></textarea></div>
+            <button class="form-submit" type="submit" id="submitBtn">
+              Send message
+              <svg class="icon-arrow" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </button>
+            <div class="form-message" id="formMessage" role="alert"></div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-inner">
+      <div class="footer-left">
+        <img src="/public/logo.png" alt="Perceptive Labs" style="height:34px;width:auto;border-radius:8px;flex-shrink:0"/>
+        <div>
+          <div class="footer-name">Perceptive Labs Private Limited</div>
+          <div class="footer-tag">Intelligence for the business of tomorrow.</div>
+        </div>
+      </div>
+      <div class="footer-right">
+        <a href="mailto:team@perceptivelabs.in" class="footer-link" aria-label="Email us">
+          <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22 6 12 13 2 6"/></svg>
+        </a>
+        <a href="https://www.linkedin.com/company/perceptivelabs/" target="_blank" rel="noopener noreferrer" class="footer-link" aria-label="LinkedIn">
+          <svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+        </a>
+      </div>
+    </div>
+    <div class="footer-copy">
+      <span>© 2026 Perceptive Labs Private Limited. All rights reserved.</span>
+    </div>
+  </div>
+</footer>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => { nav.classList.toggle('scrolled', window.scrollY > 18); }, { passive: true });
+
+const burger = document.getElementById('navBurger');
+const mobileNav = document.getElementById('navMobile');
+const navClose = document.getElementById('navClose');
+const mobileLinks = mobileNav.querySelectorAll('a');
+function openNav(){ mobileNav.classList.add('open'); mobileNav.setAttribute('aria-hidden','false'); burger.setAttribute('aria-expanded','true'); document.body.style.overflow='hidden'; }
+function closeNav(){ mobileNav.classList.remove('open'); mobileNav.setAttribute('aria-hidden','true'); burger.setAttribute('aria-expanded','false'); document.body.style.overflow=''; }
+if(burger) burger.addEventListener('click', openNav);
+if(navClose) navClose.addEventListener('click', closeNav);
+mobileLinks.forEach(link => link.addEventListener('click', closeNav));
+
+const revealEls = document.querySelectorAll('.reveal');
+const revealObs = new IntersectionObserver((entries) => {
+  entries.forEach(entry => { if(entry.isIntersecting){ entry.target.classList.add('in'); revealObs.unobserve(entry.target); } });
+}, { threshold: .12, rootMargin: '0px 0px -40px 0px' });
+revealEls.forEach(el => { if(el.closest('.industries-panel')) return; el.classList.add('animate'); revealObs.observe(el); });
+
+document.querySelectorAll('.industries-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.industries-tab').forEach(t => { t.classList.remove('active'); t.setAttribute('aria-selected','false'); });
+    document.querySelectorAll('.industries-panel').forEach(p => p.classList.remove('active'));
+    tab.classList.add('active'); tab.setAttribute('aria-selected','true');
+    const panel = document.getElementById('tab-' + tab.dataset.tab);
+    if(panel) panel.classList.add('active');
+  });
+});
+
+const form = document.getElementById('contactForm');
+const submitBtn = document.getElementById('submitBtn');
+const formMessage = document.getElementById('formMessage');
+const WORKER_URL = 'https://perceptive-contact.jainsaanidhya.workers.dev/';
+if(form){
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    formMessage.className = 'form-message'; formMessage.style.display = 'none';
+    submitBtn.disabled = true; submitBtn.innerHTML = 'Sending…';
+    const payload = { name: document.getElementById('name').value, email: document.getElementById('email').value, message: document.getElementById('message').value, _origin: window.location.href };
+    try {
+      const res = await fetch(WORKER_URL, { method: 'POST', headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }, body: JSON.stringify(payload) });
+      if(!res.ok) throw new Error('HTTP ' + res.status);
+      formMessage.className = 'form-message success';
+      formMessage.textContent = "Thanks — we'll reply from team@perceptivelabs.in.";
+      formMessage.style.display = 'block'; form.reset();
+    } catch(err) {
+      formMessage.className = 'form-message error';
+      formMessage.textContent = "Couldn't send. Please email team@perceptivelabs.in directly.";
+      formMessage.style.display = 'block';
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = 'Send message <svg class="icon-arrow" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>';
+    }
+  });
+}
+</script>
+</body>
+</html>
