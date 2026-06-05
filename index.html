@@ -59,8 +59,8 @@ body::before{
 .nav__cta{display:inline-flex;align-items:center;gap:.45rem;padding:.58rem 1.1rem;border-radius:10px;background:#0b0c0f;color:#fff;font-size:.84rem;font-weight:650;transition:transform .2s var(--ease),background .18s ease}
 .nav__cta:hover{transform:translateY(-1px);background:#1e2028}
 .icon-arrow{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-.nav__burger{display:none;flex-direction:column;gap:5px;width:24px;padding:4px 0;background:none;border:none;cursor:pointer}
-.nav__burger span{display:block;height:1.5px;border-radius:999px;background:#0b0c0f;transition:all .3s var(--ease)}
+.nav__burger{display:none;flex-direction:column;gap:5px;width:24px;min-width:24px;padding:4px 0;background:none;border:none;cursor:pointer;-webkit-appearance:none;appearance:none}
+.nav__burger span{display:block;height:2px;border-radius:999px;background:#0b0c0f;transition:all .3s var(--ease);width:100%;min-width:20px}
 .nav__mobile{
   display:none;
   position:fixed;
