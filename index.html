@@ -45,7 +45,7 @@ body::before{
 .orb{position:absolute;border-radius:50%;filter:blur(90px);pointer-events:none}
 
 /* nav */
-.nav{position:fixed;top:0;left:0;right:0;z-index:900;height:var(--nav-h);border-bottom:1px solid rgba(11,12,15,.08);background:rgba(255,255,255,.92);backdrop-filter:blur(22px) saturate(1.4);-webkit-backdrop-filter:blur(22px) saturate(1.4);transition:border-color .25s ease,box-shadow .25s ease}
+.nav{position:fixed;top:0;left:0;right:0;z-index:900;height:var(--nav-h);border-bottom:1px solid rgba(11,12,15,.08);background:#ffffff;background:rgba(255,255,255,.92);-webkit-backdrop-filter:blur(22px) saturate(1.4);backdrop-filter:blur(22px) saturate(1.4);transition:border-color .25s ease,box-shadow .25s ease}
 .nav.scrolled{border-color:rgba(11,12,15,.13);box-shadow:0 4px 24px rgba(11,12,15,.05)}
 .nav__inner{max-width:var(--max);height:100%;margin:0 auto;padding:0 clamp(1.25rem,4vw,2.5rem);display:flex;align-items:center;justify-content:space-between;gap:2rem}
 .nav__logo{display:flex;align-items:center;gap:.875rem;flex-shrink:0}
@@ -190,7 +190,7 @@ section{position:relative}
 .hero .dot-grid{mask-image:radial-gradient(ellipse 88% 80% at 50% 0%,black 42%,transparent 100%);opacity:.68}
 .hero .orb-1{width:560px;height:560px;top:-220px;right:-100px;background:radial-gradient(circle,rgba(59,110,255,.16) 0%,transparent 72%)}
 .hero .orb-2{width:340px;height:340px;left:-80px;bottom:40px;background:radial-gradient(circle,rgba(255,255,255,.06) 0%,transparent 72%)}
-.hero__grid{position:relative;z-index:2;display:grid;grid-template-columns:1.04fr .96fr;gap:2.6rem;align-items:center}
+.hero__grid{position:relative;z-index:2;display:grid;grid-template-columns:1.04fr .96fr;gap:2.6rem;align-items:start}
 .hero__label{display:inline-flex;align-items:center;gap:.55rem;padding:.45rem .9rem;border-radius:999px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);color:rgba(255,255,255,.62);font-size:.78rem;font-weight:600;letter-spacing:.02em;margin-bottom:1.35rem}
 .hero__label::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 6px rgba(59,110,255,.14)}
 .hero__title{font-size:clamp(3rem,7vw,5.7rem);font-weight:780;letter-spacing:-.05em;line-height:.98;max-width:10ch}
@@ -227,7 +227,7 @@ section{position:relative}
 .problem-section{
   position:relative;overflow:hidden;
   background:linear-gradient(180deg,#050507 0%,#090a0d 100%);
-  padding:clamp(2rem,3vw,3rem) 0 clamp(14rem,20vw,18rem);
+  padding:clamp(2rem,3vw,3rem) 0 clamp(3rem,5vw,4rem);
   border-top:1px solid rgba(255,255,255,.04);
 }
 .problem-section .dot-grid{mask-image:radial-gradient(ellipse 70% 100% at 50% 50%,black,transparent);opacity:.3}
@@ -245,9 +245,9 @@ section{position:relative}
   color:#f87171;
   margin-bottom:1.2rem;
 }
-.problem-headline{font-size:clamp(1.9rem,4vw,3rem);font-weight:760;letter-spacing:-.04em;line-height:1.08;color:#fff}
+.problem-headline{font-size:clamp(1.8rem,4vw,3rem);font-weight:760;letter-spacing:.02em;line-height:1.08;color:#fff;max-width:100%;margin-top:1.2rem}
 .problem-headline em{font-style:normal;background:linear-gradient(90deg,#f87171,#fca5a5);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.problem-body{margin-top:1.1rem;font-size:clamp(.96rem,1.5vw,1.04rem);line-height:1.74;color:rgba(255,255,255,.45);max-width:44ch}
+.problem-body{margin-top:2rem;font-size:clamp(1.02rem,1.7vw,1.14rem);line-height:1.74;color:rgba(255,255,255,.45);max-width:100%}
 .problem-costs{display:grid;gap:.6rem;margin-top:2rem}
 .problem-cost{display:flex;align-items:center;gap:.85rem;padding:.85rem 1rem;border-radius:14px;border:1px solid rgba(248,113,113,.1);background:rgba(248,113,113,.035);font-size:.9rem;color:rgba(255,255,255,.65);line-height:1.5;transition:border-color .25s ease,background .25s ease}
 .problem-cost:hover{border-color:rgba(248,113,113,.22);background:rgba(248,113,113,.07)}
@@ -276,7 +276,7 @@ section{position:relative}
 .problem-card__foot{padding:.85rem 1.1rem;border-top:1px solid rgba(255,255,255,.06);background:rgba(248,113,113,.03);display:flex;align-items:center;gap:.6rem;font-size:.78rem;color:rgba(248,113,113,.55)}
 .problem-card__foot svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
 
-@media(max-width:900px){.problem-inner{grid-template-columns:1fr;gap:2.5rem}.problem-body{max-width:100%}}
+@media(max-width:900px){.problem-inner{grid-template-columns:1fr;gap:2.5rem}.problem-body{max-width:100%}.problem-copy{padding:0 0.5rem}}
 @media(max-width:580px){.problem-costs{gap:.45rem}.problem-cost{padding:.75rem .85rem;font-size:.86rem}}
 
 /* what */
@@ -531,8 +531,8 @@ section{position:relative}
 </header>
 
 <div class="nav__mobile" id="navMobile" aria-hidden="true">
-  <a href="#problem" class="nav__mobile-link">The Problem</a>
   <a href="#what" class="nav__mobile-link">What we do</a>
+  <a href="#problem" class="nav__mobile-link">The Problem</a>
   <a href="#product" class="nav__mobile-link">Products</a>
   <a href="#value" class="nav__mobile-link">Value</a>
   <a href="#industries" class="nav__mobile-link">Industries</a>
@@ -691,6 +691,18 @@ section{position:relative}
         </div>
 
       </div>
+    </div>
+    <div class="wrap" style="position:relative;z-index:2;margin-top:3rem;display:flex;flex-wrap:wrap;gap:.5rem;">
+      <span style="padding:.35rem .75rem;border-radius:8px;font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;background:rgba(248,113,113,.08);color:#f87171;border:1px solid rgba(248,113,113,.18);">Delays</span>
+      <span style="padding:.35rem .75rem;border-radius:8px;font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;background:rgba(248,113,113,.08);color:#f87171;border:1px solid rgba(248,113,113,.18);">Bottlenecks</span>
+      <span style="padding:.35rem .75rem;border-radius:8px;font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;background:rgba(248,113,113,.08);color:#f87171;border:1px solid rgba(248,113,113,.18);">Errors</span>
+      <span style="padding:.35rem .75rem;border-radius:8px;font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;background:rgba(248,113,113,.08);color:#f87171;border:1px solid rgba(248,113,113,.18);">Firefighting</span>
+      <span style="padding:.35rem .75rem;border-radius:8px;font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;background:rgba(248,113,113,.08);color:#f87171;border:1px solid rgba(248,113,113,.18);">Guesswork</span>
+      <span style="padding:.35rem .75rem;border-radius:8px;font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;background:rgba(248,113,113,.08);color:#f87171;border:1px solid rgba(248,113,113,.18);">Leakage</span>
+      <span style="padding:.35rem .75rem;border-radius:8px;font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;background:rgba(248,113,113,.08);color:#f87171;border:1px solid rgba(248,113,113,.18);">Overload</span>
+      <span style="padding:.35rem .75rem;border-radius:8px;font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;background:rgba(248,113,113,.08);color:#f87171;border:1px solid rgba(248,113,113,.18);">Miscommunication</span>
+      <span style="padding:.35rem .75rem;border-radius:8px;font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;background:rgba(248,113,113,.08);color:#f87171;border:1px solid rgba(248,113,113,.18);">Rework</span>
+      <span style="padding:.35rem .75rem;border-radius:8px;font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;background:rgba(248,113,113,.08);color:#f87171;border:1px solid rgba(248,113,113,.18);">Dependency</span>
     </div>
   </section>
 
