@@ -55,7 +55,6 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
 .nav__mobile a:hover{background:rgba(58,134,255,.06);color:#0b0c0f}
 .nav__cta-btns{display:flex;align-items:center;gap:.6rem}
 @media(max-width:900px){.nav__links,.nav__cta,.nav__cta-btns{display:none}.nav__burger,.nav__mobile{display:flex}}
-
 @media(max-width:860px){.nav__inner{padding:0 1.1rem}.nav__logo img{height:36px}.nav__logo-text{font-size:.83rem}}
 
 #scrollBar{position:fixed;top:0;left:0;height:3px;width:0%;background:linear-gradient(90deg,#3b6eff,#9cb8ff);z-index:9999;transition:width .1s linear;pointer-events:none;border-radius:0 2px 2px 0}
@@ -110,12 +109,9 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
 
 /* ROLES */
 .roles-grid{display:grid;gap:1px;background:rgba(255,255,255,.06);border-radius:22px;overflow:hidden;border:1px solid rgba(255,255,255,.07)}
-.roles-grid:empty + .roles-empty{display:block}
-
 .role-item{background:#0b0d11}
 .role-item[data-open="true"] .role-card{background:#10131a;border-bottom:1px solid rgba(255,255,255,.06)}
-.role-item[data-open="true"] .role-card__arrow{transform:rotate(90deg);border-color:rgba(59,110,255,.4);color:#8fb0ff;background:rgba(59,110,255,.08)}
-
+.role-item[data-open="true"] .role-card__arrow{transform:rotate(180deg);border-color:rgba(59,110,255,.4);color:#8fb0ff;background:rgba(59,110,255,.08)}
 .role-card{display:grid;grid-template-columns:1fr auto;gap:1.5rem;align-items:center;padding:1.5rem 1.6rem;transition:background .2s;cursor:pointer;border:none;width:100%;text-align:left;color:inherit;background:transparent}
 .role-card:hover{background:#10131a}
 .role-card__dept{font-size:.7rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.32);margin-bottom:.4rem}
@@ -134,10 +130,8 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
 /* JD PANEL */
 .role-panel{display:none;padding:0 1.6rem 1.8rem;background:#0b0d11}
 .role-item[data-open="true"] .role-panel{display:block}
-
 .role-panel__inner{border-top:1px solid rgba(255,255,255,.06);padding-top:1.6rem;display:grid;grid-template-columns:1fr 1fr;gap:2.5rem;align-items:start}
 @media(max-width:760px){.role-panel__inner{grid-template-columns:1fr;gap:1.5rem}}
-
 .jd-section{margin-bottom:1.4rem}
 .jd-section:last-child{margin-bottom:0}
 .jd-label{font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:.75rem}
@@ -218,6 +212,9 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
 .cform-input{width:100%;padding:.82rem 1rem;border-radius:12px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.05);color:#fff;outline:none;transition:border-color .2s,background .2s;font-size:.9rem}
 .cform-input::placeholder{color:rgba(255,255,255,.22)}
 .cform-input:focus{border-color:rgba(59,110,255,.5);background:rgba(59,110,255,.06)}
+.cform-input.cform-error{border-color:rgba(248,113,113,.55) !important;background:rgba(248,113,113,.05) !important}
+.cform-field-error{display:none;font-size:.74rem;font-weight:600;color:#fca5a5;margin-top:.3rem;line-height:1.4}
+.cform-field-error.visible{display:block}
 .cform-textarea{min-height:120px;resize:vertical;line-height:1.66}
 .cform-submit{width:100%;display:inline-flex;align-items:center;justify-content:center;gap:.55rem;padding:.95rem 1rem;border-radius:13px;background:var(--accent);color:#fff;font-size:.9rem;font-weight:700;border:none;cursor:pointer;transition:transform .2s var(--ease),background .2s;box-shadow:0 12px 28px var(--accent-glow)}
 .cform-submit:hover{transform:translateY(-1px);background:#2f5ce8}
@@ -256,34 +253,34 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
 <div id="scrollBar"></div>
 
 <header class="nav" id="nav">
-    <div class="nav__inner">
-      <a href="/" class="nav__logo" aria-label="Perceptive Labs home">
-        <img src="/logo.png" alt="Perceptive Labs"/>
-        <div class="nav__logo-stack">
-          <span class="nav__logo-text">Perceptive Labs</span>
-          <span class="nav__logo-sub">Intelligence for the business of tomorrow</span>
-        </div>
-      </a>
-      <nav class="nav__links" aria-label="Main navigation">
-        <a href="/#what" class="nav__link">What we do</a>
-        <a href="/#problem" class="nav__link">Problem</a>
-        <a href="/#industries" class="nav__link">Industries</a>
-        <a href="/#value" class="nav__link">Value</a>
-        <a href="/#product" class="nav__link">Products</a>
-        <a href="/#why" class="nav__link">Why Perceptive</a>
-      </nav>
-      <div class="nav__cta-btns">
-        <a href="/careers" class="nav__cta-outline nav__cta-outline--active">Careers</a>
-        <a href="/#contact" class="nav__cta">
-          Reach out to us
-          <svg class="icon-arrow" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-        </a>
+  <div class="nav__inner">
+    <a href="/" class="nav__logo" aria-label="Perceptive Labs home">
+      <img src="/logo.png" alt="Perceptive Labs"/>
+      <div class="nav__logo-stack">
+        <span class="nav__logo-text">Perceptive Labs</span>
+        <span class="nav__logo-sub">Intelligence for the business of tomorrow</span>
       </div>
-      <button class="nav__burger" id="navBurger" aria-label="Open navigation" aria-expanded="false">
-        <span></span><span></span><span></span>
-      </button>
+    </a>
+    <nav class="nav__links" aria-label="Main navigation">
+      <a href="/#what" class="nav__link">What we do</a>
+      <a href="/#problem" class="nav__link">Problem</a>
+      <a href="/#industries" class="nav__link">Industries</a>
+      <a href="/#value" class="nav__link">Value</a>
+      <a href="/#product" class="nav__link">Products</a>
+      <a href="/#why" class="nav__link">Why Perceptive</a>
+    </nav>
+    <div class="nav__cta-btns">
+      <a href="/careers" class="nav__cta-outline nav__cta-outline--active">Careers</a>
+      <a href="/#contact" class="nav__cta">
+        Reach out to us
+        <svg class="icon-arrow" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </a>
     </div>
-  </header>
+    <button class="nav__burger" id="navBurger" aria-label="Open navigation" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
 
 <div class="nav__mobile" id="navMobile" aria-hidden="true">
   <a href="/#what">What we do</a>
@@ -297,7 +294,6 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
 </div>
 
 <main>
-
   <section class="hero">
     <div class="dot-grid" aria-hidden="true"></div>
     <div class="hero__orb hero__orb-1" aria-hidden="true"></div>
@@ -334,16 +330,10 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
         <h2 class="section-title">Where we need you.</h2>
         <p class="section-sub">All roles are based in India. Remote-friendly for the right fit.</p>
       </div>
-
-      <div class="filters reveal reveal-delay-1" role="group" aria-label="Filter by department">
+      <div class="filters reveal reveal-delay-1" role="group" aria-label="Filter by department" id="filtersContainer">
         <button class="filter-btn active" data-filter="all">All roles</button>
-        <button class="filter-btn" data-filter="engineering">Engineering</button>
-        <button class="filter-btn" data-filter="sales">Sales</button>
-        <button class="filter-btn" data-filter="marketing">Marketing</button>
       </div>
-
       <div class="roles-grid reveal reveal-delay-2" id="rolesGrid"></div>
-
       <div class="roles-empty" id="rolesEmpty">
         <div class="roles-empty__icon"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
         <div class="roles-empty__title">No open roles right now</div>
@@ -382,19 +372,30 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
         <div class="contact-careers-form">
           <form id="careersContactForm" novalidate>
             <div class="cform-row">
-              <div class="cform-field"><label class="cform-label" for="c_name">Your name</label><input class="cform-input" type="text" id="c_name" placeholder="Name" required/></div>
-              <div class="cform-field"><label class="cform-label" for="c_email">Email</label><input class="cform-input" type="email" id="c_email" placeholder="you@company.com" required/></div>
+              <div class="cform-field">
+                <label class="cform-label" for="c_name">Your name</label>
+                <input class="cform-input" type="text" id="c_name" placeholder="Name" required/>
+                <span class="cform-field-error" id="c_name_err">Please enter your name.</span>
+              </div>
+              <div class="cform-field">
+                <label class="cform-label" for="c_email">Email</label>
+                <input class="cform-input" type="email" id="c_email" placeholder="you@company.com" required/>
+                <span class="cform-field-error" id="c_email_err">Please enter a valid email address.</span>
+              </div>
             </div>
             <div class="cform-field"><label class="cform-label" for="c_role">Role you're interested in <span style="color:rgba(255,255,255,.28);font-weight:400">(optional)</span></label><input class="cform-input" type="text" id="c_role" placeholder="e.g. Full-Stack Engineer"/></div>
-            <div class="cform-field"><label class="cform-label" for="c_msg">Your message</label><textarea class="cform-input cform-textarea" id="c_msg" placeholder="What you do, what you're looking for, or just say hi." required></textarea></div>
-            <button class="cform-submit" type="submit" id="careersSubmitBtn">Send message<svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+            <div class="cform-field">
+              <label class="cform-label" for="c_msg">Your message</label>
+              <textarea class="cform-input cform-textarea" id="c_msg" placeholder="What you do, what you're looking for, or just say hi." required></textarea>
+              <span class="cform-field-error" id="c_msg_err">Please enter your message.</span>
+            </div>
+            <button class="cform-submit" type="submit" id="careersSubmitBtn" disabled>Send message<svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
             <div class="cform-message" id="careersFormMsg" role="alert"></div>
           </form>
         </div>
       </div>
     </div>
   </section>
-
 </main>
 
 <footer class="footer">
@@ -411,55 +412,91 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
     </div>
     <div class="footer-copy">
       <span>© 2026 Perceptive Labs Private Limited. All rights reserved.</span>
-      <a href="/" style="color:rgba(255,255,255,.26);transition:color .18s" onmouseover="this.style.color='rgba(255,255,255,.6)'" onmouseout="this.style.color='rgba(255,255,255,.26)'">← Back to main site</a>
+      <div style="display:flex;align-items:center;gap:1.2rem">
+        <a href="/" style="color:rgba(255,255,255,.26);transition:color .18s" onmouseover="this.style.color='rgba(255,255,255,.6)'" onmouseout="this.style.color='rgba(255,255,255,.26)'">← Back to main site</a>
+        <a href="/admin.html" style="color:rgba(255,255,255,.12);transition:color .18s;font-size:.72rem" onmouseover="this.style.color='rgba(255,255,255,.3)'" onmouseout="this.style.color='rgba(255,255,255,.12)'">team</a>
+      </div>
     </div>
   </div>
 </footer>
 
 <script>
-// ─────────────────────────────────────────────────────────────────
-//  JOBS DATA
-// ─────────────────────────────────────────────────────────────────
-
-// ── ONE LINE TO CHANGE WHEN YOU SET UP GOOGLE SHEETS ──
-const API_URL =
-"https://script.google.com/macros/s/AKfycbxnFKn8zY379gSrfdHHgTrn1irUHNQM_InzUK8qoqNM2L3xCIrvH3AIiB7XXODEEchPlQ/exec"; // ← paste your Apps Script URL here
-
-// ── Everything below stays the same forever ──────────────────────
+const API_URL = "https://script.google.com/macros/s/AKfycbxnFKn8zY379gSrfdHHgTrn1irUHNQM_InzUK8qoqNM2L3xCIrvH3AIiB7XXODEEchPlQ/exec";
+const WORKER_URL = 'https://perceptive-contact.jainsaanidhya.workers.dev/';
 
 let JOBS = [];
 
+// ─── LOAD & SYNC ──────────────────────────────────────────────────
 async function loadJobs() {
-  // If a real API URL has been configured, fetch from Google Sheets
-  if (API_URL !== "YOUR_GOOGLE_SHEET_URL_HERE") {
-    try {
-      const res = await fetch(API_URL + "?action=getJobs");
-      const data = await res.json();
-      JOBS = (data.jobs || []).filter(j => j.active);
-    } catch {
-      // Fall back to localStorage if API fails
-      JOBS = getLocalJobs();
-    }
-  } else {
-    // No API yet — read from localStorage (set by admin panel)
-    JOBS = getLocalJobs();
+  const cached = localStorage.getItem('pl_jobs');
+  if (cached) { 
+    JOBS = JSON.parse(cached).filter(j => j.active);
+    renderJobs('all');
+    initFilters();
   }
-
-  renderJobs('all');
-  initFilters();
+  await syncJobs();
+  setInterval(syncJobs, 30000);
 }
 
-function getLocalJobs() {
+async function syncJobs() {
+  if (API_URL === "YOUR_GOOGLE_SHEET_URL_HERE") return;
   try {
-    const all = JSON.parse(localStorage.getItem('pl_jobs') || '[]');
-    return all.filter(j => j.active);
-  } catch {
-    return [];
-  }
+    const res = await fetch(API_URL + "?action=getJobs");
+    const data = await res.json();
+    const all = data.jobs || [];
+    const fresh = all.filter(j => j.active);
+    if (JSON.stringify(fresh) !== JSON.stringify(JOBS)) {
+      JOBS = fresh;
+      localStorage.setItem('pl_jobs', JSON.stringify(all));
+      renderJobs(document.querySelector('.filter-btn.active')?.dataset.filter || 'all');
+      initFilters();
+    }
+  } catch {}
 }
 
-const WORKER_URL = 'https://perceptive-contact.jainsaanidhya.workers.dev/';
+// ─── BUILD CUSTOM QUESTIONS ───────────────────────────────────────
+function buildCustomQuestions(job) {
+  if (!job.questions || job.questions.length === 0) return '';
+  return job.questions.map((q, i) => {
+    const name = 'custom_' + i;
+    const req = q.required ? 'required' : '';
+    const optLabel = q.required ? '' : ' <span style="color:rgba(255,255,255,.28);font-weight:400">(optional)</span>';
+    const errMsg = q.type === 'select' || q.type === 'yesno' || q.type === 'dropdown' ? 'Please select an option.' : 'This field is required.';
+    const dataReq = q.required ? 'data-required="true"' : 'data-required="false"';
 
+    if (q.type === 'text') {
+      return `<div class="aform-field">
+        <label class="aform-label">${q.label}${optLabel}</label>
+        <input class="aform-input" type="text" name="${name}" placeholder="Your answer" ${req} ${dataReq}/>
+        <span class="field-error" data-for="${name}">${errMsg}</span>
+      </div>`;
+    } else {
+      const opts = (q.type === 'yesno') ? ['Yes', 'No'] : (q.options || []);
+      return `<div class="aform-field">
+        <label class="aform-label">${q.label}${optLabel}</label>
+        <select class="aform-input" name="${name}" ${req} ${dataReq}>
+          <option value="" disabled selected>Select an option</option>
+          ${opts.map(o => `<option value="${o}">${o}</option>`).join('')}
+        </select>
+        <span class="field-error" data-for="${name}">${errMsg}</span>
+      </div>`;
+    }
+  }).join('');
+}
+
+// ─── BUILD CUSTOM SECTIONS HTML (for JD panel) ───────────────────
+function buildCustomSectionsHTML(job) {
+  if (!job.customSections || job.customSections.length === 0) return '';
+  return job.customSections.map(s => {
+    if (!s.name || !s.items || s.items.length === 0) return '';
+    return `<div class="jd-section">
+      <div class="jd-label">${s.name}</div>
+      <ul class="jd-list">${s.items.map(item => `<li>${item}</li>`).join('')}</ul>
+    </div>`;
+  }).join('');
+}
+
+// ─── BUILD ROLE HTML ──────────────────────────────────────────────
 function buildTagHTML(job) {
   let tags = `<span class="role-tag tag-type">${job.type}</span>`;
   if (job.location.toLowerCase().includes('remote')) {
@@ -474,10 +511,11 @@ function buildTagHTML(job) {
 }
 
 function buildRoleHTML(job) {
-  const listItems = arr => arr.map(i => `<li>${i}</li>`).join('');
+  const listItems = arr => (arr && arr.length) ? arr.map(i => `<li>${i}</li>`).join('') : '';
   const optionalSection = (arr, label) => arr && arr.length
     ? `<div class="jd-section"><div class="jd-label">${label}</div><ul class="jd-list">${listItems(arr)}</ul></div>`
     : '';
+
   return `
     <div class="role-item" data-open="false" data-dept="${job.dept}" data-id="${job.id}">
       <button class="role-card" aria-expanded="false">
@@ -499,65 +537,39 @@ function buildRoleHTML(job) {
               <div class="jd-label">About the role</div>
               <div class="jd-body">${job.about}</div>
             </div>
-            <div class="jd-section">
+            ${job.responsibilities && job.responsibilities.length ? `<div class="jd-section">
               <div class="jd-label">What you'll be building</div>
               <ul class="jd-list">${listItems(job.responsibilities)}</ul>
-            </div>
-            <div class="jd-section">
+            </div>` : ''}
+            ${job.requirements && job.requirements.length ? `<div class="jd-section">
               <div class="jd-label">Required skills</div>
               <ul class="jd-list">${listItems(job.requirements)}</ul>
-            </div>
+            </div>` : ''}
             ${optionalSection(job.niceToHave, 'Nice to have')}
             ${optionalSection(job.interviewProcess, 'Interview process')}
             ${optionalSection(job.offer, 'What we offer')}
+            ${buildCustomSectionsHTML(job)}
           </div>
           <div class="role-apply">
             <div class="apply-form-wrap">
               <div class="apply-form-title">Apply for ${job.title}</div>
-              <form class="apply-form" data-role="${job.title}" novalidate>
+              <form class="apply-form" data-role="${job.title}" data-jobid="${job.id}" novalidate>
                 <div class="aform-field">
                   <label class="aform-label">Full name</label>
                   <input class="aform-input" type="text" name="name" placeholder="Your name" required/>
-                  <span class="field-error" data-for="name"></span>
+                  <span class="field-error" data-for="name">Please enter your full name.</span>
                 </div>
                 <div class="aform-field">
                   <label class="aform-label">Email</label>
                   <input class="aform-input" type="email" name="email" placeholder="you@email.com" required/>
-                  <span class="field-error" data-for="email"></span>
+                  <span class="field-error" data-for="email">Please enter a valid email address.</span>
                 </div>
                 <div class="aform-field">
                   <label class="aform-label">Phone number</label>
                   <input class="aform-input" type="tel" name="phone" placeholder="+91 98765 43210" required/>
-                  <span class="field-error" data-for="phone"></span>
+                  <span class="field-error" data-for="phone">Please enter a valid phone number.</span>
                 </div>
-                <div class="aform-field">
-                  <label class="aform-label">Have you graduated?</label>
-                  <select class="aform-input" name="graduated">
-                    <option value="" disabled selected>Select an option</option>
-                    <option value="yes">Yes, I have graduated</option>
-                    <option value="final-year">Final year — graduating soon</option>
-                    <option value="no">No, still studying</option>
-                  </select>
-                </div>
-                <div class="aform-field">
-                  <label class="aform-label">Are you willing to relocate to Ahmedabad?</label>
-                  <select class="aform-input" name="relocate">
-                    <option value="" disabled selected>Select an option</option>
-                    <option value="yes">Yes, willing to relocate</option>
-                    <option value="already">Already in Ahmedabad</option>
-                    <option value="no">No, not willing to relocate</option>
-                  </select>
-                </div>
-                <div class="aform-field">
-                  <label class="aform-label">When can you start?</label>
-                  <select class="aform-input" name="start">
-                    <option value="" disabled selected>Select an option</option>
-                    <option value="immediately">Immediately</option>
-                    <option value="2weeks">Within 2 weeks</option>
-                    <option value="1month">Within a month</option>
-                    <option value="later">More than a month</option>
-                  </select>
-                </div>
+                ${buildCustomQuestions(job)}
                 <div class="aform-field">
                   <label class="aform-label">Resume / CV <span style="color:rgba(255,255,255,.28);font-weight:400">(PDF only)</span></label>
                   <div class="file-upload-area">
@@ -591,7 +603,6 @@ function renderJobs(filter) {
   const grid = document.getElementById('rolesGrid');
   const empty = document.getElementById('rolesEmpty');
   const filtered = filter === 'all' ? JOBS : JOBS.filter(j => j.dept === filter);
-
   if (filtered.length === 0) {
     grid.innerHTML = '';
     empty.style.display = 'block';
@@ -603,9 +614,17 @@ function renderJobs(filter) {
 }
 
 function initFilters() {
-  document.querySelectorAll('.filter-btn').forEach(btn => {
+  const container = document.getElementById('filtersContainer');
+  const depts = [...new Set(JOBS.map(j => j.dept))];
+  container.innerHTML = `<button class="filter-btn active" data-filter="all">All roles</button>`;
+  depts.forEach(dept => {
+    const job = JOBS.find(j => j.dept === dept);
+    const label = job.deptLabel || dept;
+    container.innerHTML += `<button class="filter-btn" data-filter="${dept}">${label}</button>`;
+  });
+  container.querySelectorAll('.filter-btn').forEach(btn => {
     btn.addEventListener('click', () => {
-      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      container.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       renderJobs(btn.dataset.filter);
     });
@@ -614,7 +633,7 @@ function initFilters() {
 
 loadJobs();
 
-// ── Validation helpers ─────────────────────────────────────────
+// ─── VALIDATION ───────────────────────────────────────────────────
 function isValidEmail(v) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); }
 function isValidPhone(v) { return /^[+]?[\d\s\-().]{7,15}$/.test(v); }
 
@@ -622,52 +641,41 @@ function validateField(input, errorSpan) {
   const name = input.name;
   const val = input.value.trim();
   let msg = '';
-
-  if (name === 'name') {
-    if (!val) msg = 'Please enter your full name.';
-  } else if (name === 'email') {
-    if (!val) msg = 'Please enter your email address.';
-    else if (!isValidEmail(val)) msg = 'Please enter a valid email address.';
-  } else if (name === 'phone') {
-    if (!val) msg = 'Please enter your phone number.';
-    else if (!isValidPhone(val)) msg = 'Please enter a valid phone number (7–15 digits).';
-  }
-
-  if (msg) {
-    input.classList.add('input-error');
-    errorSpan.textContent = msg;
-    errorSpan.classList.add('visible');
-  } else {
-    input.classList.remove('input-error');
-    errorSpan.textContent = '';
-    errorSpan.classList.remove('visible');
-  }
+  if (name === 'name') { if (!val) msg = 'Please enter your full name.'; }
+  else if (name === 'email') { if (!val) msg = 'Please enter your email address.'; else if (!isValidEmail(val)) msg = 'Please enter a valid email address.'; }
+  else if (name === 'phone') { if (!val) msg = 'Please enter your phone number.'; else if (!isValidPhone(val)) msg = 'Please enter a valid phone number (7–15 digits).'; }
+  if (msg) { input.classList.add('input-error'); errorSpan.textContent = msg; errorSpan.classList.add('visible'); }
+  else { input.classList.remove('input-error'); errorSpan.textContent = ''; errorSpan.classList.remove('visible'); }
   return !msg;
 }
 
 function checkSubmitGate(form) {
-  const nameInput  = form.querySelector('[name="name"]');
+  const nameInput = form.querySelector('[name="name"]');
   const emailInput = form.querySelector('[name="email"]');
   const phoneInput = form.querySelector('[name="phone"]');
   const btn = form.querySelector('.aform-submit');
 
-  const nameOk  = nameInput.value.trim().length > 0 && !nameInput.classList.contains('input-error');
+  const nameOk = nameInput.value.trim().length > 0 && !nameInput.classList.contains('input-error');
   const emailOk = emailInput.value.trim().length > 0 && isValidEmail(emailInput.value.trim());
   const phoneOk = phoneInput.value.trim().length > 0 && isValidPhone(phoneInput.value.trim());
 
-  btn.disabled = !(nameOk && emailOk && phoneOk);
+  const customOk = Array.from(form.querySelectorAll('[name^="custom_"]'))
+    .filter(el => el.dataset.required === 'true')
+    .every(el => el.value.trim().length > 0);
+
+  const fileInput = form.querySelector('[name="resume"]');
+  const resumeOk = fileInput && fileInput.files && fileInput.files.length > 0;
+
+  btn.disabled = !(nameOk && emailOk && phoneOk && customOk && resumeOk);
 }
 
+// ─── ROLE HANDLERS ────────────────────────────────────────────────
 function attachRoleHandlers() {
-  // Toggle open/close
   document.querySelectorAll('.role-card').forEach(card => {
     card.addEventListener('click', () => {
       const item = card.closest('.role-item');
       const isOpen = item.dataset.open === 'true';
-      document.querySelectorAll('.role-item').forEach(i => {
-        i.dataset.open = 'false';
-        i.querySelector('.role-card').setAttribute('aria-expanded','false');
-      });
+      document.querySelectorAll('.role-item').forEach(i => { i.dataset.open = 'false'; i.querySelector('.role-card').setAttribute('aria-expanded','false'); });
       if (!isOpen) {
         item.dataset.open = 'true';
         card.setAttribute('aria-expanded','true');
@@ -676,73 +684,83 @@ function attachRoleHandlers() {
     });
   });
 
-  // ── Real-time field validation + submit gating ──────────────
   document.querySelectorAll('.apply-form').forEach(form => {
-    const fields = ['name','email','phone'];
-
-    fields.forEach(fieldName => {
+    ['name','email','phone'].forEach(fieldName => {
       const input = form.querySelector(`[name="${fieldName}"]`);
       const errorSpan = form.querySelector(`.field-error[data-for="${fieldName}"]`);
       if (!input || !errorSpan) return;
-
-      input.addEventListener('blur', () => {
-        validateField(input, errorSpan);
+      input.addEventListener('blur', () => { validateField(input, errorSpan); checkSubmitGate(form); });
+      input.addEventListener('input', () => {
+        if (input.classList.contains('input-error') || errorSpan.classList.contains('visible')) validateField(input, errorSpan);
         checkSubmitGate(form);
       });
+    });
 
-      input.addEventListener('input', () => {
-        if (input.classList.contains('input-error') || errorSpan.classList.contains('visible')) {
-          validateField(input, errorSpan);
+    form.querySelectorAll('[name^="custom_"]').forEach(el => {
+      el.addEventListener('change', () => {
+        if (el.dataset.required === 'true' && el.value.trim().length > 0) {
+          el.classList.remove('input-error');
+          const errSpan = form.querySelector(`.field-error[data-for="${el.name}"]`);
+          if (errSpan) errSpan.classList.remove('visible');
+        }
+        checkSubmitGate(form);
+      });
+      el.addEventListener('input', () => {
+        if (el.dataset.required === 'true' && el.value.trim().length > 0) {
+          el.classList.remove('input-error');
+          const errSpan = form.querySelector(`.field-error[data-for="${el.name}"]`);
+          if (errSpan) errSpan.classList.remove('visible');
         }
         checkSubmitGate(form);
       });
     });
+
+    checkSubmitGate(form);
   });
+}
 
-  // ── File upload (PDF only) ──────────────────────────────────
+  // File upload
   document.querySelectorAll('[id^="fileInput-"]').forEach(input => {
-    const jobId     = input.id.replace('fileInput-','');
-    const dropZone  = document.getElementById('dropZone-' + jobId);
-    const preview   = document.getElementById('filePreview-' + jobId);
-    const fileName  = document.getElementById('fileName-' + jobId);
+    const jobId = input.id.replace('fileInput-','');
+    const dropZone = document.getElementById('dropZone-' + jobId);
+    const preview = document.getElementById('filePreview-' + jobId);
+    const fileName = document.getElementById('fileName-' + jobId);
     const fileError = document.getElementById('fileError-' + jobId);
+    const form = input.closest('form');
 
-    function isPDF(file) {
-      return file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf');
-    }
-
+    function isPDF(file) { return file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf'); }
     function showFile(file) {
       fileName.textContent = file.name;
       preview.classList.add('visible');
       dropZone.classList.remove('upload-error');
       fileError.textContent = '';
       fileError.classList.remove('visible');
+      checkSubmitGate(form);
     }
-
     function rejectFile(msg) {
       input.value = '';
       preview.classList.remove('visible');
       dropZone.classList.add('upload-error');
       fileError.textContent = msg;
       fileError.classList.add('visible');
+      checkSubmitGate(form);
     }
-
     function clearFile() {
       input.value = '';
       preview.classList.remove('visible');
       dropZone.classList.remove('upload-error');
       fileError.textContent = '';
       fileError.classList.remove('visible');
+      checkSubmitGate(form);
     }
 
     input.addEventListener('change', () => {
       const file = input.files[0];
       if (!file) return;
-      if (!isPDF(file)) { rejectFile('Only PDF files are accepted. Please upload a .pdf file.'); return; }
-      if (file.size > 10 * 1024 * 1024) { rejectFile('File is too large. Maximum size is 10MB.'); return; }
+      if (!isPDF(file)) { rejectFile('Only PDF files are accepted.'); return; }
+      if (file.size > 10*1024*1024) { rejectFile('File too large. Max 10MB.'); return; }
       showFile(file);
     });
-
     dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('dragover'); });
     dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
     dropZone.addEventListener('drop', e => {
@@ -750,19 +768,18 @@ function attachRoleHandlers() {
       dropZone.classList.remove('dragover');
       const file = e.dataTransfer.files[0];
       if (!file) return;
-      if (!isPDF(file)) { rejectFile('Only PDF files are accepted. Please upload a .pdf file.'); return; }
-      if (file.size > 10 * 1024 * 1024) { rejectFile('File is too large. Maximum size is 10MB.'); return; }
+      if (!isPDF(file)) { rejectFile('Only PDF files are accepted.'); return; }
+      if (file.size > 10*1024*1024) { rejectFile('File too large. Max 10MB.'); return; }
       const dt = new DataTransfer();
       dt.items.add(file);
       input.files = dt.files;
       showFile(file);
     });
-
     const removeBtn = preview.querySelector('.file-preview__remove');
     if (removeBtn) removeBtn.addEventListener('click', clearFile);
   });
 
-  // ── Apply form submission ────────────────────────────────────
+  // Apply form submit
   document.querySelectorAll('.apply-form').forEach(form => {
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
@@ -770,50 +787,127 @@ function attachRoleHandlers() {
       const msg = form.querySelector('.aform-message');
       msg.className = 'aform-message';
 
-      const role  = form.dataset.role;
-      const name  = form.querySelector('[name="name"]').value.trim();
+      const role = form.dataset.role;
+      const jobId = form.dataset.jobid;
+      const job = JOBS.find(j => j.id === jobId);
+      const name = form.querySelector('[name="name"]').value.trim();
       const email = form.querySelector('[name="email"]').value.trim();
       const phone = form.querySelector('[name="phone"]').value.trim();
-
-      if (!name || !isValidEmail(email) || !isValidPhone(phone)) return;
 
       btn.disabled = true;
       btn.innerHTML = 'Sending…';
 
-      const graduated = form.querySelector('[name="graduated"]').value;
-      const relocate  = form.querySelector('[name="relocate"]').value;
-      const start     = form.querySelector('[name="start"]').value;
-      const fileInput = form.querySelector('[type="file"]');
-      const file = fileInput?.files[0];
-
-      let body = `[Application: ${role}]\n\nName: ${name}\nEmail: ${email}\nPhone: ${phone}`;
-      if (graduated) body += `\nGraduated: ${graduated}`;
-      if (relocate)  body += `\nWilling to relocate: ${relocate}`;
-      if (start)     body += `\nAvailable from: ${start}`;
-      if (file)      body += `\n\nResume: ${file.name} (${(file.size/1024).toFixed(0)}KB) — please follow up by email for the actual file.`;
-
-      const payload = { name, email, message: body, _origin: window.location.href };
-
-      try {
-        const res = await fetch(WORKER_URL, { method:'POST', headers:{'Content-Type':'application/json','Accept':'application/json'}, body: JSON.stringify(payload) });
-        if (!res.ok) throw new Error('HTTP ' + res.status);
-        msg.className = 'aform-message success';
-        msg.textContent = "Application sent — we'll be in touch from team@perceptivelabs.in.";
-        form.reset();
-        document.querySelectorAll('.file-preview').forEach(p => p.classList.remove('visible'));
-        btn.disabled = true;
-      } catch(err) {
-        msg.className = 'aform-message error';
-        msg.textContent = "Couldn't send. Email us directly at team@perceptivelabs.in.";
-        btn.disabled = false;
-      } finally {
-        btn.innerHTML = 'Submit application<svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>';
+      let baseValid = true;
+      if (!name) {
+        const inp = form.querySelector('[name="name"]');
+        const err = form.querySelector('.field-error[data-for="name"]');
+        inp.classList.add('input-error');
+        if (err) err.classList.add('visible');
+        baseValid = false;
       }
-    });
-  });
-}
+      if (!isValidEmail(email)) {
+        const inp = form.querySelector('[name="email"]');
+        const err = form.querySelector('.field-error[data-for="email"]');
+        inp.classList.add('input-error');
+        if (err) err.classList.add('visible');
+        baseValid = false;
+      }
+      if (!isValidPhone(phone)) {
+        const inp = form.querySelector('[name="phone"]');
+        const err = form.querySelector('.field-error[data-for="phone"]');
+        inp.classList.add('input-error');
+        if (err) err.classList.add('visible');
+        baseValid = false;
+      }
 
-// Nav
+      let customValid = true;
+      form.querySelectorAll('[name^="custom_"]').forEach(field => {
+        if (field.dataset.required === 'true' && !field.value.trim()) {
+          field.classList.add('input-error');
+          const err = form.querySelector(`.field-error[data-for="${field.name}"]`);
+          if (err) err.classList.add('visible');
+          customValid = false;
+        }
+      });
+
+      const fileInput = form.querySelector('[name="resume"]');
+      const fileErr = document.getElementById('fileError-' + jobId);
+      const dropZone2 = document.getElementById('dropZone-' + jobId);
+      let resumeValid = true;
+      if (!fileInput || !fileInput.files || fileInput.files.length === 0) {
+        if (fileErr) { fileErr.textContent = 'Please attach your resume before submitting.'; fileErr.classList.add('visible'); }
+        if (dropZone2) dropZone2.classList.add('upload-error');
+        resumeValid = false;
+      }
+
+      if (!baseValid || !customValid || !resumeValid) {
+        btn.disabled = false;
+        btn.innerHTML = 'Submit application<svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>';
+        return;
+      }
+
+      const answers = [];
+      if (job && job.questions && job.questions.length) {
+        job.questions.forEach((q, i) => {
+          const input = form.querySelector(`[name="custom_${i}"]`);
+          if (input && input.value) answers.push({ label: q.label, value: input.value });
+        });
+      }
+
+      const file = fileInput.files[0];
+
+const reader = new FileReader();
+
+reader.onload = async () => {
+
+  const payload = {
+    action: "submitApplication",
+    data: {
+      role,
+      jobId,
+      name,
+      email,
+      phone,
+      answers,
+      resumeBase64: reader.result.split(',')[1]
+    }
+  };
+
+  try {
+    await fetch(API_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify(payload)
+    });
+
+    msg.className = 'aform-message success';
+    msg.textContent = "Application sent — we'll be in touch from team@perceptivelabs.in.";
+
+    form.reset();
+
+    document.querySelectorAll('.file-preview')
+      .forEach(p => p.classList.remove('visible'));
+
+    btn.disabled = true;
+
+  } catch(err) {
+
+    msg.className = 'aform-message error';
+    msg.textContent = "Couldn't send. Email us directly at team@perceptivelabs.in.";
+
+    btn.disabled = false;
+
+  } finally {
+
+    btn.innerHTML = 'Submit application<svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>';
+
+  }
+};
+
+reader.readAsDataURL(file);
+
+// ─── NAV ──────────────────────────────────────────────────────────
 const nav = document.getElementById('nav');
 window.addEventListener('scroll', () => { nav.classList.toggle('scrolled', window.scrollY > 18); }, { passive:true });
 const burger = document.getElementById('navBurger');
@@ -839,23 +933,56 @@ window.addEventListener('scroll', () => {
 
 // Contact form
 const careersForm = document.getElementById('careersContactForm');
-if(careersForm){
+
+function checkCareersFormGate() {
+  const name = document.getElementById('c_name').value.trim();
+  const email = document.getElementById('c_email').value.trim();
+  const message = document.getElementById('c_msg').value.trim();
+  const btn = document.getElementById('careersSubmitBtn');
+  btn.disabled = !(name.length > 0 && isValidEmail(email) && message.length > 0);
+}
+
+if (careersForm) {
+  ['c_name', 'c_email', 'c_role', 'c_msg'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener('input', checkCareersFormGate);
+  });
+
+  checkCareersFormGate();
+
   careersForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     const btn = document.getElementById('careersSubmitBtn');
     const msg = document.getElementById('careersFormMsg');
     msg.className = 'cform-message';
-    btn.disabled = true; btn.innerHTML = 'Sending…';
+    btn.disabled = true;
+    btn.innerHTML = 'Sending…';
+
     const role = document.getElementById('c_role').value;
-    const payload = { name: document.getElementById('c_name').value, email: document.getElementById('c_email').value, message: (role ? '[Role: ' + role + ']\n\n' : '') + document.getElementById('c_msg').value, _origin: window.location.href };
+    const payload = {
+      name: document.getElementById('c_name').value,
+      email: document.getElementById('c_email').value,
+      message: (role ? '[Role: ' + role + ']\n\n' : '') + document.getElementById('c_msg').value,
+      _origin: window.location.href
+    };
+
     try {
-      const res = await fetch(WORKER_URL, { method:'POST', headers:{'Content-Type':'application/json','Accept':'application/json'}, body:JSON.stringify(payload) });
-      if(!res.ok) throw new Error('HTTP ' + res.status);
-      msg.className = 'cform-message success'; msg.textContent = "Got it — we'll reply from team@perceptivelabs.in."; careersForm.reset();
-    } catch(err) {
-      msg.className = 'cform-message error'; msg.textContent = "Couldn't send. Email us at team@perceptivelabs.in directly.";
+      const res = await fetch(WORKER_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      msg.className = 'cform-message success';
+      msg.textContent = "Got it — we'll reply from team@perceptivelabs.in.";
+      careersForm.reset();
+      checkCareersFormGate();
+    } catch (err) {
+      msg.className = 'cform-message error';
+      msg.textContent = "Couldn't send. Email us at team@perceptivelabs.in directly.";
+      btn.disabled = false;
     } finally {
-      btn.disabled = false; btn.innerHTML = 'Send message<svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>';
+      btn.innerHTML = 'Send message<svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>';
     }
   });
 }

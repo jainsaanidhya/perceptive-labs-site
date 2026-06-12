@@ -20,7 +20,6 @@ button,input,textarea,select{font:inherit}
   --surface-hover:rgba(255,255,255,.07);--red:#f87171;--green:#49d17d;
   --ease:cubic-bezier(.16,1,.3,1);--max:1100px;
 }
-.wrap{max-width:var(--max);margin:0 auto;padding:0 clamp(1.25rem,4vw,2.5rem)}
 
 /* LOGIN */
 #loginScreen{
@@ -67,7 +66,10 @@ button,input,textarea,select{font:inherit}
   position:sticky;top:0;z-index:800;height:64px;border-bottom:1px solid var(--line);
   background:rgba(6,7,10,.88);backdrop-filter:blur(20px);
 }
-.topbar__inner{height:100%;display:flex;align-items:center;justify-content:space-between;gap:1rem}
+.topbar__inner{
+  height:100%;display:flex;align-items:center;justify-content:space-between;
+  padding:0 2rem;gap:1rem;
+}
 .topbar__left{display:flex;align-items:center;gap:1rem}
 .topbar__logo{display:flex;align-items:center;gap:.65rem}
 .topbar__logo-dot{width:28px;height:28px;border-radius:8px;background:var(--accent);display:flex;align-items:center;justify-content:center}
@@ -78,16 +80,16 @@ button,input,textarea,select{font:inherit}
 .topbar__site-link{
   display:inline-flex;align-items:center;gap:.4rem;padding:.45rem .9rem;
   border-radius:9px;border:1px solid var(--line-strong);color:var(--muted);
-  font-size:.78rem;font-weight:600;transition:all .18s;
+  font-size:.78rem;font-weight:600;transition:all .18s;background:rgba(255,255,255,.04);
 }
-.topbar__site-link:hover{border-color:rgba(255,255,255,.24);color:#fff}
+.topbar__site-link:hover{border-color:rgba(255,255,255,.24);color:#fff;background:rgba(255,255,255,.08)}
 .topbar__site-link svg{width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .logout-btn{
-  padding:.45rem .9rem;border-radius:9px;border:1px solid rgba(248,113,113,.2);
-  color:rgba(248,113,113,.7);font-size:.78rem;font-weight:600;background:transparent;
+  padding:.45rem .9rem;border-radius:9px;border:1px solid var(--line-strong);
+  color:var(--muted);font-size:.78rem;font-weight:600;background:rgba(255,255,255,.04);
   cursor:pointer;transition:all .18s;
 }
-.logout-btn:hover{border-color:var(--red);color:var(--red);background:rgba(248,113,113,.06)}
+.logout-btn:hover{border-color:rgba(248,113,113,.4);color:var(--red);background:rgba(248,113,113,.06)}
 
 /* LAYOUT */
 .admin-layout{display:grid;grid-template-columns:260px 1fr;min-height:calc(100vh - 64px)}
@@ -117,7 +119,10 @@ button,input,textarea,select{font:inherit}
 .main-content{padding:2rem clamp(1.25rem,3vw,2.5rem);min-width:0}
 
 /* PAGE HEADER */
-.page-header{margin-bottom:2rem;display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;flex-wrap:wrap}
+.page-header{
+  margin-bottom:2rem;display:flex;align-items:flex-start;
+  justify-content:space-between;gap:1rem;flex-wrap:wrap;
+}
 .page-title{font-size:1.6rem;font-weight:760;letter-spacing:-.04em;color:#fff}
 .page-sub{font-size:.88rem;color:var(--muted);margin-top:.3rem}
 .btn-primary{
@@ -139,25 +144,25 @@ button,input,textarea,select{font:inherit}
 
 /* STATS */
 .stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:2rem}
-.stat-card{
-  padding:1.3rem 1.4rem;border-radius:16px;border:1px solid var(--line);
-  background:var(--surface);
-}
+.stat-card{padding:1.3rem 1.4rem;border-radius:16px;border:1px solid var(--line);background:var(--surface)}
 .stat-card__label{font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.32);margin-bottom:.5rem}
 .stat-card__value{font-size:2rem;font-weight:780;letter-spacing:-.05em;color:#fff;font-family:'Geist Mono',monospace}
 .stat-card__sub{font-size:.78rem;color:var(--muted);margin-top:.2rem}
 
 /* JOBS LIST */
 .jobs-list{display:grid;gap:.75rem}
-.job-card{
-  border-radius:16px;border:1px solid var(--line);background:var(--surface);
-  transition:border-color .2s,background .2s;overflow:hidden;
-}
+.job-card{border-radius:16px;border:1px solid var(--line);background:var(--surface);transition:border-color .2s,background .2s;overflow:hidden}
 .job-card:hover{border-color:var(--line-strong);background:var(--surface-hover)}
 .job-card__main{display:grid;grid-template-columns:1fr auto;gap:1rem;align-items:center;padding:1.2rem 1.4rem}
 .job-card__dept{font-size:.68rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:.3rem}
 .job-card__title{font-size:1rem;font-weight:720;color:#fff;margin-bottom:.55rem}
 .job-card__meta{display:flex;gap:.5rem;flex-wrap:wrap}
+.job-admin-id{
+  font-size:12px;
+  color:#94a3b8;
+  margin-top:4px;
+  font-family:monospace;
+}
 .tag{display:inline-flex;align-items:center;padding:.2rem .6rem;border-radius:7px;font-size:.68rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
 .tag-blue{background:rgba(59,110,255,.1);color:#8fb0ff;border:1px solid rgba(59,110,255,.18)}
 .tag-gray{background:rgba(255,255,255,.05);color:rgba(255,255,255,.48);border:1px solid rgba(255,255,255,.09)}
@@ -185,26 +190,15 @@ button,input,textarea,select{font:inherit}
 .empty-state__title{font-size:1rem;font-weight:700;color:rgba(255,255,255,.6);margin-bottom:.4rem}
 .empty-state__text{font-size:.86rem;color:rgba(255,255,255,.32);max-width:34ch;margin:0 auto 1.5rem}
 
-/* FORM PANEL */
-#formPanel{display:none}
-.form-card{
-  border-radius:20px;border:1px solid var(--line);background:rgba(255,255,255,.03);
-  overflow:hidden;
-}
-.form-card__head{
-  padding:1.4rem 1.8rem;border-bottom:1px solid var(--line);
-  display:flex;align-items:center;justify-content:space-between;gap:1rem;
-}
+/* FORM */
+.form-card{border-radius:20px;border:1px solid var(--line);background:rgba(255,255,255,.03);overflow:hidden}
+.form-card__head{padding:1.4rem 1.8rem;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:1rem}
 .form-card__title{font-size:1.05rem;font-weight:720;letter-spacing:-.025em;color:#fff}
 .form-card__sub{font-size:.82rem;color:var(--muted);margin-top:.15rem}
 .form-card__body{padding:1.8rem}
 .form-section{margin-bottom:2rem}
 .form-section:last-child{margin-bottom:0}
-.form-section-title{
-  font-size:.72rem;font-weight:700;letter-spacing:.13em;text-transform:uppercase;
-  color:rgba(255,255,255,.3);margin-bottom:1.1rem;padding-bottom:.6rem;
-  border-bottom:1px solid var(--line);
-}
+.form-section-title{font-size:.72rem;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:1.1rem;padding-bottom:.6rem;border-bottom:1px solid var(--line)}
 .form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem}
 .form-row.triple{grid-template-columns:1fr 1fr 1fr}
 .form-row.full{grid-template-columns:1fr}
@@ -222,78 +216,93 @@ button,input,textarea,select{font:inherit}
 .form-textarea{resize:vertical;line-height:1.66}
 .form-hint{font-size:.74rem;color:rgba(255,255,255,.28);line-height:1.5;margin-top:.3rem}
 
-/* LIST EDITOR */
-.list-editor{display:grid;gap:.5rem}
-.list-item-row{display:flex;gap:.5rem;align-items:center}
-.list-item-input{
-  flex:1;padding:.75rem 1rem;border-radius:11px;border:1px solid var(--line-strong);
+/* COMMA TEXTAREA — replaces the old list-editor rows */
+.comma-field{
+  width:100%;padding:.82rem 1rem;border-radius:12px;border:1px solid var(--line-strong);
+  background:rgba(255,255,255,.05);color:#fff;outline:none;font-size:.88rem;
+  transition:border-color .2s,background .2s;resize:vertical;line-height:1.66;min-height:72px;
+}
+.comma-field::placeholder{color:rgba(255,255,255,.22)}
+.comma-field:focus{border-color:rgba(59,110,255,.5);background:rgba(59,110,255,.06)}
+.comma-hint{font-size:.74rem;color:rgba(255,255,255,.28);margin-top:.35rem;line-height:1.5}
+
+/* CUSTOM SECTIONS BUILDER */
+.custom-section-card{
+  border:1px solid var(--line-strong);border-radius:14px;
+  background:rgba(255,255,255,.03);padding:1.1rem 1.2rem;
+  display:grid;gap:.75rem;margin-bottom:.75rem;
+}
+.custom-section-card__row{display:grid;grid-template-columns:1fr auto;gap:.75rem;align-items:start}
+.custom-section-card__fields{flex:1;display:grid;gap:.6rem;width:100%}
+.custom-section-name{
+  width:100%;padding:.75rem 1rem;border-radius:11px;border:1px solid var(--line-strong);
   background:rgba(255,255,255,.05);color:#fff;outline:none;font-size:.86rem;
-  transition:border-color .2s,background .2s;
+  transition:border-color .2s;
 }
-.list-item-input::placeholder{color:rgba(255,255,255,.22)}
-.list-item-input:focus{border-color:rgba(59,110,255,.5);background:rgba(59,110,255,.06)}
-.list-remove-btn{
-  width:32px;height:32px;border-radius:8px;border:1px solid var(--line-strong);
-  background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;
-  color:rgba(255,255,255,.3);transition:all .18s;flex-shrink:0;
+.custom-section-name::placeholder{color:rgba(255,255,255,.22)}
+.custom-section-name:focus{border-color:rgba(59,110,255,.5);background:rgba(59,110,255,.06)}
+
+/* CUSTOM QUESTIONS BUILDER */
+.question-card{
+  border:1px solid var(--line-strong);border-radius:14px;
+  background:rgba(255,255,255,.03);padding:1.1rem 1.2rem;
+  display:grid;gap:.75rem;margin-bottom:.75rem;
 }
+.question-card__top{display:flex;align-items:flex-start;gap:.75rem}
+.question-card__fields{flex:1;display:grid;gap:.6rem}
+.question-card__row{display:grid;grid-template-columns:1fr auto;gap:.75rem;align-items:center}
+.question-type-select{
+  padding:.55rem .8rem;border-radius:10px;border:1px solid var(--line-strong);
+  background:rgba(255,255,255,.05);color:#fff;outline:none;font-size:.82rem;
+  transition:border-color .2s;cursor:pointer;
+}
+.question-type-select:focus{border-color:rgba(59,110,255,.5)}
+.question-type-select option{background:#1a1c22}
+.options-editor{display:grid;gap:.4rem;margin-top:.4rem}
+.option-row{display:flex;gap:.5rem;align-items:center}
+.option-input{flex:1;padding:.6rem .85rem;border-radius:9px;border:1px solid var(--line-strong);background:rgba(255,255,255,.05);color:#fff;outline:none;font-size:.84rem;transition:border-color .2s}
+.option-input::placeholder{color:rgba(255,255,255,.22)}
+.option-input:focus{border-color:rgba(59,110,255,.5);background:rgba(59,110,255,.06)}
+.option-remove{width:28px;height:28px;border-radius:7px;border:1px solid var(--line-strong);background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.28);transition:all .18s;flex-shrink:0}
+.option-remove:hover{color:var(--red);border-color:rgba(248,113,113,.28);background:rgba(248,113,113,.06)}
+.option-remove svg{width:10px;height:10px;stroke:currentColor;fill:none;stroke-width:2.5;stroke-linecap:round}
+.add-option-btn{display:inline-flex;align-items:center;gap:.35rem;padding:.45rem .75rem;border-radius:8px;border:1px dashed rgba(255,255,255,.12);background:transparent;color:rgba(255,255,255,.32);font-size:.76rem;font-weight:600;cursor:pointer;transition:all .18s;margin-top:.2rem}
+.add-option-btn:hover{border-color:rgba(59,110,255,.3);color:#8fb0ff;background:rgba(59,110,255,.06)}
+.add-option-btn svg{width:11px;height:11px;stroke:currentColor;fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+.question-required-toggle{display:flex;align-items:center;gap:.5rem;font-size:.76rem;color:rgba(255,255,255,.38);cursor:pointer;user-select:none;white-space:nowrap}
+.question-required-toggle input{accent-color:var(--accent);width:13px;height:13px;cursor:pointer}
+
+/* shared remove btn */
+.list-remove-btn{width:32px;height:32px;border-radius:8px;border:1px solid var(--line-strong);background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.3);transition:all .18s;flex-shrink:0}
 .list-remove-btn:hover{color:var(--red);border-color:rgba(248,113,113,.28);background:rgba(248,113,113,.06)}
 .list-remove-btn svg{width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2.5;stroke-linecap:round}
-.add-item-btn{
-  display:inline-flex;align-items:center;gap:.45rem;padding:.6rem .9rem;
-  border-radius:10px;border:1px dashed rgba(255,255,255,.14);background:transparent;
-  color:rgba(255,255,255,.38);font-size:.8rem;font-weight:600;cursor:pointer;
-  transition:all .18s;margin-top:.25rem;
-}
+
+.add-item-btn{display:inline-flex;align-items:center;gap:.45rem;padding:.6rem .9rem;border-radius:10px;border:1px dashed rgba(255,255,255,.14);background:transparent;color:rgba(255,255,255,.38);font-size:.8rem;font-weight:600;cursor:pointer;transition:all .18s;margin-top:.25rem}
 .add-item-btn:hover{border-color:rgba(59,110,255,.35);color:#8fb0ff;background:rgba(59,110,255,.06)}
 .add-item-btn svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
 
 /* FORM FOOTER */
-.form-footer{
-  padding:1.2rem 1.8rem;border-top:1px solid var(--line);
-  display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;
-  background:rgba(255,255,255,.02);
-}
+.form-footer{padding:1.2rem 1.8rem;border-top:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;background:rgba(255,255,255,.02)}
 .form-footer__left{font-size:.8rem;color:var(--muted)}
 .form-footer__right{display:flex;gap:.75rem}
 
 /* TOAST */
-.toast{
-  position:fixed;bottom:1.5rem;right:1.5rem;z-index:9999;
-  padding:.85rem 1.2rem;border-radius:14px;font-size:.86rem;font-weight:600;
-  display:flex;align-items:center;gap:.6rem;
-  transform:translateY(20px);opacity:0;transition:all .3s var(--ease);pointer-events:none;
-  box-shadow:0 16px 40px rgba(0,0,0,.4);
-}
+.toast{position:fixed;bottom:1.5rem;right:1.5rem;z-index:9999;padding:.85rem 1.2rem;border-radius:14px;font-size:.86rem;font-weight:600;display:flex;align-items:center;gap:.6rem;transform:translateY(20px);opacity:0;transition:all .3s var(--ease);pointer-events:none;box-shadow:0 16px 40px rgba(0,0,0,.4)}
 .toast.show{transform:translateY(0);opacity:1}
 .toast.success{background:#0f2a1a;border:1px solid rgba(73,209,125,.25);color:#7be4a2}
 .toast.error{background:#2a0f0f;border:1px solid rgba(248,113,113,.25);color:#fca5a5}
 .toast svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
 
-/* CONFIRM MODAL */
-.modal-overlay{
-  position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:9000;
-  display:none;align-items:center;justify-content:center;backdrop-filter:blur(4px);
-}
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:9000;display:none;align-items:center;justify-content:center;backdrop-filter:blur(4px)}
 .modal-overlay.show{display:flex}
-.modal-box{
-  width:min(420px,90vw);border-radius:20px;border:1px solid var(--line-strong);
-  background:#0f1115;padding:2rem;box-shadow:0 40px 80px rgba(0,0,0,.6);
-}
+.modal-box{width:min(420px,90vw);border-radius:20px;border:1px solid var(--line-strong);background:#0f1115;padding:2rem;box-shadow:0 40px 80px rgba(0,0,0,.6)}
 .modal-title{font-size:1.1rem;font-weight:740;color:#fff;margin-bottom:.5rem}
 .modal-text{font-size:.88rem;color:var(--muted);line-height:1.6;margin-bottom:1.5rem}
 .modal-actions{display:flex;gap:.75rem;justify-content:flex-end}
-.modal-cancel{
-  padding:.65rem 1.1rem;border-radius:10px;border:1px solid var(--line-strong);
-  background:transparent;color:rgba(255,255,255,.62);font-size:.86rem;font-weight:600;
-  cursor:pointer;transition:all .18s;
-}
+.modal-cancel{padding:.65rem 1.1rem;border-radius:10px;border:1px solid var(--line-strong);background:transparent;color:rgba(255,255,255,.62);font-size:.86rem;font-weight:600;cursor:pointer;transition:all .18s}
 .modal-cancel:hover{border-color:rgba(255,255,255,.28);color:#fff}
-.modal-confirm{
-  padding:.65rem 1.1rem;border-radius:10px;background:rgba(248,113,113,.15);
-  border:1px solid rgba(248,113,113,.28);color:var(--red);font-size:.86rem;font-weight:700;
-  cursor:pointer;transition:all .18s;
-}
+.modal-confirm{padding:.65rem 1.1rem;border-radius:10px;background:rgba(248,113,113,.15);border:1px solid rgba(248,113,113,.28);color:var(--red);font-size:.86rem;font-weight:700;cursor:pointer;transition:all .18s}
 .modal-confirm:hover{background:rgba(248,113,113,.22)}
 
 /* STATUS TOGGLE */
@@ -301,15 +310,8 @@ button,input,textarea,select{font:inherit}
 .status-toggle__label{font-size:.84rem;font-weight:600;color:rgba(255,255,255,.62);flex:1}
 .toggle-switch{position:relative;width:40px;height:22px;flex-shrink:0}
 .toggle-switch input{opacity:0;width:0;height:0;position:absolute}
-.toggle-slider{
-  position:absolute;inset:0;border-radius:11px;background:rgba(255,255,255,.12);
-  cursor:pointer;transition:background .25s;border:1px solid var(--line-strong);
-}
-.toggle-slider::before{
-  content:'';position:absolute;width:16px;height:16px;border-radius:50%;
-  background:#fff;top:2px;left:2px;transition:transform .25s var(--ease);
-  box-shadow:0 1px 4px rgba(0,0,0,.3);
-}
+.toggle-slider{position:absolute;inset:0;border-radius:11px;background:rgba(255,255,255,.12);cursor:pointer;transition:background .25s;border:1px solid var(--line-strong)}
+.toggle-slider::before{content:'';position:absolute;width:16px;height:16px;border-radius:50%;background:#fff;top:2px;left:2px;transition:transform .25s var(--ease);box-shadow:0 1px 4px rgba(0,0,0,.3)}
 input:checked + .toggle-slider{background:var(--accent);border-color:rgba(59,110,255,.5)}
 input:checked + .toggle-slider::before{transform:translateX(18px)}
 
@@ -345,10 +347,8 @@ input:checked + .toggle-slider::before{transform:translateX(18px)}
 
 <!-- ADMIN APP -->
 <div id="adminApp">
-
-  <!-- TOPBAR -->
   <header class="topbar">
-    <div class="wrap topbar__inner">
+    <div class="topbar__inner">
       <div class="topbar__left">
         <div class="topbar__logo">
           <div class="topbar__logo-dot">
@@ -369,8 +369,6 @@ input:checked + .toggle-slider::before{transform:translateX(18px)}
   </header>
 
   <div class="admin-layout">
-
-    <!-- SIDEBAR -->
     <aside class="sidebar">
       <div class="sidebar-section-label">Jobs</div>
       <button class="sidebar-link active" id="sidebarJobs" onclick="showSection('jobs')">
@@ -384,9 +382,7 @@ input:checked + .toggle-slider::before{transform:translateX(18px)}
       </button>
     </aside>
 
-    <!-- MAIN -->
     <main class="main-content">
-
       <!-- JOBS SECTION -->
       <div id="jobsSection">
         <div class="page-header">
@@ -399,7 +395,6 @@ input:checked + .toggle-slider::before{transform:translateX(18px)}
             Post new job
           </button>
         </div>
-
         <div class="stats-row">
           <div class="stat-card">
             <div class="stat-card__label">Total postings</div>
@@ -417,9 +412,7 @@ input:checked + .toggle-slider::before{transform:translateX(18px)}
             <div class="stat-card__sub">Hiring across</div>
           </div>
         </div>
-
         <div class="jobs-list" id="jobsList"></div>
-
         <div class="empty-state" id="emptyState" style="display:none">
           <div class="empty-state__icon">
             <svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
@@ -455,6 +448,7 @@ input:checked + .toggle-slider::before{transform:translateX(18px)}
           </div>
           <div class="form-card__body">
 
+            <!-- BASIC INFO -->
             <div class="form-section">
               <div class="form-section-title">Basic info</div>
               <div class="form-row">
@@ -509,6 +503,7 @@ input:checked + .toggle-slider::before{transform:translateX(18px)}
               </div>
             </div>
 
+            <!-- DESCRIPTION -->
             <div class="form-section">
               <div class="form-section-title">Description</div>
               <div class="form-row full">
@@ -519,51 +514,74 @@ input:checked + .toggle-slider::before{transform:translateX(18px)}
               </div>
             </div>
 
+            <!-- RESPONSIBILITIES -->
             <div class="form-section">
               <div class="form-section-title">What you'll be building <span style="font-weight:400;opacity:.5">(responsibilities)</span></div>
-              <div class="list-editor" id="respList"></div>
-              <button class="add-item-btn" onclick="addListItem('respList')">
-                <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                Add responsibility
-              </button>
+              <div class="form-field">
+                <textarea class="comma-field" id="f_responsibilities" placeholder="Build the API, Write unit tests, Deploy to production"></textarea>
+                <div class="comma-hint">Separate items with commas — each becomes a bullet point on the careers page.</div>
+              </div>
             </div>
 
+            <!-- REQUIREMENTS -->
             <div class="form-section">
               <div class="form-section-title">Required skills</div>
-              <div class="list-editor" id="reqList"></div>
-              <button class="add-item-btn" onclick="addListItem('reqList')">
-                <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                Add requirement
-              </button>
+              <div class="form-field">
+                <textarea class="comma-field" id="f_requirements" placeholder="Python, React, SQL, REST APIs"></textarea>
+                <div class="comma-hint">Separate items with commas.</div>
+              </div>
             </div>
 
+            <!-- NICE TO HAVE -->
             <div class="form-section">
               <div class="form-section-title">Nice to have <span style="font-weight:400;opacity:.5">(optional)</span></div>
-              <div class="list-editor" id="niceList"></div>
-              <button class="add-item-btn" onclick="addListItem('niceList')">
-                <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                Add item
-              </button>
+              <div class="form-field">
+                <textarea class="comma-field" id="f_niceToHave" placeholder="GCP, AWS, Docker, GraphQL"></textarea>
+                <div class="comma-hint">Separate items with commas.</div>
+              </div>
             </div>
 
+            <!-- INTERVIEW PROCESS -->
             <div class="form-section">
               <div class="form-section-title">Interview process <span style="font-weight:400;opacity:.5">(optional)</span></div>
-              <div class="list-editor" id="interviewList"></div>
-              <button class="add-item-btn" onclick="addListItem('interviewList')">
-                <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                Add step
-              </button>
+              <div class="form-field">
+                <textarea class="comma-field" id="f_interviewProcess" placeholder="Intro call, Take-home task, Final interview, Offer"></textarea>
+                <div class="comma-hint">Separate steps with commas.</div>
+              </div>
             </div>
 
+            <!-- WHAT WE OFFER -->
             <div class="form-section">
               <div class="form-section-title">What we offer <span style="font-weight:400;opacity:.5">(optional)</span></div>
-              <div class="list-editor" id="offerList"></div>
-              <button class="add-item-btn" onclick="addListItem('offerList')">
-                <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                Add item
-              </button>
+              <div class="form-field">
+                <textarea class="comma-field" id="f_offer" placeholder="Flexible hours, Remote-friendly, Learning budget"></textarea>
+                <div class="comma-hint">Separate items with commas.</div>
+              </div>
             </div>
 
+            <!-- CUSTOM SECTIONS -->
+            <div class="form-section">
+              <div class="form-section-title">Custom sections <span style="font-weight:400;opacity:.5">(optional — appear in job detail)</span></div>
+              <div id="customSectionsList"></div>
+              <button class="add-item-btn" onclick="addCustomSection()" type="button">
+                <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                Add section
+              </button>
+              <div class="form-hint" style="margin-top:.5rem">Give the section a name (e.g. "Tech stack") and list items separated by commas. It renders as a bullet list on the careers page.</div>
+            </div>
+
+            <!-- CUSTOM QUESTIONS -->
+            <div class="form-section">
+              <div class="form-section-title">Application questions <span style="font-weight:400;opacity:.5">(shown on apply form)</span></div>
+              <div id="questionsList"></div>
+              <button class="add-item-btn" onclick="addQuestion()" type="button">
+                <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                Add question
+              </button>
+              <div class="form-hint" style="margin-top:.6rem">Name, email, phone and resume are always collected. Add any extra questions here.</div>
+            </div>
+
+            <!-- VISIBILITY -->
             <div class="form-section">
               <div class="form-section-title">Visibility</div>
               <div class="status-toggle">
@@ -589,12 +607,11 @@ input:checked + .toggle-slider::before{transform:translateX(18px)}
           </div>
         </div>
       </div>
-
     </main>
   </div>
 </div>
 
-<!-- CONFIRM MODAL -->
+<!-- MODAL -->
 <div class="modal-overlay" id="confirmModal">
   <div class="modal-box">
     <div class="modal-title" id="modalTitle">Delete job posting?</div>
@@ -606,26 +623,21 @@ input:checked + .toggle-slider::before{transform:translateX(18px)}
   </div>
 </div>
 
-<!-- TOAST -->
 <div class="toast" id="toast">
   <svg id="toastIcon" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
   <span id="toastMsg"></span>
 </div>
 
 <script>
-// ─── CONFIG ──────────────────────────────────────────────────────
-const ADMIN_PASSWORD = "perceptive123";  // ← change this anytime
+const ADMIN_PASSWORD = "perceptive123";
 const API_URL = "https://script.google.com/macros/s/AKfycbxnFKn8zY379gSrfdHHgTrn1irUHNQM_InzUK8qoqNM2L3xCIrvH3AIiB7XXODEEchPlQ/exec";
 
-// ─── STATE ───────────────────────────────────────────────────────
 let jobs = [];
 let editingId = null;
 let pendingDeleteId = null;
 
 // ─── AUTH ─────────────────────────────────────────────────────────
-document.getElementById('loginPassword').addEventListener('keydown', e => {
-  if (e.key === 'Enter') login();
-});
+document.getElementById('loginPassword').addEventListener('keydown', e => { if (e.key === 'Enter') login(); });
 document.getElementById('loginBtn').addEventListener('click', login);
 
 function login() {
@@ -653,87 +665,65 @@ document.getElementById('logoutBtn').addEventListener('click', () => {
 
 // ─── DATA ─────────────────────────────────────────────────────────
 function loadJobs() {
-  // ── FIX: compare against placeholder, not the real URL ──
+  jobs = JSON.parse(localStorage.getItem('pl_jobs') || '[]');
+  renderJobs();
   if (API_URL !== "YOUR_GOOGLE_SHEET_URL_HERE") {
     fetch(API_URL + "?action=getJobs")
       .then(r => r.json())
       .then(data => {
-        jobs = data.jobs || [];
-        renderJobs();
+        if (data.jobs) {
+          jobs = data.jobs;
+          localStorage.setItem('pl_jobs', JSON.stringify(jobs));
+          renderJobs();
+        }
       })
-      .catch(() => {
-        jobs = JSON.parse(localStorage.getItem('pl_jobs') || '[]');
-        renderJobs();
-      });
-  } else {
-    jobs = JSON.parse(localStorage.getItem('pl_jobs') || '[]');
-    renderJobs();
+      .catch(() => {});
   }
 }
 
-function saveJobsLocally() {
-  localStorage.setItem('pl_jobs', JSON.stringify(jobs));
-}
+function saveJobsLocally() { localStorage.setItem('pl_jobs', JSON.stringify(jobs)); }
 
 async function pushToAPI(job, action) {
   if (API_URL === "YOUR_GOOGLE_SHEET_URL_HERE") return true;
-
   try {
-    console.log("Sending to API:", action, job);
-
-    const response = await fetch(API_URL, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        action,
-        job,
-        password: ADMIN_PASSWORD
-      })
+    await fetch(API_URL, {
+      method: "POST", mode: "no-cors",
+      headers: { "Content-Type": "text/plain" },
+      body: JSON.stringify({ action, job, password: ADMIN_PASSWORD })
     });
-
-    const result = await response.text();
-    console.log("API Response:", result);
-
     return true;
-  } catch (err) {
-    console.error("API Error:", err);
-    return false;
-  }
+  } catch (err) { return false; }
 }
 
-// ─── RENDER ───────────────────────────────────────────────────────
+// ─── RENDER JOBS ──────────────────────────────────────────────────
 function renderJobs() {
   const list = document.getElementById('jobsList');
   const empty = document.getElementById('emptyState');
   const total = jobs.length;
   const live = jobs.filter(j => j.active).length;
   const depts = new Set(jobs.map(j => j.dept)).size;
-
   document.getElementById('statTotal').textContent = total;
   document.getElementById('statLive').textContent = live;
   document.getElementById('statDepts').textContent = depts;
   document.getElementById('sidebarCount').textContent = total;
-
-  if (total === 0) {
-    list.innerHTML = '';
-    empty.style.display = 'block';
-    return;
-  }
+  if (total === 0) { list.innerHTML = ''; empty.style.display = 'block'; return; }
   empty.style.display = 'none';
-
   list.innerHTML = jobs.map(job => `
     <div class="job-card">
       <div class="job-card__main">
         <div>
           <div class="job-card__dept">${capitalize(job.dept)}</div>
           <div class="job-card__title">${job.title}</div>
+          <div class="job-admin-id">
+            ID: ${job.id}
+          </div>
           <div class="job-card__meta">
             <span class="tag tag-blue">${job.type}</span>
             <span class="tag tag-gray">${job.location}</span>
             ${job.salary ? `<span class="tag tag-amber">${job.salary}</span>` : ''}
             <span class="tag ${job.active ? 'tag-green' : 'tag-red'}">${job.active ? 'Live' : 'Hidden'}</span>
+            ${job.questions && job.questions.length ? `<span class="tag tag-gray">${job.questions.length} question${job.questions.length>1?'s':''}</span>` : ''}
+            ${job.customSections && job.customSections.length ? `<span class="tag tag-gray">${job.customSections.length} custom section${job.customSections.length>1?'s':''}</span>` : ''}
           </div>
         </div>
         <div class="job-card__actions">
@@ -761,7 +751,6 @@ function showSection(section) {
   document.getElementById('formSection').style.display = section !== 'jobs' ? 'block' : 'none';
   document.getElementById('sidebarJobs').classList.toggle('active', section === 'jobs');
   document.getElementById('sidebarNew').classList.toggle('active', section === 'new' || section === 'edit');
-
   if (section === 'new') {
     editingId = null;
     clearForm();
@@ -769,57 +758,164 @@ function showSection(section) {
     document.getElementById('formCardTitle').textContent = 'New job posting';
     document.getElementById('saveBtnText').textContent = 'Publish job';
     document.getElementById('formSubtitle').textContent = 'Fill in the details and publish when ready.';
-    initListEditors();
   }
 }
 
-// ─── FORM ─────────────────────────────────────────────────────────
+// ─── COMMA-SPLIT HELPERS ──────────────────────────────────────────
+// Convert an array to a comma-separated string for the textarea
+function arrayToComma(arr) {
+  if (!arr || arr.length === 0) return '';
+  return arr.join(', ');
+}
+
+// Parse a comma-separated string into a trimmed, non-empty array
+function commaToArray(str) {
+  if (!str || !str.trim()) return [];
+  return str.split(',').map(s => s.trim()).filter(Boolean);
+}
+
+// ─── CLEAR FORM ───────────────────────────────────────────────────
 function clearForm() {
-  ['f_title','f_salary','f_experience','f_equity','f_about','f_location'].forEach(id => {
-    document.getElementById(id).value = '';
-  });
+  ['f_title','f_salary','f_experience','f_equity','f_about','f_location',
+   'f_responsibilities','f_requirements','f_niceToHave','f_interviewProcess','f_offer']
+    .forEach(id => { const el = document.getElementById(id); if(el) el.value = ''; });
   document.getElementById('f_dept').value = '';
   document.getElementById('f_type').value = '';
   document.getElementById('f_active').checked = true;
   document.getElementById('formFooterMsg').textContent = '';
-  ['respList','reqList','niceList','interviewList','offerList'].forEach(clearListEditor);
+  document.getElementById('questionsList').innerHTML = '';
+  document.getElementById('customSectionsList').innerHTML = '';
 }
 
-function initListEditors() {
-  ['respList','reqList','niceList','interviewList','offerList'].forEach(id => {
-    addListItem(id);
-  });
+// ─── CUSTOM SECTIONS ──────────────────────────────────────────────
+function addCustomSection(section = null) {
+  const container = document.getElementById('customSectionsList');
+  const card = document.createElement('div');
+  card.className = 'custom-section-card';
+
+  const nameVal = section ? escHtml(section.name) : '';
+  const contentVal = section ? escHtml(arrayToComma(section.items)) : '';
+
+  card.innerHTML = `
+    <div class="custom-section-card__row">
+      <div class="custom-section-card__fields">
+        <input class="custom-section-name" type="text" placeholder="Section name e.g. Tech stack" value="${nameVal}" data-role="csname"/>
+        <textarea class="comma-field" placeholder="React, Node.js, PostgreSQL, Redis" data-role="csitems" style="min-height:56px">${contentVal}</textarea>
+        <div class="comma-hint">Separate items with commas — renders as a bullet list on the careers page.</div>
+      </div>
+      <button class="list-remove-btn" onclick="this.closest('.custom-section-card').remove()" type="button" style="margin-top:.15rem">
+        <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>`;
+  container.appendChild(card);
 }
 
-function addListItem(listId, value = '') {
-  const list = document.getElementById(listId);
-  const row = document.createElement('div');
-  row.className = 'list-item-row';
-  row.innerHTML = `
-    <input class="list-item-input" type="text" placeholder="Add item..." value="${escHtml(value)}"/>
-    <button class="list-remove-btn" onclick="removeListItem(this)" type="button">
+function getCustomSections() {
+  return Array.from(document.querySelectorAll('.custom-section-card')).map(card => {
+    const name = card.querySelector('[data-role="csname"]').value.trim();
+    const items = commaToArray(card.querySelector('[data-role="csitems"]').value);
+    return { name, items };
+  }).filter(s => s.name && s.items.length > 0);
+}
+
+function populateCustomSections(sections) {
+  document.getElementById('customSectionsList').innerHTML = '';
+  if (sections && sections.length) sections.forEach(s => addCustomSection(s));
+}
+
+// ─── CUSTOM QUESTIONS ─────────────────────────────────────────────
+function addQuestion(q = null) {
+  const container = document.getElementById('questionsList');
+  const id = 'q_' + Date.now() + '_' + Math.random().toString(36).slice(2,6);
+  const card = document.createElement('div');
+  card.className = 'question-card';
+  card.dataset.qid = id;
+
+  const type = q ? q.type : 'dropdown';
+  const label = q ? q.label : '';
+  const required = q ? q.required : true;
+  const options = q && q.options ? q.options : [''];
+
+  card.innerHTML = `
+    <div class="question-card__top">
+      <div class="question-card__fields">
+        <div class="question-card__row">
+          <input class="list-item-input" type="text" placeholder="Question label e.g. Have you graduated?" value="${escHtml(label)}" data-role="qlabel" style="flex:1;padding:.75rem 1rem;border-radius:11px;border:1px solid var(--line-strong);background:rgba(255,255,255,.05);color:#fff;outline:none;font-size:.86rem;transition:border-color .2s"/>
+          <select class="question-type-select" data-role="qtype" onchange="onQuestionTypeChange(this)">
+            <option value="dropdown" ${type==='dropdown'?'selected':''}>Dropdown</option>
+            <option value="text" ${type==='text'?'selected':''}>Short text</option>
+            <option value="yesno" ${type==='yesno'?'selected':''}>Yes / No</option>
+          </select>
+        </div>
+        <label class="question-required-toggle">
+          <input type="checkbox" data-role="qrequired" ${required?'checked':''}/>
+          Required
+        </label>
+        <div class="options-editor" data-role="qoptions" style="${type==='text'?'display:none':''}">
+          ${type === 'yesno'
+            ? '<div style="font-size:.78rem;color:rgba(255,255,255,.3);padding:.3rem 0">Options: Yes, No — fixed</div>'
+            : options.map(o => optionRowHTML(o)).join('') + `<button class="add-option-btn" onclick="addOptionToQuestion(this)" type="button"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Add option</button>`
+          }
+        </div>
+      </div>
+      <button class="list-remove-btn" onclick="this.closest('.question-card').remove()" type="button" style="margin-top:.15rem">
+        <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>`;
+  container.appendChild(card);
+}
+
+function optionRowHTML(value = '') {
+  return `<div class="option-row">
+    <input class="option-input" type="text" placeholder="Option text..." value="${escHtml(value)}" data-role="qoption"/>
+    <button class="option-remove" onclick="this.closest('.option-row').remove()" type="button">
       <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-    </button>`;
-  list.appendChild(row);
+    </button>
+  </div>`;
 }
 
-function removeListItem(btn) {
-  btn.closest('.list-item-row').remove();
+function addOptionToQuestion(btn) {
+  const editor = btn.closest('[data-role="qoptions"]');
+  const newRow = document.createElement('div');
+  newRow.innerHTML = optionRowHTML('');
+  editor.insertBefore(newRow.firstElementChild, btn);
 }
 
-function clearListEditor(listId) {
-  document.getElementById(listId).innerHTML = '';
+function onQuestionTypeChange(sel) {
+  const card = sel.closest('.question-card');
+  const optionsEl = card.querySelector('[data-role="qoptions"]');
+  const type = sel.value;
+  if (type === 'text') {
+    optionsEl.style.display = 'none';
+    optionsEl.innerHTML = '';
+  } else if (type === 'yesno') {
+    optionsEl.style.display = '';
+    optionsEl.innerHTML = '<div style="font-size:.78rem;color:rgba(255,255,255,.3);padding:.3rem 0">Options: Yes, No — fixed</div>';
+  } else {
+    optionsEl.style.display = '';
+    optionsEl.innerHTML = optionRowHTML('') + `<button class="add-option-btn" onclick="addOptionToQuestion(this)" type="button"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Add option</button>`;
+  }
 }
 
-function getListValues(listId) {
-  return Array.from(document.getElementById(listId).querySelectorAll('.list-item-input'))
-    .map(i => i.value.trim()).filter(Boolean);
+function getQuestions() {
+  const cards = document.querySelectorAll('.question-card');
+  return Array.from(cards).map(card => {
+    const label = card.querySelector('[data-role="qlabel"]').value.trim();
+    const type = card.querySelector('[data-role="qtype"]').value;
+    const required = card.querySelector('[data-role="qrequired"]').checked;
+    let options = [];
+    if (type === 'dropdown') {
+      options = Array.from(card.querySelectorAll('[data-role="qoption"]')).map(i => i.value.trim()).filter(Boolean);
+    } else if (type === 'yesno') {
+      options = ['Yes', 'No'];
+    }
+    return { label, type, required, options };
+  }).filter(q => q.label);
 }
 
-function populateList(listId, items) {
-  clearListEditor(listId);
-  if (!items || items.length === 0) return addListItem(listId);
-  items.forEach(item => addListItem(listId, item));
+function populateQuestions(questions) {
+  document.getElementById('questionsList').innerHTML = '';
+  if (questions && questions.length) questions.forEach(q => addQuestion(q));
 }
 
 // ─── SAVE ─────────────────────────────────────────────────────────
@@ -829,52 +925,38 @@ async function saveJob() {
   const type = document.getElementById('f_type').value;
   const location = document.getElementById('f_location').value.trim();
   const about = document.getElementById('f_about').value.trim();
-
   if (!title || !dept || !type || !location || !about) {
     document.getElementById('formFooterMsg').innerHTML = '<span style="color:#fca5a5">Please fill in all required fields.</span>';
     return;
   }
-
   const btn = document.getElementById('saveBtn');
   btn.disabled = true;
   document.getElementById('saveBtnText').textContent = 'Saving…';
-
-  const deptLabels = {
-    engineering:'Engineering',sales:'Sales',marketing:'Marketing',
-    design:'Design',operations:'Operations',finance:'Finance',product:'Product',other:'Other'
-  };
-
+  const deptLabels = { engineering:'Engineering',sales:'Sales',marketing:'Marketing',design:'Design',operations:'Operations',finance:'Finance',product:'Product',other:'Other' };
   const job = {
     id: editingId || 'job_' + Date.now(),
-    title, dept,
-    deptLabel: deptLabels[dept] || dept,
-    type, location,
+    title, dept, deptLabel: deptLabels[dept] || dept, type, location,
     salary: document.getElementById('f_salary').value.trim(),
     experience: document.getElementById('f_experience').value.trim(),
     equity: document.getElementById('f_equity').value.trim(),
     about,
-    responsibilities: getListValues('respList'),
-    requirements: getListValues('reqList'),
-    niceToHave: getListValues('niceList'),
-    interviewProcess: getListValues('interviewList'),
-    offer: getListValues('offerList'),
+    responsibilities: commaToArray(document.getElementById('f_responsibilities').value),
+    requirements: commaToArray(document.getElementById('f_requirements').value),
+    niceToHave: commaToArray(document.getElementById('f_niceToHave').value),
+    interviewProcess: commaToArray(document.getElementById('f_interviewProcess').value),
+    offer: commaToArray(document.getElementById('f_offer').value),
+    customSections: getCustomSections(),
+    questions: getQuestions(),
     active: document.getElementById('f_active').checked,
     isNew: !editingId,
     createdAt: editingId ? (jobs.find(j=>j.id===editingId)?.createdAt || Date.now()) : Date.now(),
   };
-
-  if (editingId) {
-    jobs = jobs.map(j => j.id === editingId ? job : j);
-  } else {
-    jobs.unshift(job);
-  }
-
+  if (editingId) { jobs = jobs.map(j => j.id === editingId ? job : j); }
+  else { jobs.unshift(job); }
   saveJobsLocally();
   await pushToAPI(job, editingId ? 'updateJob' : 'addJob');
-
   btn.disabled = false;
   document.getElementById('saveBtnText').textContent = editingId ? 'Save changes' : 'Publish job';
-
   showToast(editingId ? 'Job updated successfully.' : 'Job posted and live on careers page.', 'success');
   showSection('jobs');
   renderJobs();
@@ -886,12 +968,10 @@ function editJob(id) {
   if (!job) return;
   editingId = id;
   showSection('edit');
-
   document.getElementById('formTitle').textContent = 'Edit job';
   document.getElementById('formCardTitle').textContent = 'Edit: ' + job.title;
   document.getElementById('formSubtitle').textContent = 'Update the details and save changes.';
   document.getElementById('saveBtnText').textContent = 'Save changes';
-
   document.getElementById('f_title').value = job.title;
   document.getElementById('f_dept').value = job.dept;
   document.getElementById('f_type').value = job.type;
@@ -901,15 +981,18 @@ function editJob(id) {
   document.getElementById('f_equity').value = job.equity || '';
   document.getElementById('f_about').value = job.about;
   document.getElementById('f_active').checked = job.active;
-
-  populateList('respList', job.responsibilities);
-  populateList('reqList', job.requirements);
-  populateList('niceList', job.niceToHave);
-  populateList('interviewList', job.interviewProcess);
-  populateList('offerList', job.offer);
+  // Comma fields
+  document.getElementById('f_responsibilities').value = arrayToComma(job.responsibilities);
+  document.getElementById('f_requirements').value = arrayToComma(job.requirements);
+  document.getElementById('f_niceToHave').value = arrayToComma(job.niceToHave);
+  document.getElementById('f_interviewProcess').value = arrayToComma(job.interviewProcess);
+  document.getElementById('f_offer').value = arrayToComma(job.offer);
+  // Custom sections & questions
+  populateCustomSections(job.customSections);
+  populateQuestions(job.questions);
 }
 
-// ─── TOGGLE ACTIVE ────────────────────────────────────────────────
+// ─── TOGGLE / DELETE ──────────────────────────────────────────────
 async function toggleActive(id) {
   jobs = jobs.map(j => j.id === id ? {...j, active: !j.active} : j);
   const job = jobs.find(j => j.id === id);
@@ -919,7 +1002,6 @@ async function toggleActive(id) {
   renderJobs();
 }
 
-// ─── DELETE ───────────────────────────────────────────────────────
 function confirmDelete(id) {
   pendingDeleteId = id;
   const job = jobs.find(j => j.id === id);
@@ -927,23 +1009,18 @@ function confirmDelete(id) {
   document.getElementById('modalText').textContent = 'This will remove the job from your careers page permanently.';
   document.getElementById('confirmModal').classList.add('show');
   document.getElementById('modalConfirmBtn').onclick = async () => {
-    jobs = jobs.filter(j => j.id !== pendingDeleteId);
+    const idToDelete = pendingDeleteId;
+    jobs = jobs.filter(j => j.id !== idToDelete);
     saveJobsLocally();
-    await pushToAPI({ id: pendingDeleteId }, 'deleteJob');
     closeModal();
     showToast('Job deleted.', 'success');
     renderJobs();
+    pushToAPI({ id: idToDelete }, 'deleteJob');
   };
 }
 
-function closeModal() {
-  document.getElementById('confirmModal').classList.remove('show');
-  pendingDeleteId = null;
-}
-
-document.getElementById('confirmModal').addEventListener('click', e => {
-  if (e.target === document.getElementById('confirmModal')) closeModal();
-});
+function closeModal() { document.getElementById('confirmModal').classList.remove('show'); pendingDeleteId = null; }
+document.getElementById('confirmModal').addEventListener('click', e => { if (e.target === document.getElementById('confirmModal')) closeModal(); });
 
 // ─── TOAST ────────────────────────────────────────────────────────
 let toastTimer;
@@ -952,22 +1029,14 @@ function showToast(msg, type = 'success') {
   const icon = document.getElementById('toastIcon');
   document.getElementById('toastMsg').textContent = msg;
   toast.className = 'toast ' + type;
-  icon.innerHTML = type === 'success'
-    ? '<polyline points="20 6 9 17 4 12"/>'
-    : '<circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>';
+  icon.innerHTML = type === 'success' ? '<polyline points="20 6 9 17 4 12"/>' : '<circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>';
   clearTimeout(toastTimer);
   setTimeout(() => toast.classList.add('show'), 10);
   toastTimer = setTimeout(() => toast.classList.remove('show'), 3500);
 }
 
-// ─── HELPERS ──────────────────────────────────────────────────────
-function capitalize(str) {
-  return str.charAt(0).toUpperCase() + str.slice(1);
-}
-
-function escHtml(str) {
-  return str.replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-}
+function capitalize(str) { return str.charAt(0).toUpperCase() + str.slice(1); }
+function escHtml(str) { if(!str) return ''; return String(str).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 </script>
 </body>
 </html>
