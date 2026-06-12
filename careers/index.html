@@ -175,6 +175,13 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
 .file-error{display:none;font-size:.74rem;font-weight:600;color:#fca5a5;margin-top:.45rem;line-height:1.4}
 .file-error.visible{display:block}
 
+/* UPLOAD PROGRESS */
+.upload-progress{display:none;margin-top:.6rem;padding:.65rem .9rem;border-radius:10px;background:rgba(59,110,255,.06);border:1px solid rgba(59,110,255,.18)}
+.upload-progress.visible{display:block}
+.upload-progress__text{font-size:.78rem;color:#8fb0ff;display:flex;align-items:center;gap:.5rem}
+.upload-progress__spinner{width:12px;height:12px;border:2px solid rgba(59,110,255,.3);border-top-color:#3b6eff;border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0}
+@keyframes spin{to{transform:rotate(360deg)}}
+
 .aform-submit{margin-top:1.1rem;width:100%;display:inline-flex;align-items:center;justify-content:center;gap:.55rem;padding:.9rem 1rem;border-radius:12px;background:var(--accent);color:#fff;font-size:.9rem;font-weight:700;border:none;cursor:pointer;transition:transform .2s var(--ease),background .2s,opacity .2s;box-shadow:0 12px 28px var(--accent-glow)}
 .aform-submit:hover:not(:disabled){transform:translateY(-1px);background:#2f5ce8}
 .aform-submit:disabled{opacity:.38;cursor:not-allowed;transform:none;box-shadow:none}
@@ -421,15 +428,18 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
 </footer>
 
 <script>
-const API_URL = "https://script.google.com/macros/s/AKfycbxnFKn8zY379gSrfdHHgTrn1irUHNQM_InzUK8qoqNM2L3xCIrvH3AIiB7XXODEEchPlQ/exec";
+const API_URL    = "https://script.google.com/macros/s/AKfycbxnFKn8zY379gSrfdHHgTrn1irUHNQM_InzUK8qoqNM2L3xCIrvH3AIiB7XXODEEchPlQ/exec";
 const WORKER_URL = 'https://perceptive-contact.jainsaanidhya.workers.dev/';
 
 let JOBS = [];
 
+// ─── SUBMIT BUTTON LABEL TEMPLATE ────────────────────────────────
+const SUBMIT_BTN_INNER = 'Submit application<svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>';
+
 // ─── LOAD & SYNC ──────────────────────────────────────────────────
 async function loadJobs() {
   const cached = localStorage.getItem('pl_jobs');
-  if (cached) { 
+  if (cached) {
     JOBS = JSON.parse(cached).filter(j => j.active);
     renderJobs('all');
     initFilters();
@@ -441,9 +451,9 @@ async function loadJobs() {
 async function syncJobs() {
   if (API_URL === "YOUR_GOOGLE_SHEET_URL_HERE") return;
   try {
-    const res = await fetch(API_URL + "?action=getJobs");
+    const res  = await fetch(API_URL + "?action=getJobs");
     const data = await res.json();
-    const all = data.jobs || [];
+    const all  = data.jobs || [];
     const fresh = all.filter(j => j.active);
     if (JSON.stringify(fresh) !== JSON.stringify(JOBS)) {
       JOBS = fresh;
@@ -458,12 +468,11 @@ async function syncJobs() {
 function buildCustomQuestions(job) {
   if (!job.questions || job.questions.length === 0) return '';
   return job.questions.map((q, i) => {
-    const name = 'custom_' + i;
-    const req = q.required ? 'required' : '';
+    const name    = 'custom_' + i;
+    const req     = q.required ? 'required' : '';
     const optLabel = q.required ? '' : ' <span style="color:rgba(255,255,255,.28);font-weight:400">(optional)</span>';
-    const errMsg = q.type === 'select' || q.type === 'yesno' || q.type === 'dropdown' ? 'Please select an option.' : 'This field is required.';
+    const errMsg  = (q.type === 'select' || q.type === 'yesno' || q.type === 'dropdown') ? 'Please select an option.' : 'This field is required.';
     const dataReq = q.required ? 'data-required="true"' : 'data-required="false"';
-
     if (q.type === 'text') {
       return `<div class="aform-field">
         <label class="aform-label">${q.label}${optLabel}</label>
@@ -484,7 +493,7 @@ function buildCustomQuestions(job) {
   }).join('');
 }
 
-// ─── BUILD CUSTOM SECTIONS HTML (for JD panel) ───────────────────
+// ─── BUILD CUSTOM SECTIONS HTML ───────────────────────────────────
 function buildCustomSectionsHTML(job) {
   if (!job.customSections || job.customSections.length === 0) return '';
   return job.customSections.map(s => {
@@ -504,9 +513,9 @@ function buildTagHTML(job) {
   } else {
     tags += `<span class="role-tag tag-loc">${job.location}</span>`;
   }
-  if (job.salary) tags += `<span class="role-tag tag-salary">${job.salary}</span>`;
+  if (job.salary)     tags += `<span class="role-tag tag-salary">${job.salary}</span>`;
   if (job.experience) tags += `<span class="role-tag tag-loc">${job.experience}</span>`;
-  if (job.isNew) tags += `<span class="role-tag tag-new">New</span>`;
+  if (job.isNew)      tags += `<span class="role-tag tag-new">New</span>`;
   return tags;
 }
 
@@ -587,9 +596,15 @@ function buildRoleHTML(job) {
                         <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
                       </button>
                     </div>
+                    <div class="upload-progress" id="uploadProgress-${job.id}">
+                      <div class="upload-progress__text">
+                        <div class="upload-progress__spinner"></div>
+                        Uploading resume…
+                      </div>
+                    </div>
                   </div>
                 </div>
-                <button type="submit" class="aform-submit" disabled>Submit application<svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+                <button type="submit" class="aform-submit" disabled>${SUBMIT_BTN_INNER}</button>
                 <div class="aform-message" role="alert"></div>
               </form>
             </div>
@@ -600,8 +615,8 @@ function buildRoleHTML(job) {
 }
 
 function renderJobs(filter) {
-  const grid = document.getElementById('rolesGrid');
-  const empty = document.getElementById('rolesEmpty');
+  const grid     = document.getElementById('rolesGrid');
+  const empty    = document.getElementById('rolesEmpty');
   const filtered = filter === 'all' ? JOBS : JOBS.filter(j => j.dept === filter);
   if (filtered.length === 0) {
     grid.innerHTML = '';
@@ -615,10 +630,10 @@ function renderJobs(filter) {
 
 function initFilters() {
   const container = document.getElementById('filtersContainer');
-  const depts = [...new Set(JOBS.map(j => j.dept))];
+  const depts     = [...new Set(JOBS.map(j => j.dept))];
   container.innerHTML = `<button class="filter-btn active" data-filter="all">All roles</button>`;
   depts.forEach(dept => {
-    const job = JOBS.find(j => j.dept === dept);
+    const job   = JOBS.find(j => j.dept === dept);
     const label = job.deptLabel || dept;
     container.innerHTML += `<button class="filter-btn" data-filter="${dept}">${label}</button>`;
   });
@@ -639,23 +654,23 @@ function isValidPhone(v) { return /^[+]?[\d\s\-().]{7,15}$/.test(v); }
 
 function validateField(input, errorSpan) {
   const name = input.name;
-  const val = input.value.trim();
-  let msg = '';
-  if (name === 'name') { if (!val) msg = 'Please enter your full name.'; }
+  const val  = input.value.trim();
+  let   msg  = '';
+  if (name === 'name')  { if (!val) msg = 'Please enter your full name.'; }
   else if (name === 'email') { if (!val) msg = 'Please enter your email address.'; else if (!isValidEmail(val)) msg = 'Please enter a valid email address.'; }
   else if (name === 'phone') { if (!val) msg = 'Please enter your phone number.'; else if (!isValidPhone(val)) msg = 'Please enter a valid phone number (7–15 digits).'; }
   if (msg) { input.classList.add('input-error'); errorSpan.textContent = msg; errorSpan.classList.add('visible'); }
-  else { input.classList.remove('input-error'); errorSpan.textContent = ''; errorSpan.classList.remove('visible'); }
+  else     { input.classList.remove('input-error'); errorSpan.textContent = ''; errorSpan.classList.remove('visible'); }
   return !msg;
 }
 
 function checkSubmitGate(form) {
-  const nameInput = form.querySelector('[name="name"]');
+  const nameInput  = form.querySelector('[name="name"]');
   const emailInput = form.querySelector('[name="email"]');
   const phoneInput = form.querySelector('[name="phone"]');
-  const btn = form.querySelector('.aform-submit');
+  const btn        = form.querySelector('.aform-submit');
 
-  const nameOk = nameInput.value.trim().length > 0 && !nameInput.classList.contains('input-error');
+  const nameOk  = nameInput.value.trim().length > 0 && !nameInput.classList.contains('input-error');
   const emailOk = emailInput.value.trim().length > 0 && isValidEmail(emailInput.value.trim());
   const phoneOk = phoneInput.value.trim().length > 0 && isValidPhone(phoneInput.value.trim());
 
@@ -664,32 +679,37 @@ function checkSubmitGate(form) {
     .every(el => el.value.trim().length > 0);
 
   const fileInput = form.querySelector('[name="resume"]');
-  const resumeOk = fileInput && fileInput.files && fileInput.files.length > 0;
+  const resumeOk  = fileInput && fileInput.files && fileInput.files.length > 0;
 
   btn.disabled = !(nameOk && emailOk && phoneOk && customOk && resumeOk);
 }
 
 // ─── ROLE HANDLERS ────────────────────────────────────────────────
 function attachRoleHandlers() {
+  // Accordion toggle
   document.querySelectorAll('.role-card').forEach(card => {
     card.addEventListener('click', () => {
-      const item = card.closest('.role-item');
+      const item   = card.closest('.role-item');
       const isOpen = item.dataset.open === 'true';
-      document.querySelectorAll('.role-item').forEach(i => { i.dataset.open = 'false'; i.querySelector('.role-card').setAttribute('aria-expanded','false'); });
+      document.querySelectorAll('.role-item').forEach(i => {
+        i.dataset.open = 'false';
+        i.querySelector('.role-card').setAttribute('aria-expanded', 'false');
+      });
       if (!isOpen) {
         item.dataset.open = 'true';
-        card.setAttribute('aria-expanded','true');
-        setTimeout(() => item.scrollIntoView({ behavior:'smooth', block:'nearest' }), 50);
+        card.setAttribute('aria-expanded', 'true');
+        setTimeout(() => item.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 50);
       }
     });
   });
 
+  // Field validation listeners
   document.querySelectorAll('.apply-form').forEach(form => {
-    ['name','email','phone'].forEach(fieldName => {
-      const input = form.querySelector(`[name="${fieldName}"]`);
+    ['name', 'email', 'phone'].forEach(fieldName => {
+      const input     = form.querySelector(`[name="${fieldName}"]`);
       const errorSpan = form.querySelector(`.field-error[data-for="${fieldName}"]`);
       if (!input || !errorSpan) return;
-      input.addEventListener('blur', () => { validateField(input, errorSpan); checkSubmitGate(form); });
+      input.addEventListener('blur',  () => { validateField(input, errorSpan); checkSubmitGate(form); });
       input.addEventListener('input', () => {
         if (input.classList.contains('input-error') || errorSpan.classList.contains('visible')) validateField(input, errorSpan);
         checkSubmitGate(form);
@@ -697,38 +717,31 @@ function attachRoleHandlers() {
     });
 
     form.querySelectorAll('[name^="custom_"]').forEach(el => {
-      el.addEventListener('change', () => {
+      const onCustomChange = () => {
         if (el.dataset.required === 'true' && el.value.trim().length > 0) {
           el.classList.remove('input-error');
           const errSpan = form.querySelector(`.field-error[data-for="${el.name}"]`);
           if (errSpan) errSpan.classList.remove('visible');
         }
         checkSubmitGate(form);
-      });
-      el.addEventListener('input', () => {
-        if (el.dataset.required === 'true' && el.value.trim().length > 0) {
-          el.classList.remove('input-error');
-          const errSpan = form.querySelector(`.field-error[data-for="${el.name}"]`);
-          if (errSpan) errSpan.classList.remove('visible');
-        }
-        checkSubmitGate(form);
-      });
+      };
+      el.addEventListener('change', onCustomChange);
+      el.addEventListener('input',  onCustomChange);
     });
 
     checkSubmitGate(form);
   });
-}
 
-  // File upload
+  // ── File upload ───────────────────────────────────────────────
   document.querySelectorAll('[id^="fileInput-"]').forEach(input => {
-    const jobId = input.id.replace('fileInput-','');
-    const dropZone = document.getElementById('dropZone-' + jobId);
-    const preview = document.getElementById('filePreview-' + jobId);
-    const fileName = document.getElementById('fileName-' + jobId);
-    const fileError = document.getElementById('fileError-' + jobId);
-    const form = input.closest('form');
+    const jobId    = input.id.replace('fileInput-', '');
+    const dropZone = document.getElementById('dropZone-'    + jobId);
+    const preview  = document.getElementById('filePreview-' + jobId);
+    const fileName = document.getElementById('fileName-'    + jobId);
+    const fileError = document.getElementById('fileError-'  + jobId);
+    const form     = input.closest('form');
 
-    function isPDF(file) { return file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf'); }
+    function isPDF(file)  { return file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf'); }
     function showFile(file) {
       fileName.textContent = file.name;
       preview.classList.add('visible');
@@ -757,20 +770,20 @@ function attachRoleHandlers() {
     input.addEventListener('change', () => {
       const file = input.files[0];
       if (!file) return;
-      if (!isPDF(file)) { rejectFile('Only PDF files are accepted.'); return; }
-      if (file.size > 10*1024*1024) { rejectFile('File too large. Max 10MB.'); return; }
+      if (!isPDF(file))                 { rejectFile('Only PDF files are accepted.'); return; }
+      if (file.size > 10 * 1024 * 1024) { rejectFile('File too large. Max 10MB.');  return; }
       showFile(file);
     });
-    dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('dragover'); });
-    dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+    dropZone.addEventListener('dragover',  e => { e.preventDefault(); dropZone.classList.add('dragover'); });
+    dropZone.addEventListener('dragleave', ()  => dropZone.classList.remove('dragover'));
     dropZone.addEventListener('drop', e => {
       e.preventDefault();
       dropZone.classList.remove('dragover');
       const file = e.dataTransfer.files[0];
       if (!file) return;
-      if (!isPDF(file)) { rejectFile('Only PDF files are accepted.'); return; }
-      if (file.size > 10*1024*1024) { rejectFile('File too large. Max 10MB.'); return; }
-      const dt = new DataTransfer();
+      if (!isPDF(file))                 { rejectFile('Only PDF files are accepted.'); return; }
+      if (file.size > 10 * 1024 * 1024) { rejectFile('File too large. Max 10MB.');  return; }
+      const dt   = new DataTransfer();
       dt.items.add(file);
       input.files = dt.files;
       showFile(file);
@@ -779,167 +792,180 @@ function attachRoleHandlers() {
     if (removeBtn) removeBtn.addEventListener('click', clearFile);
   });
 
-  // Apply form submit
+  // ── Apply form submit ─────────────────────────────────────────
   document.querySelectorAll('.apply-form').forEach(form => {
-    form.addEventListener('submit', async (e) => {
+    form.addEventListener('submit', async e => {
       e.preventDefault();
-      const btn = form.querySelector('.aform-submit');
-      const msg = form.querySelector('.aform-message');
-      msg.className = 'aform-message';
 
-      const role = form.dataset.role;
-      const jobId = form.dataset.jobid;
-      const job = JOBS.find(j => j.id === jobId);
-      const name = form.querySelector('[name="name"]').value.trim();
-      const email = form.querySelector('[name="email"]').value.trim();
-      const phone = form.querySelector('[name="phone"]').value.trim();
+      const btn      = form.querySelector('.aform-submit');
+      const msgEl    = form.querySelector('.aform-message');
+      msgEl.className = 'aform-message';
 
-      btn.disabled = true;
-      btn.innerHTML = 'Sending…';
+      const jobId    = form.dataset.jobid;
+      const role     = form.dataset.role;
+      const job      = JOBS.find(j => j.id === jobId);
+      const name     = form.querySelector('[name="name"]').value.trim();
+      const email    = form.querySelector('[name="email"]').value.trim();
+      const phone    = form.querySelector('[name="phone"]').value.trim();
 
-      let baseValid = true;
+      // ── Client-side validation ──
+      let valid = true;
       if (!name) {
         const inp = form.querySelector('[name="name"]');
         const err = form.querySelector('.field-error[data-for="name"]');
         inp.classList.add('input-error');
         if (err) err.classList.add('visible');
-        baseValid = false;
+        valid = false;
       }
       if (!isValidEmail(email)) {
         const inp = form.querySelector('[name="email"]');
         const err = form.querySelector('.field-error[data-for="email"]');
         inp.classList.add('input-error');
         if (err) err.classList.add('visible');
-        baseValid = false;
+        valid = false;
       }
       if (!isValidPhone(phone)) {
         const inp = form.querySelector('[name="phone"]');
         const err = form.querySelector('.field-error[data-for="phone"]');
         inp.classList.add('input-error');
         if (err) err.classList.add('visible');
-        baseValid = false;
+        valid = false;
       }
-
-      let customValid = true;
       form.querySelectorAll('[name^="custom_"]').forEach(field => {
         if (field.dataset.required === 'true' && !field.value.trim()) {
           field.classList.add('input-error');
           const err = form.querySelector(`.field-error[data-for="${field.name}"]`);
           if (err) err.classList.add('visible');
-          customValid = false;
+          valid = false;
         }
       });
 
-      const fileInput = form.querySelector('[name="resume"]');
-      const fileErr = document.getElementById('fileError-' + jobId);
-      const dropZone2 = document.getElementById('dropZone-' + jobId);
-      let resumeValid = true;
+      const fileInput  = form.querySelector('[name="resume"]');
+      const fileErr    = document.getElementById('fileError-' + jobId);
+      const dropZone2  = document.getElementById('dropZone-'  + jobId);
       if (!fileInput || !fileInput.files || fileInput.files.length === 0) {
-        if (fileErr) { fileErr.textContent = 'Please attach your resume before submitting.'; fileErr.classList.add('visible'); }
-        if (dropZone2) dropZone2.classList.add('upload-error');
-        resumeValid = false;
+        if (fileErr)   { fileErr.textContent = 'Please attach your resume before submitting.'; fileErr.classList.add('visible'); }
+        if (dropZone2)   dropZone2.classList.add('upload-error');
+        valid = false;
       }
 
-      if (!baseValid || !customValid || !resumeValid) {
-        btn.disabled = false;
-        btn.innerHTML = 'Submit application<svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>';
-        return;
-      }
+      if (!valid) return;
 
+      // ── Disable button + show uploading state ──
+      btn.disabled     = true;
+      btn.innerHTML    = 'Uploading resume…';
+
+      const progressEl = document.getElementById('uploadProgress-' + jobId);
+      if (progressEl) progressEl.classList.add('visible');
+
+      // ── Build answers array ──
       const answers = [];
       if (job && job.questions && job.questions.length) {
         job.questions.forEach((q, i) => {
-          const input = form.querySelector(`[name="custom_${i}"]`);
-          if (input && input.value) answers.push({ label: q.label, value: input.value });
+          const inp = form.querySelector(`[name="custom_${i}"]`);
+          if (inp && inp.value) answers.push({ label: q.label, value: inp.value });
         });
       }
 
+      // ── Read file as base64, then POST ──
       const file = fileInput.files[0];
 
-const reader = new FileReader();
+      try {
+        const base64 = await new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload  = () => resolve(reader.result.split(',')[1]);
+          reader.onerror = () => reject(new Error('File read failed'));
+          reader.readAsDataURL(file);
+        });
 
-reader.onload = async () => {
+        const payload = {
+          action: "submitApplication",
+          data: {
+            role,
+            jobId,
+            name,
+            email,
+            phone,
+            answers,
+            resumeBase64:    base64,
+            resumeFileName:  file.name   // ← sent so Apps Script can keep the extension
+          }
+        };
 
-  const payload = {
-    action: "submitApplication",
-    data: {
-      role,
-      jobId,
-      name,
-      email,
-      phone,
-      answers,
-      resumeBase64: reader.result.split(',')[1]
-    }
-  };
+        btn.innerHTML = 'Submitting…';
 
-  try {
-    await fetch(API_URL, {
-      method: 'POST',
-      mode: 'no-cors',
-      headers: { 'Content-Type': 'text/plain' },
-      body: JSON.stringify(payload)
+        await fetch(API_URL, {
+          method:  'POST',
+          mode:    'no-cors',
+          headers: { 'Content-Type': 'text/plain' },
+          body:    JSON.stringify(payload)
+        });
+
+        // no-cors means we can't read the response — assume success
+        if (progressEl) progressEl.classList.remove('visible');
+        msgEl.className   = 'aform-message success';
+        msgEl.textContent = "Application sent — we'll be in touch from team@perceptivelabs.in.";
+        form.reset();
+        document.querySelectorAll('.file-preview').forEach(p => p.classList.remove('visible'));
+        btn.disabled  = true;
+        btn.innerHTML = SUBMIT_BTN_INNER;
+
+      } catch (err) {
+        if (progressEl) progressEl.classList.remove('visible');
+        msgEl.className   = 'aform-message error';
+        msgEl.textContent = "Couldn't send. Email us directly at team@perceptivelabs.in.";
+        btn.disabled  = false;
+        btn.innerHTML = SUBMIT_BTN_INNER;
+      }
     });
-
-    msg.className = 'aform-message success';
-    msg.textContent = "Application sent — we'll be in touch from team@perceptivelabs.in.";
-
-    form.reset();
-
-    document.querySelectorAll('.file-preview')
-      .forEach(p => p.classList.remove('visible'));
-
-    btn.disabled = true;
-
-  } catch(err) {
-
-    msg.className = 'aform-message error';
-    msg.textContent = "Couldn't send. Email us directly at team@perceptivelabs.in.";
-
-    btn.disabled = false;
-
-  } finally {
-
-    btn.innerHTML = 'Submit application<svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>';
-
-  }
-};
-
-reader.readAsDataURL(file);
+  });
+}
 
 // ─── NAV ──────────────────────────────────────────────────────────
 const nav = document.getElementById('nav');
-window.addEventListener('scroll', () => { nav.classList.toggle('scrolled', window.scrollY > 18); }, { passive:true });
-const burger = document.getElementById('navBurger');
+window.addEventListener('scroll', () => { nav.classList.toggle('scrolled', window.scrollY > 18); }, { passive: true });
+
+const burger    = document.getElementById('navBurger');
 const mobileNav = document.getElementById('navMobile');
-function closeNav(){ mobileNav.classList.remove('open'); mobileNav.setAttribute('aria-hidden','true'); burger.setAttribute('aria-expanded','false'); document.body.style.overflow=''; }
-if(burger) burger.addEventListener('click', () => {
-  const open = mobileNav.classList.toggle('open');
-  mobileNav.setAttribute('aria-hidden', String(!open));
-  burger.setAttribute('aria-expanded', String(open));
-  document.body.style.overflow = open ? 'hidden' : '';
-});
+
+function closeNav() {
+  mobileNav.classList.remove('open');
+  mobileNav.setAttribute('aria-hidden', 'true');
+  burger.setAttribute('aria-expanded', 'false');
+  document.body.style.overflow = '';
+}
+
+if (burger) {
+  burger.addEventListener('click', () => {
+    const open = mobileNav.classList.toggle('open');
+    mobileNav.setAttribute('aria-hidden', String(!open));
+    burger.setAttribute('aria-expanded', String(open));
+    document.body.style.overflow = open ? 'hidden' : '';
+  });
+}
 mobileNav.querySelectorAll('a').forEach(l => l.addEventListener('click', closeNav));
 
-const obs = new IntersectionObserver((entries) => {
-  entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('in'); obs.unobserve(e.target); } });
-}, { threshold:.1, rootMargin:'0px 0px -40px 0px' });
+// ─── REVEAL OBSERVER ─────────────────────────────────────────────
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); obs.unobserve(e.target); } });
+}, { threshold: .1, rootMargin: '0px 0px -40px 0px' });
 document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
 
+// ─── SCROLL BAR ───────────────────────────────────────────────────
 window.addEventListener('scroll', () => {
   const pct = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
   document.getElementById('scrollBar').style.width = pct + '%';
-}, { passive:true });
+}, { passive: true });
 
-// Contact form
+// ─── CONTACT FORM ─────────────────────────────────────────────────
 const careersForm = document.getElementById('careersContactForm');
 
 function checkCareersFormGate() {
-  const name = document.getElementById('c_name').value.trim();
-  const email = document.getElementById('c_email').value.trim();
+  const name    = document.getElementById('c_name').value.trim();
+  const email   = document.getElementById('c_email').value.trim();
   const message = document.getElementById('c_msg').value.trim();
-  const btn = document.getElementById('careersSubmitBtn');
-  btn.disabled = !(name.length > 0 && isValidEmail(email) && message.length > 0);
+  const btn     = document.getElementById('careersSubmitBtn');
+  btn.disabled  = !(name.length > 0 && isValidEmail(email) && message.length > 0);
 }
 
 if (careersForm) {
@@ -947,40 +973,39 @@ if (careersForm) {
     const el = document.getElementById(id);
     if (el) el.addEventListener('input', checkCareersFormGate);
   });
-
   checkCareersFormGate();
 
-  careersForm.addEventListener('submit', async (e) => {
+  careersForm.addEventListener('submit', async e => {
     e.preventDefault();
     const btn = document.getElementById('careersSubmitBtn');
     const msg = document.getElementById('careersFormMsg');
     msg.className = 'cform-message';
-    btn.disabled = true;
+    btn.disabled  = true;
     btn.innerHTML = 'Sending…';
 
-    const role = document.getElementById('c_role').value;
+    const role    = document.getElementById('c_role').value;
     const payload = {
-      name: document.getElementById('c_name').value,
-      email: document.getElementById('c_email').value,
+      name:    document.getElementById('c_name').value,
+      email:   document.getElementById('c_email').value,
       message: (role ? '[Role: ' + role + ']\n\n' : '') + document.getElementById('c_msg').value,
       _origin: window.location.href
     };
 
     try {
       const res = await fetch(WORKER_URL, {
-        method: 'POST',
+        method:  'POST',
         headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-        body: JSON.stringify(payload)
+        body:    JSON.stringify(payload)
       });
       if (!res.ok) throw new Error('HTTP ' + res.status);
-      msg.className = 'cform-message success';
+      msg.className   = 'cform-message success';
       msg.textContent = "Got it — we'll reply from team@perceptivelabs.in.";
       careersForm.reset();
       checkCareersFormGate();
     } catch (err) {
-      msg.className = 'cform-message error';
+      msg.className   = 'cform-message error';
       msg.textContent = "Couldn't send. Email us at team@perceptivelabs.in directly.";
-      btn.disabled = false;
+      btn.disabled    = false;
     } finally {
       btn.innerHTML = 'Send message<svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>';
     }
