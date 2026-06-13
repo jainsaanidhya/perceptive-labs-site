@@ -428,7 +428,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
 </footer>
 
 <script>
-const API_URL    = "https://script.google.com/macros/s/AKfycbyyg4KtrE0XQjlQ4_VSWxKFPQwqJzn6v205elUkUPtB4vOOjQm5z5hwkhlebMzL0yjzOQ/exec";
+const API_URL    = "https://script.google.com/macros/s/AKfycbxY4zz9mVPoJ5ERB0XDwFZsD1xMe57lQQiKBh-wJ1AdpXJpyjq6CoAi3jBThmQeasDjXA/exec";
 const WORKER_URL = 'https://perceptive-contact.jainsaanidhya.workers.dev/';
 
 let JOBS = [];
@@ -475,20 +475,20 @@ function buildCustomQuestions(job) {
     const dataReq = q.required ? 'data-required="true"' : 'data-required="false"';
     if (q.type === 'text') {
       return `<div class="aform-field">
-        <label class="aform-label">${q.label}${optLabel}</label>
+        <label class="aform-label">${escHtml(q.label)}${optLabel}</label>
         <input class="aform-input" type="text" name="${name}" placeholder="Your answer" ${req} ${dataReq}/>
         <span class="field-error" data-for="${name}">${errMsg}</span>
       </div>`;
     } else {
       const opts = (q.type === 'yesno') ? ['Yes', 'No'] : (q.options || []);
       return `<div class="aform-field">
-        <label class="aform-label">${q.label}${optLabel}</label>
+        <label class="aform-label">${escHtml(q.label)}${optLabel}</label>
         <select class="aform-input" name="${name}" ${req} ${dataReq}>
           <option value="" disabled selected>Select an option</option>
-          ${opts.map(o => `<option value="${o}">${o}</option>`).join('')}
+          ${opts.map(o => `<option value="${escHtml(o)}">${escHtml(o)}</option>`).join('')}
         </select>
         <span class="field-error" data-for="${name}">${errMsg}</span>
-      </div>`;
+      </div>`;;
     }
   }).join('');
 }
@@ -499,9 +499,9 @@ function buildCustomSectionsHTML(job) {
   return job.customSections.map(s => {
     if (!s.name || !s.items || s.items.length === 0) return '';
     return `<div class="jd-section">
-      <div class="jd-label">${s.name}</div>
-      <ul class="jd-list">${s.items.map(item => `<li>${item}</li>`).join('')}</ul>
-    </div>`;
+    <div class="jd-label">${escHtml(s.name)}</div>
+    <ul class="jd-list">${s.items.map(item => `<li>${escHtml(item)}</li>`).join('')}</ul>
+  </div>`;
   }).join('');
 }
 
@@ -509,28 +509,30 @@ function buildCustomSectionsHTML(job) {
 function buildTagHTML(job) {
   let tags = `<span class="role-tag tag-type">${job.type}</span>`;
   if (job.location.toLowerCase().includes('remote')) {
-    tags += `<span class="role-tag tag-remote">${job.location}</span>`;
+    tags += `<span class="role-tag tag-remote">${escHtml(job.location)}</span>`;
   } else {
-    tags += `<span class="role-tag tag-loc">${job.location}</span>`;
+    tags += `<span class="role-tag tag-loc">${escHtml(job.location)}</span>`;
   }
-  if (job.salary)     tags += `<span class="role-tag tag-salary">${job.salary}</span>`;
-  if (job.experience) tags += `<span class="role-tag tag-loc">${job.experience}</span>`;
+  if (job.salary)     tags += `<span class="role-tag tag-salary">${escHtml(job.salary)}</span>`;
+  if (job.experience) tags += `<span class="role-tag tag-loc">${escHtml(job.experience)}</span>`;
   if (job.isNew)      tags += `<span class="role-tag tag-new">New</span>`;
   return tags;
 }
 
 function buildRoleHTML(job) {
-  const listItems = arr => (arr && arr.length) ? arr.map(i => `<li>${i}</li>`).join('') : '';
+  const listItems = arr => (arr && arr.length) 
+  ? arr.map(i => `<li>${escHtml(i)}</li>`) .join('') 
+  : '';
   const optionalSection = (arr, label) => arr && arr.length
     ? `<div class="jd-section"><div class="jd-label">${label}</div><ul class="jd-list">${listItems(arr)}</ul></div>`
     : '';
 
   return `
-    <div class="role-item" data-open="false" data-dept="${job.dept}" data-id="${job.id}">
+    <div class="role-item" data-open="false" data-dept="${escHtml(job.dept)}" data-id="${escHtml(job.id)}">
       <button class="role-card" aria-expanded="false">
         <div class="role-card__left">
-          <div class="role-card__dept">${job.deptLabel}</div>
-          <div class="role-card__title">${job.title}</div>
+          <div class="role-card__dept">${escHtml(job.deptLabel)}</div>
+          <div class="role-card__title">${escHtml(job.title)}</div>
           <div class="role-card__meta">${buildTagHTML(job)}</div>
         </div>
         <div class="role-card__right">
@@ -539,12 +541,12 @@ function buildRoleHTML(job) {
           </div>
         </div>
       </button>
-      <div class="role-panel" role="region" aria-label="${job.title} details">
+      <div class="role-panel" role="region" aria-label="${escHtml(job.title)} details">
         <div class="role-panel__inner">
           <div class="role-jd">
             <div class="jd-section">
               <div class="jd-label">About the role</div>
-              <div class="jd-body">${job.about}</div>
+              <div class="jd-body">${escHtml(job.about)}</div>
             </div>
             ${job.responsibilities && job.responsibilities.length ? `<div class="jd-section">
               <div class="jd-label">What you'll be building</div>
@@ -614,6 +616,17 @@ function buildRoleHTML(job) {
     </div>`;
 }
 
+function escHtml(str) {
+  if (!str) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+
 function renderJobs(filter) {
   const grid     = document.getElementById('rolesGrid');
   const empty    = document.getElementById('rolesEmpty');
@@ -658,7 +671,7 @@ function validateField(input, errorSpan) {
   let   msg  = '';
   if (name === 'name')  { if (!val) msg = 'Please enter your full name.'; }
   else if (name === 'email') { if (!val) msg = 'Please enter your email address.'; else if (!isValidEmail(val)) msg = 'Please enter a valid email address.'; }
-  else if (name === 'phone') { if (!val) msg = 'Please enter your phone number.'; else if (!isValidPhone(val)) msg = 'Please enter a valid phone number (7–15 digits).'; }
+  else if (name === 'phone') { if (!val) msg = 'Please enter your phone number.'; else if (!isValidPhone(val)) msg = 'Please enter a valid phone number.'; }
   if (msg) { input.classList.add('input-error'); errorSpan.textContent = msg; errorSpan.classList.add('visible'); }
   else     { input.classList.remove('input-error'); errorSpan.textContent = ''; errorSpan.classList.remove('visible'); }
   return !msg;
@@ -894,26 +907,27 @@ function attachRoleHandlers() {
 
         btn.innerHTML = 'Submitting…';
 
-        await fetch(API_URL, {
-          method:  'POST',
-          mode:    'no-cors',
-          headers: { 'Content-Type': 'text/plain' },
-          body:    JSON.stringify(payload)
-        });
+        const res  = await fetch('https://perceptive-contact.jainsaanidhya.workers.dev/apply', {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify(payload)
+      });
+      const data = await res.json();
 
-        // no-cors means we can't read the response — assume success
-        if (progressEl) progressEl.classList.remove('visible');
-        msgEl.className   = 'aform-message success';
-        msgEl.textContent = "Application sent — we'll be in touch from team@perceptivelabs.in.";
-        form.reset();
-        document.querySelectorAll('.file-preview').forEach(p => p.classList.remove('visible'));
-        btn.disabled  = true;
-        btn.innerHTML = SUBMIT_BTN_INNER;
+      if (!data.success) throw new Error(data.error || 'Submission failed');
+
+      if (progressEl) progressEl.classList.remove('visible');
+      msgEl.className   = 'aform-message success';
+      msgEl.textContent = "Application sent — we'll be in touch from team@perceptivelabs.in.";
+      form.reset();
+      document.querySelectorAll('.file-preview').forEach(p => p.classList.remove('visible'));
+      btn.disabled  = true;
+      btn.innerHTML = SUBMIT_BTN_INNER;
 
       } catch (err) {
         if (progressEl) progressEl.classList.remove('visible');
         msgEl.className   = 'aform-message error';
-        msgEl.textContent = "Couldn't send. Email us directly at team@perceptivelabs.in.";
+        msgEl.textContent = "Couldn't send. Please email your resume directly to team@perceptivelabs.in.";
         btn.disabled  = false;
         btn.innerHTML = SUBMIT_BTN_INNER;
       }
