@@ -428,7 +428,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
 </footer>
 
 <script>
-const API_URL    = "https://script.google.com/macros/s/AKfycbxnFKn8zY379gSrfdHHgTrn1irUHNQM_InzUK8qoqNM2L3xCIrvH3AIiB7XXODEEchPlQ/exec";
+const API_URL    = "https://script.google.com/macros/s/AKfycbyyg4KtrE0XQjlQ4_VSWxKFPQwqJzn6v205elUkUPtB4vOOjQm5z5hwkhlebMzL0yjzOQ/exec";
 const WORKER_URL = 'https://perceptive-contact.jainsaanidhya.workers.dev/';
 
 let JOBS = [];
@@ -586,7 +586,7 @@ function buildRoleHTML(job) {
                       <input type="file" name="resume" accept=".pdf,application/pdf" id="fileInput-${job.id}"/>
                       <div class="file-upload-icon"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div>
                       <div class="file-upload-text"><strong>Click to upload</strong> or drag and drop</div>
-                      <div class="file-upload-types">PDF only — max 10MB</div>
+                      <div class="file-upload-types">PDF only — max 5MB</div>
                     </div>
                     <span class="file-error" id="fileError-${job.id}"></span>
                     <div class="file-preview" id="filePreview-${job.id}">
@@ -771,7 +771,7 @@ function attachRoleHandlers() {
       const file = input.files[0];
       if (!file) return;
       if (!isPDF(file))                 { rejectFile('Only PDF files are accepted.'); return; }
-      if (file.size > 10 * 1024 * 1024) { rejectFile('File too large. Max 10MB.');  return; }
+      if (file.size > 5 * 1024 * 1024) { rejectFile('File too large. Max 5MB.');  return; }
       showFile(file);
     });
     dropZone.addEventListener('dragover',  e => { e.preventDefault(); dropZone.classList.add('dragover'); });
@@ -782,7 +782,7 @@ function attachRoleHandlers() {
       const file = e.dataTransfer.files[0];
       if (!file) return;
       if (!isPDF(file))                 { rejectFile('Only PDF files are accepted.'); return; }
-      if (file.size > 10 * 1024 * 1024) { rejectFile('File too large. Max 10MB.');  return; }
+      if (file.size > 5 * 1024 * 1024) { rejectFile('File too large. Max 5MB.');  return; }
       const dt   = new DataTransfer();
       dt.items.add(file);
       input.files = dt.files;

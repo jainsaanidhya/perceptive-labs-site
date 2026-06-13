@@ -629,36 +629,65 @@ input:checked + .toggle-slider::before{transform:translateX(18px)}
 </div>
 
 <script>
-const ADMIN_PASSWORD = "perceptive123";
-const API_URL = "https://script.google.com/macros/s/AKfycbxnFKn8zY379gSrfdHHgTrn1irUHNQM_InzUK8qoqNM2L3xCIrvH3AIiB7XXODEEchPlQ/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbyyg4KtrE0XQjlQ4_VSWxKFPQwqJzn6v205elUkUPtB4vOOjQm5z5hwkhlebMzL0yjzOQ/exec";
 
 let jobs = [];
 let editingId = null;
 let pendingDeleteId = null;
 
+let SESSION_PASSWORD = null; // held in memory only, never in source
+
 // ─── AUTH ─────────────────────────────────────────────────────────
-document.getElementById('loginPassword').addEventListener('keydown', e => { if (e.key === 'Enter') login(); });
+document.getElementById('loginPassword').addEventListener('keydown', e => {
+  if (e.key === 'Enter') login();
+});
 document.getElementById('loginBtn').addEventListener('click', login);
 
-function login() {
-  const pw = document.getElementById('loginPassword').value;
+async function login() {
+  const pw    = document.getElementById('loginPassword').value;
   const input = document.getElementById('loginPassword');
-  const err = document.getElementById('loginError');
-  if (pw === ADMIN_PASSWORD) {
-    document.getElementById('loginScreen').style.display = 'none';
-    document.getElementById('adminApp').style.display = 'block';
-    loadJobs();
-  } else {
-    input.classList.add('error');
+  const err   = document.getElementById('loginError');
+  const btn   = document.getElementById('loginBtn');
+
+  if (!pw) return;
+
+  btn.textContent = 'Signing in…';
+  btn.disabled    = true;
+  err.classList.remove('show');
+  input.classList.remove('error');
+
+  try {
+    const res  = await fetch(API_URL, {
+      method:  'POST',
+      headers: { 'Content-Type': 'text/plain' }, // changed
+      body:    JSON.stringify({ action: 'verifyPassword', password: pw })
+    });
+    const data = await res.json();
+
+    if (data.success) {
+      SESSION_PASSWORD = pw;
+      document.getElementById('loginScreen').style.display = 'none';
+      document.getElementById('adminApp').style.display    = 'block';
+      loadJobs();
+    } else {
+      input.classList.add('error');
+      err.classList.add('show');
+      btn.textContent = 'Sign in';
+      btn.disabled    = false;
+    }
+  } catch (e) {
+    err.textContent = 'Connection error. Try again.';
     err.classList.add('show');
-    input.focus();
+    btn.textContent = 'Sign in';
+    btn.disabled    = false;
   }
 }
 
 document.getElementById('logoutBtn').addEventListener('click', () => {
+  SESSION_PASSWORD = null;
   document.getElementById('loginScreen').style.display = 'flex';
-  document.getElementById('adminApp').style.display = 'none';
-  document.getElementById('loginPassword').value = '';
+  document.getElementById('adminApp').style.display    = 'none';
+  document.getElementById('loginPassword').value       = '';
   document.getElementById('loginError').classList.remove('show');
   document.getElementById('loginPassword').classList.remove('error');
 });
@@ -667,32 +696,35 @@ document.getElementById('logoutBtn').addEventListener('click', () => {
 function loadJobs() {
   jobs = JSON.parse(localStorage.getItem('pl_jobs') || '[]');
   renderJobs();
-  if (API_URL !== "YOUR_GOOGLE_SHEET_URL_HERE") {
-    fetch(API_URL + "?action=getJobs")
-      .then(r => r.json())
-      .then(data => {
-        if (data.jobs) {
-          jobs = data.jobs;
-          localStorage.setItem('pl_jobs', JSON.stringify(jobs));
-          renderJobs();
-        }
-      })
-      .catch(() => {});
-  }
+
+  fetch(API_URL + "?action=getJobs")
+    .then(r  => r.json())
+    .then(data => {
+      if (data.jobs) {
+        jobs = data.jobs;
+        localStorage.setItem('pl_jobs', JSON.stringify(jobs));
+        renderJobs();
+      }
+    })
+    .catch(() => showToast('Could not sync jobs from server.', 'error'));
 }
 
 function saveJobsLocally() { localStorage.setItem('pl_jobs', JSON.stringify(jobs)); }
 
 async function pushToAPI(job, action) {
-  if (API_URL === "YOUR_GOOGLE_SHEET_URL_HERE") return true;
   try {
-    await fetch(API_URL, {
-      method: "POST", mode: "no-cors",
-      headers: { "Content-Type": "text/plain" },
-      body: JSON.stringify({ action, job, password: ADMIN_PASSWORD })
+    const res = await fetch(API_URL, {
+      method:  'POST',
+      headers: { 'Content-Type': 'text/plain' }, // changed
+      body:    JSON.stringify({ action, job, password: SESSION_PASSWORD })
     });
+    const data = await res.json();
+    if (!data.success) throw new Error(data.error || 'Unknown error');
     return true;
-  } catch (err) { return false; }
+  } catch (err) {
+    showToast('API error: ' + err.message, 'error');
+    return false;
+  }
 }
 
 // ─── RENDER JOBS ──────────────────────────────────────────────────
