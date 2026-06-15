@@ -1,0 +1,1153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Admin — Perceptive Labs</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800;900&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-font-smoothing:antialiased;text-rendering:geometricPrecision}
+body{font-family:'Geist',system-ui,sans-serif;background:#06070a;color:#fff;line-height:1.6;min-height:100vh}
+a{text-decoration:none;color:inherit}
+button,input,textarea,select{font:inherit}
+:root{
+  --accent:#3b6eff;--accent-glow:rgba(59,110,255,.28);
+  --muted:rgba(255,255,255,.5);--line:rgba(255,255,255,.08);
+  --line-strong:rgba(255,255,255,.14);--surface:rgba(255,255,255,.04);
+  --surface-hover:rgba(255,255,255,.07);--red:#f87171;--green:#49d17d;
+  --ease:cubic-bezier(.16,1,.3,1);--max:1100px;
+}
+
+/* LOGIN */
+#loginScreen{
+  position:fixed;inset:0;display:flex;align-items:center;justify-content:center;
+  background:radial-gradient(circle at 60% 30%,rgba(59,110,255,.14) 0%,transparent 28%),#06070a;
+  z-index:999;
+}
+.login-box{
+  width:min(420px,90vw);border-radius:24px;border:1px solid var(--line-strong);
+  background:rgba(255,255,255,.04);backdrop-filter:blur(24px);padding:2.5rem 2rem;
+  box-shadow:0 40px 80px rgba(0,0,0,.5);
+}
+.login-logo{display:flex;align-items:center;gap:.75rem;margin-bottom:2rem}
+.login-logo-dot{width:36px;height:36px;border-radius:10px;background:var(--accent);display:flex;align-items:center;justify-content:center}
+.login-logo-dot svg{width:18px;height:18px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.login-logo-text{font-size:.95rem;font-weight:700;letter-spacing:-.02em}
+.login-logo-sub{font-size:.72rem;color:var(--muted)}
+.login-title{font-size:1.5rem;font-weight:760;letter-spacing:-.04em;margin-bottom:.35rem}
+.login-sub{font-size:.88rem;color:var(--muted);margin-bottom:1.8rem}
+.login-field{margin-bottom:1rem}
+.login-label{font-size:.78rem;font-weight:600;color:rgba(255,255,255,.42);margin-bottom:.45rem;display:block}
+.login-input{
+  width:100%;padding:.85rem 1rem;border-radius:12px;border:1px solid var(--line-strong);
+  background:rgba(255,255,255,.05);color:#fff;outline:none;font-size:.92rem;
+  transition:border-color .2s,background .2s;
+}
+.login-input::placeholder{color:rgba(255,255,255,.22)}
+.login-input:focus{border-color:rgba(59,110,255,.5);background:rgba(59,110,255,.06)}
+.login-input.error{border-color:rgba(248,113,113,.5);background:rgba(248,113,113,.05)}
+.login-error{font-size:.78rem;color:var(--red);margin-top:.45rem;display:none}
+.login-error.show{display:block}
+.login-btn{
+  width:100%;padding:.9rem;border-radius:12px;background:var(--accent);color:#fff;
+  font-size:.92rem;font-weight:700;border:none;cursor:pointer;margin-top:.5rem;
+  transition:transform .2s var(--ease),background .18s;box-shadow:0 12px 28px var(--accent-glow);
+}
+.login-btn:hover{transform:translateY(-1px);background:#2f5ce8}
+
+/* ADMIN APP */
+#adminApp{display:none}
+
+/* TOP NAV */
+.topbar{
+  position:sticky;top:0;z-index:800;height:64px;border-bottom:1px solid var(--line);
+  background:rgba(6,7,10,.88);backdrop-filter:blur(20px);
+}
+.topbar__inner{
+  height:100%;display:flex;align-items:center;justify-content:space-between;
+  padding:0 2rem;gap:1rem;
+}
+.topbar__left{display:flex;align-items:center;gap:1rem}
+.topbar__logo{display:flex;align-items:center;gap:.65rem}
+.topbar__logo-dot{width:28px;height:28px;border-radius:8px;background:var(--accent);display:flex;align-items:center;justify-content:center}
+.topbar__logo-dot svg{width:13px;height:13px;stroke:#fff;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.topbar__name{font-size:.88rem;font-weight:700;letter-spacing:-.02em}
+.topbar__badge{font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:.2rem .55rem;border-radius:6px;background:rgba(59,110,255,.14);color:#8fb0ff;border:1px solid rgba(59,110,255,.22)}
+.topbar__right{display:flex;align-items:center;gap:.75rem}
+.topbar__site-link{
+  display:inline-flex;align-items:center;gap:.4rem;padding:.45rem .9rem;
+  border-radius:9px;border:1px solid var(--line-strong);color:var(--muted);
+  font-size:.78rem;font-weight:600;transition:all .18s;background:rgba(255,255,255,.04);
+}
+.topbar__site-link:hover{border-color:rgba(255,255,255,.24);color:#fff;background:rgba(255,255,255,.08)}
+.topbar__site-link svg{width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.logout-btn{
+  padding:.45rem .9rem;border-radius:9px;border:1px solid var(--line-strong);
+  color:var(--muted);font-size:.78rem;font-weight:600;background:rgba(255,255,255,.04);
+  cursor:pointer;transition:all .18s;
+}
+.logout-btn:hover{border-color:rgba(248,113,113,.4);color:var(--red);background:rgba(248,113,113,.06)}
+
+/* LAYOUT */
+.admin-layout{display:grid;grid-template-columns:260px 1fr;min-height:calc(100vh - 64px)}
+
+/* SIDEBAR */
+.sidebar{
+  border-right:1px solid var(--line);padding:1.5rem 1rem;
+  display:flex;flex-direction:column;gap:.35rem;position:sticky;
+  top:64px;height:calc(100vh - 64px);overflow-y:auto;
+}
+.sidebar-section-label{
+  font-size:.65rem;font-weight:700;letter-spacing:.13em;text-transform:uppercase;
+  color:rgba(255,255,255,.28);padding:.5rem .75rem .3rem;margin-top:.5rem;
+}
+.sidebar-link{
+  display:flex;align-items:center;gap:.65rem;padding:.72rem .85rem;border-radius:12px;
+  font-size:.84rem;font-weight:600;color:rgba(255,255,255,.5);cursor:pointer;
+  transition:all .18s;border:1px solid transparent;background:transparent;width:100%;text-align:left;
+}
+.sidebar-link svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+.sidebar-link:hover{color:rgba(255,255,255,.82);background:var(--surface)}
+.sidebar-link.active{color:#fff;background:rgba(59,110,255,.12);border-color:rgba(59,110,255,.22)}
+.sidebar-link.active svg{stroke:#8fb0ff}
+.sidebar-count{margin-left:auto;font-size:.68rem;font-weight:700;padding:.15rem .5rem;border-radius:6px;background:rgba(255,255,255,.08);color:rgba(255,255,255,.48)}
+
+/* MAIN CONTENT */
+.main-content{padding:2rem clamp(1.25rem,3vw,2.5rem);min-width:0}
+
+/* PAGE HEADER */
+.page-header{
+  margin-bottom:2rem;display:flex;align-items:flex-start;
+  justify-content:space-between;gap:1rem;flex-wrap:wrap;
+}
+.page-title{font-size:1.6rem;font-weight:760;letter-spacing:-.04em;color:#fff}
+.page-sub{font-size:.88rem;color:var(--muted);margin-top:.3rem}
+.btn-primary{
+  display:inline-flex;align-items:center;gap:.5rem;padding:.72rem 1.2rem;
+  border-radius:11px;background:var(--accent);color:#fff;font-size:.86rem;font-weight:700;
+  border:none;cursor:pointer;transition:transform .2s var(--ease),background .18s;
+  box-shadow:0 10px 24px var(--accent-glow);white-space:nowrap;
+}
+.btn-primary:hover{transform:translateY(-1px);background:#2f5ce8}
+.btn-primary svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.btn-secondary{
+  display:inline-flex;align-items:center;gap:.5rem;padding:.72rem 1.2rem;
+  border-radius:11px;border:1px solid var(--line-strong);color:rgba(255,255,255,.72);
+  background:transparent;font-size:.86rem;font-weight:600;cursor:pointer;
+  transition:all .18s;white-space:nowrap;
+}
+.btn-secondary:hover{border-color:rgba(255,255,255,.28);color:#fff;background:var(--surface)}
+.btn-secondary svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+/* STATS */
+.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:2rem}
+.stat-card{padding:1.3rem 1.4rem;border-radius:16px;border:1px solid var(--line);background:var(--surface)}
+.stat-card__label{font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.32);margin-bottom:.5rem}
+.stat-card__value{font-size:2rem;font-weight:780;letter-spacing:-.05em;color:#fff;font-family:'Geist Mono',monospace}
+.stat-card__sub{font-size:.78rem;color:var(--muted);margin-top:.2rem}
+
+/* JOBS LIST */
+.jobs-list{display:grid;gap:.75rem}
+.job-card{border-radius:16px;border:1px solid var(--line);background:var(--surface);transition:border-color .2s,background .2s;overflow:hidden}
+.job-card:hover{border-color:var(--line-strong);background:var(--surface-hover)}
+.job-card__main{display:grid;grid-template-columns:1fr auto;gap:1rem;align-items:center;padding:1.2rem 1.4rem}
+.job-card__dept{font-size:.68rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:.3rem}
+.job-card__title{font-size:1rem;font-weight:720;color:#fff;margin-bottom:.55rem}
+.job-card__meta{display:flex;gap:.5rem;flex-wrap:wrap}
+.job-admin-id{
+  font-size:12px;
+  color:#94a3b8;
+  margin-top:4px;
+  font-family:monospace;
+}
+.tag{display:inline-flex;align-items:center;padding:.2rem .6rem;border-radius:7px;font-size:.68rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
+.tag-blue{background:rgba(59,110,255,.1);color:#8fb0ff;border:1px solid rgba(59,110,255,.18)}
+.tag-gray{background:rgba(255,255,255,.05);color:rgba(255,255,255,.48);border:1px solid rgba(255,255,255,.09)}
+.tag-green{background:rgba(73,209,125,.08);color:#7be4a2;border:1px solid rgba(73,209,125,.16)}
+.tag-red{background:rgba(248,113,113,.08);color:#fca5a5;border:1px solid rgba(248,113,113,.16)}
+.tag-amber{background:rgba(251,191,36,.07);color:#fcd34d;border:1px solid rgba(251,191,36,.18)}
+.job-card__actions{display:flex;gap:.5rem;flex-shrink:0}
+.icon-btn{
+  width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;
+  border:1px solid var(--line-strong);background:transparent;cursor:pointer;
+  color:rgba(255,255,255,.42);transition:all .18s;
+}
+.icon-btn svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.icon-btn:hover{color:#fff;border-color:rgba(255,255,255,.28);background:var(--surface)}
+.icon-btn.delete:hover{color:var(--red);border-color:rgba(248,113,113,.28);background:rgba(248,113,113,.06)}
+.icon-btn.toggle-active:hover{color:var(--green);border-color:rgba(73,209,125,.28);background:rgba(73,209,125,.06)}
+
+/* EMPTY STATE */
+.empty-state{
+  padding:4rem 2rem;text-align:center;border-radius:20px;
+  border:1px dashed rgba(255,255,255,.1);background:rgba(255,255,255,.02);
+}
+.empty-state__icon{width:48px;height:48px;border-radius:14px;background:var(--surface);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;margin:0 auto 1rem}
+.empty-state__icon svg{width:22px;height:22px;stroke:rgba(255,255,255,.3);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.empty-state__title{font-size:1rem;font-weight:700;color:rgba(255,255,255,.6);margin-bottom:.4rem}
+.empty-state__text{font-size:.86rem;color:rgba(255,255,255,.32);max-width:34ch;margin:0 auto 1.5rem}
+
+/* FORM */
+.form-card{border-radius:20px;border:1px solid var(--line);background:rgba(255,255,255,.03);overflow:hidden}
+.form-card__head{padding:1.4rem 1.8rem;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:1rem}
+.form-card__title{font-size:1.05rem;font-weight:720;letter-spacing:-.025em;color:#fff}
+.form-card__sub{font-size:.82rem;color:var(--muted);margin-top:.15rem}
+.form-card__body{padding:1.8rem}
+.form-section{margin-bottom:2rem}
+.form-section:last-child{margin-bottom:0}
+.form-section-title{font-size:.72rem;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:1.1rem;padding-bottom:.6rem;border-bottom:1px solid var(--line)}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem}
+.form-row.triple{grid-template-columns:1fr 1fr 1fr}
+.form-row.full{grid-template-columns:1fr}
+.form-field{display:grid;gap:.42rem}
+.form-label{font-size:.78rem;font-weight:600;color:rgba(255,255,255,.42)}
+.form-label span{color:#f87171;font-weight:600}
+.form-input,.form-select,.form-textarea{
+  width:100%;padding:.82rem 1rem;border-radius:12px;border:1px solid var(--line-strong);
+  background:rgba(255,255,255,.05);color:#fff;outline:none;font-size:.88rem;
+  transition:border-color .2s,background .2s;
+}
+.form-input::placeholder,.form-textarea::placeholder{color:rgba(255,255,255,.22)}
+.form-input:focus,.form-select:focus,.form-textarea:focus{border-color:rgba(59,110,255,.5);background:rgba(59,110,255,.06)}
+.form-select option{background:#1a1c22;color:#fff}
+.form-textarea{resize:vertical;line-height:1.66}
+.form-hint{font-size:.74rem;color:rgba(255,255,255,.28);line-height:1.5;margin-top:.3rem}
+
+/* COMMA TEXTAREA — replaces the old list-editor rows */
+.comma-field{
+  width:100%;padding:.82rem 1rem;border-radius:12px;border:1px solid var(--line-strong);
+  background:rgba(255,255,255,.05);color:#fff;outline:none;font-size:.88rem;
+  transition:border-color .2s,background .2s;resize:vertical;line-height:1.66;min-height:72px;
+}
+.comma-field::placeholder{color:rgba(255,255,255,.22)}
+.comma-field:focus{border-color:rgba(59,110,255,.5);background:rgba(59,110,255,.06)}
+.comma-hint{font-size:.74rem;color:rgba(255,255,255,.28);margin-top:.35rem;line-height:1.5}
+
+/* CUSTOM SECTIONS BUILDER */
+.custom-section-card{
+  border:1px solid var(--line-strong);border-radius:14px;
+  background:rgba(255,255,255,.03);padding:1.1rem 1.2rem;
+  display:grid;gap:.75rem;margin-bottom:.75rem;
+}
+.custom-section-card__row{display:grid;grid-template-columns:1fr auto;gap:.75rem;align-items:start}
+.custom-section-card__fields{flex:1;display:grid;gap:.6rem;width:100%}
+.custom-section-name{
+  width:100%;padding:.75rem 1rem;border-radius:11px;border:1px solid var(--line-strong);
+  background:rgba(255,255,255,.05);color:#fff;outline:none;font-size:.86rem;
+  transition:border-color .2s;
+}
+.custom-section-name::placeholder{color:rgba(255,255,255,.22)}
+.custom-section-name:focus{border-color:rgba(59,110,255,.5);background:rgba(59,110,255,.06)}
+
+/* CUSTOM QUESTIONS BUILDER */
+.question-card{
+  border:1px solid var(--line-strong);border-radius:14px;
+  background:rgba(255,255,255,.03);padding:1.1rem 1.2rem;
+  display:grid;gap:.75rem;margin-bottom:.75rem;
+}
+.question-card__top{display:flex;align-items:flex-start;gap:.75rem}
+.question-card__fields{flex:1;display:grid;gap:.6rem}
+.question-card__row{display:grid;grid-template-columns:1fr auto;gap:.75rem;align-items:center}
+.question-type-select{
+  padding:.55rem .8rem;border-radius:10px;border:1px solid var(--line-strong);
+  background:rgba(255,255,255,.05);color:#fff;outline:none;font-size:.82rem;
+  transition:border-color .2s;cursor:pointer;
+}
+.question-type-select:focus{border-color:rgba(59,110,255,.5)}
+.question-type-select option{background:#1a1c22}
+.options-editor{display:grid;gap:.4rem;margin-top:.4rem}
+.option-row{display:flex;gap:.5rem;align-items:center}
+.option-input{flex:1;padding:.6rem .85rem;border-radius:9px;border:1px solid var(--line-strong);background:rgba(255,255,255,.05);color:#fff;outline:none;font-size:.84rem;transition:border-color .2s}
+.option-input::placeholder{color:rgba(255,255,255,.22)}
+.option-input:focus{border-color:rgba(59,110,255,.5);background:rgba(59,110,255,.06)}
+.option-remove{width:28px;height:28px;border-radius:7px;border:1px solid var(--line-strong);background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.28);transition:all .18s;flex-shrink:0}
+.option-remove:hover{color:var(--red);border-color:rgba(248,113,113,.28);background:rgba(248,113,113,.06)}
+.option-remove svg{width:10px;height:10px;stroke:currentColor;fill:none;stroke-width:2.5;stroke-linecap:round}
+.add-option-btn{display:inline-flex;align-items:center;gap:.35rem;padding:.45rem .75rem;border-radius:8px;border:1px dashed rgba(255,255,255,.12);background:transparent;color:rgba(255,255,255,.32);font-size:.76rem;font-weight:600;cursor:pointer;transition:all .18s;margin-top:.2rem}
+.add-option-btn:hover{border-color:rgba(59,110,255,.3);color:#8fb0ff;background:rgba(59,110,255,.06)}
+.add-option-btn svg{width:11px;height:11px;stroke:currentColor;fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+.question-required-toggle{display:flex;align-items:center;gap:.5rem;font-size:.76rem;color:rgba(255,255,255,.38);cursor:pointer;user-select:none;white-space:nowrap}
+.question-required-toggle input{accent-color:var(--accent);width:13px;height:13px;cursor:pointer}
+
+/* shared remove btn */
+.list-remove-btn{width:32px;height:32px;border-radius:8px;border:1px solid var(--line-strong);background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.3);transition:all .18s;flex-shrink:0}
+.list-remove-btn:hover{color:var(--red);border-color:rgba(248,113,113,.28);background:rgba(248,113,113,.06)}
+.list-remove-btn svg{width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2.5;stroke-linecap:round}
+
+.add-item-btn{display:inline-flex;align-items:center;gap:.45rem;padding:.6rem .9rem;border-radius:10px;border:1px dashed rgba(255,255,255,.14);background:transparent;color:rgba(255,255,255,.38);font-size:.8rem;font-weight:600;cursor:pointer;transition:all .18s;margin-top:.25rem}
+.add-item-btn:hover{border-color:rgba(59,110,255,.35);color:#8fb0ff;background:rgba(59,110,255,.06)}
+.add-item-btn svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+
+/* FORM FOOTER */
+.form-footer{padding:1.2rem 1.8rem;border-top:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;background:rgba(255,255,255,.02)}
+.form-footer__left{font-size:.8rem;color:var(--muted)}
+.form-footer__right{display:flex;gap:.75rem}
+
+/* TOAST */
+.toast{position:fixed;bottom:1.5rem;right:1.5rem;z-index:9999;padding:.85rem 1.2rem;border-radius:14px;font-size:.86rem;font-weight:600;display:flex;align-items:center;gap:.6rem;transform:translateY(20px);opacity:0;transition:all .3s var(--ease);pointer-events:none;box-shadow:0 16px 40px rgba(0,0,0,.4)}
+.toast.show{transform:translateY(0);opacity:1}
+.toast.success{background:#0f2a1a;border:1px solid rgba(73,209,125,.25);color:#7be4a2}
+.toast.error{background:#2a0f0f;border:1px solid rgba(248,113,113,.25);color:#fca5a5}
+.toast svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:9000;display:none;align-items:center;justify-content:center;backdrop-filter:blur(4px)}
+.modal-overlay.show{display:flex}
+.modal-box{width:min(420px,90vw);border-radius:20px;border:1px solid var(--line-strong);background:#0f1115;padding:2rem;box-shadow:0 40px 80px rgba(0,0,0,.6)}
+.modal-title{font-size:1.1rem;font-weight:740;color:#fff;margin-bottom:.5rem}
+.modal-text{font-size:.88rem;color:var(--muted);line-height:1.6;margin-bottom:1.5rem}
+.modal-actions{display:flex;gap:.75rem;justify-content:flex-end}
+.modal-cancel{padding:.65rem 1.1rem;border-radius:10px;border:1px solid var(--line-strong);background:transparent;color:rgba(255,255,255,.62);font-size:.86rem;font-weight:600;cursor:pointer;transition:all .18s}
+.modal-cancel:hover{border-color:rgba(255,255,255,.28);color:#fff}
+.modal-confirm{padding:.65rem 1.1rem;border-radius:10px;background:rgba(248,113,113,.15);border:1px solid rgba(248,113,113,.28);color:var(--red);font-size:.86rem;font-weight:700;cursor:pointer;transition:all .18s}
+.modal-confirm:hover{background:rgba(248,113,113,.22)}
+
+/* STATUS TOGGLE */
+.status-toggle{display:flex;align-items:center;gap:.75rem;padding:1rem 1.4rem;border-radius:12px;border:1px solid var(--line);background:var(--surface)}
+.status-toggle__label{font-size:.84rem;font-weight:600;color:rgba(255,255,255,.62);flex:1}
+.toggle-switch{position:relative;width:40px;height:22px;flex-shrink:0}
+.toggle-switch input{opacity:0;width:0;height:0;position:absolute}
+.toggle-slider{position:absolute;inset:0;border-radius:11px;background:rgba(255,255,255,.12);cursor:pointer;transition:background .25s;border:1px solid var(--line-strong)}
+.toggle-slider::before{content:'';position:absolute;width:16px;height:16px;border-radius:50%;background:#fff;top:2px;left:2px;transition:transform .25s var(--ease);box-shadow:0 1px 4px rgba(0,0,0,.3)}
+input:checked + .toggle-slider{background:var(--accent);border-color:rgba(59,110,255,.5)}
+input:checked + .toggle-slider::before{transform:translateX(18px)}
+
+@media(max-width:1024px){.admin-layout{grid-template-columns:1fr}.sidebar{display:none}}
+@media(max-width:680px){.stats-row{grid-template-columns:1fr 1fr}.form-row{grid-template-columns:1fr}.form-row.triple{grid-template-columns:1fr}}
+@media(max-width:480px){.stats-row{grid-template-columns:1fr}.page-header{flex-direction:column;align-items:stretch}.page-header .btn-primary{justify-content:center}}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="loginScreen">
+  <div class="login-box">
+    <div class="login-logo">
+      <div class="login-logo-dot">
+        <svg viewBox="0 0 24 24"><path d="M13 2L3 14h8l-1 8 11-14h-8l0-6z"/></svg>
+      </div>
+      <div>
+        <div class="login-logo-text">Perceptive Labs</div>
+        <div class="login-logo-sub">Admin Panel</div>
+      </div>
+    </div>
+    <div class="login-title">Sign in</div>
+    <p class="login-sub">Enter your admin password to continue.</p>
+    <div class="login-field">
+      <label class="login-label" for="loginPassword">Password</label>
+      <div style="position:relative">
+        <input class="login-input" type="password" id="loginPassword" placeholder="Enter password" autocomplete="current-password" style="padding-right:2.8rem"/>
+        <button type="button" id="togglePassword" onclick="togglePasswordVisibility()" style="position:absolute;right:.75rem;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:rgba(255,255,255,.38);padding:0;display:flex;align-items:center;transition:color .18s" aria-label="Show password">
+          <svg id="eyeIcon" viewBox="0 0 24 24" width="17" height="17" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+        </button>
+      </div>
+      <div class="login-error" id="loginError">Incorrect password. Try again.</div>
+    </div>
+    <button class="login-btn" id="loginBtn">Sign in</button>
+  </div>
+</div>
+
+<!-- ADMIN APP -->
+<div id="adminApp">
+  <header class="topbar">
+    <div class="topbar__inner">
+      <div class="topbar__left">
+        <div class="topbar__logo">
+          <div class="topbar__logo-dot">
+            <svg viewBox="0 0 24 24"><path d="M13 2L3 14h8l-1 8 11-14h-8l0-6z"/></svg>
+          </div>
+          <span class="topbar__name">Perceptive Labs</span>
+        </div>
+        <span class="topbar__badge">Admin</span>
+      </div>
+      <div class="topbar__right">
+        <a href="/" class="topbar__site-link" target="_blank">
+          View site
+          <svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        </a>
+        <button class="logout-btn" id="logoutBtn">Sign out</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="admin-layout">
+    <aside class="sidebar">
+      <div class="sidebar-section-label">Jobs</div>
+      <button class="sidebar-link active" id="sidebarJobs" onclick="showSection('jobs')">
+        <svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+        All postings
+        <span class="sidebar-count" id="sidebarCount">0</span>
+      </button>
+      <button class="sidebar-link" id="sidebarNew" onclick="showSection('new')">
+        <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Post new job
+      </button>
+    </aside>
+
+    <main class="main-content">
+      <!-- JOBS SECTION -->
+      <div id="jobsSection">
+        <div class="page-header">
+          <div>
+            <div class="page-title">Job postings</div>
+            <div class="page-sub">Manage what's live on your careers page.</div>
+          </div>
+          <button class="btn-primary" onclick="showSection('new')">
+            <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Post new job
+          </button>
+        </div>
+        <div class="stats-row">
+          <div class="stat-card">
+            <div class="stat-card__label">Total postings</div>
+            <div class="stat-card__value" id="statTotal">0</div>
+            <div class="stat-card__sub">All time</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card__label">Live now</div>
+            <div class="stat-card__value" id="statLive">0</div>
+            <div class="stat-card__sub">Visible on careers page</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card__label">Departments</div>
+            <div class="stat-card__value" id="statDepts">0</div>
+            <div class="stat-card__sub">Hiring across</div>
+          </div>
+        </div>
+        <div class="jobs-list" id="jobsList"></div>
+        <div class="empty-state" id="emptyState" style="display:none">
+          <div class="empty-state__icon">
+            <svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+          </div>
+          <div class="empty-state__title">No job postings yet</div>
+          <div class="empty-state__text">Post your first job and it will appear on your careers page instantly.</div>
+          <button class="btn-primary" onclick="showSection('new')">
+            <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Post first job
+          </button>
+        </div>
+      </div>
+
+      <!-- FORM SECTION -->
+      <div id="formSection" style="display:none">
+        <div class="page-header">
+          <div>
+            <div class="page-title" id="formTitle">Post new job</div>
+            <div class="page-sub" id="formSubtitle">Fill in the details and publish when ready.</div>
+          </div>
+          <button class="btn-secondary" onclick="showSection('jobs')">
+            <svg viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+            Back to jobs
+          </button>
+        </div>
+
+        <div class="form-card">
+          <div class="form-card__head">
+            <div>
+              <div class="form-card__title" id="formCardTitle">New job posting</div>
+              <div class="form-card__sub">All fields marked required must be filled before publishing.</div>
+            </div>
+          </div>
+          <div class="form-card__body">
+
+            <!-- BASIC INFO -->
+            <div class="form-section">
+              <div class="form-section-title">Basic info</div>
+              <div class="form-row">
+                <div class="form-field">
+                  <label class="form-label">Job title <span>*</span></label>
+                  <input class="form-input" id="f_title" type="text" placeholder="e.g. Backend Engineer Intern"/>
+                </div>
+                <div class="form-field">
+                  <label class="form-label">Department <span>*</span></label>
+                  <select class="form-select" id="f_dept">
+                    <option value="" disabled selected>Select department</option>
+                    <option value="engineering">Engineering</option>
+                    <option value="sales">Sales</option>
+                    <option value="marketing">Marketing</option>
+                    <option value="design">Design</option>
+                    <option value="operations">Operations</option>
+                    <option value="finance">Finance</option>
+                    <option value="product">Product</option>
+                    <option value="other">Other</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-row triple">
+                <div class="form-field">
+                  <label class="form-label">Job type <span>*</span></label>
+                  <select class="form-select" id="f_type">
+                    <option value="" disabled selected>Select type</option>
+                    <option value="Full-time">Full-time</option>
+                    <option value="Internship">Internship</option>
+                    <option value="Contract">Contract</option>
+                    <option value="Part-time">Part-time</option>
+                  </select>
+                </div>
+                <div class="form-field">
+                  <label class="form-label">Location <span>*</span></label>
+                  <input class="form-input" id="f_location" type="text" placeholder="e.g. Ahmedabad, India"/>
+                </div>
+                <div class="form-field">
+                  <label class="form-label">Salary range <span style="color:rgba(255,255,255,.22);font-weight:400">(optional)</span></label>
+                  <input class="form-input" id="f_salary" type="text" placeholder="e.g. ₹1L – ₹2L"/>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-field">
+                  <label class="form-label">Experience <span style="color:rgba(255,255,255,.22);font-weight:400">(optional)</span></label>
+                  <input class="form-input" id="f_experience" type="text" placeholder="e.g. 0–2 years"/>
+                </div>
+                <div class="form-field">
+                  <label class="form-label">Equity <span style="color:rgba(255,255,255,.22);font-weight:400">(optional)</span></label>
+                  <input class="form-input" id="f_equity" type="text" placeholder="e.g. No equity / 0.1–0.5%"/>
+                </div>
+              </div>
+            </div>
+
+            <!-- DESCRIPTION -->
+            <div class="form-section">
+              <div class="form-section-title">Description</div>
+              <div class="form-row full">
+                <div class="form-field">
+                  <label class="form-label">About the role <span>*</span></label>
+                  <textarea class="form-textarea" id="f_about" rows="4" placeholder="Describe the role, the team, and what this person will be working on..."></textarea>
+                </div>
+              </div>
+            </div>
+
+            <!-- RESPONSIBILITIES -->
+            <div class="form-section">
+              <div class="form-section-title">What you'll be building <span style="font-weight:400;opacity:.5">(responsibilities)</span></div>
+              <div class="form-field">
+                <textarea class="comma-field" id="f_responsibilities" placeholder="Build the API, Write unit tests, Deploy to production"></textarea>
+                <div class="comma-hint">Separate items with commas — each becomes a bullet point on the careers page.</div>
+              </div>
+            </div>
+
+            <!-- REQUIREMENTS -->
+            <div class="form-section">
+              <div class="form-section-title">Required skills</div>
+              <div class="form-field">
+                <textarea class="comma-field" id="f_requirements" placeholder="Python, React, SQL, REST APIs"></textarea>
+                <div class="comma-hint">Separate items with commas.</div>
+              </div>
+            </div>
+
+            <!-- NICE TO HAVE -->
+            <div class="form-section">
+              <div class="form-section-title">Nice to have <span style="font-weight:400;opacity:.5">(optional)</span></div>
+              <div class="form-field">
+                <textarea class="comma-field" id="f_niceToHave" placeholder="GCP, AWS, Docker, GraphQL"></textarea>
+                <div class="comma-hint">Separate items with commas.</div>
+              </div>
+            </div>
+
+            <!-- INTERVIEW PROCESS -->
+            <div class="form-section">
+              <div class="form-section-title">Interview process <span style="font-weight:400;opacity:.5">(optional)</span></div>
+              <div class="form-field">
+                <textarea class="comma-field" id="f_interviewProcess" placeholder="Intro call, Take-home task, Final interview, Offer"></textarea>
+                <div class="comma-hint">Separate steps with commas.</div>
+              </div>
+            </div>
+
+            <!-- WHAT WE OFFER -->
+            <div class="form-section">
+              <div class="form-section-title">What we offer <span style="font-weight:400;opacity:.5">(optional)</span></div>
+              <div class="form-field">
+                <textarea class="comma-field" id="f_offer" placeholder="Flexible hours, Remote-friendly, Learning budget"></textarea>
+                <div class="comma-hint">Separate items with commas.</div>
+              </div>
+            </div>
+
+            <!-- CUSTOM SECTIONS -->
+            <div class="form-section">
+              <div class="form-section-title">Custom sections <span style="font-weight:400;opacity:.5">(optional — appear in job detail)</span></div>
+              <div id="customSectionsList"></div>
+              <button class="add-item-btn" onclick="addCustomSection()" type="button">
+                <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                Add section
+              </button>
+              <div class="form-hint" style="margin-top:.5rem">Give the section a name (e.g. "Tech stack") and list items separated by commas. It renders as a bullet list on the careers page.</div>
+            </div>
+
+            <!-- CUSTOM QUESTIONS -->
+            <div class="form-section">
+              <div class="form-section-title">Application questions <span style="font-weight:400;opacity:.5">(shown on apply form)</span></div>
+              <div id="questionsList"></div>
+              <button class="add-item-btn" onclick="addQuestion()" type="button">
+                <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                Add question
+              </button>
+              <div class="form-hint" style="margin-top:.6rem">Name, email, phone and resume are always collected. Add any extra questions here.</div>
+            </div>
+
+            <!-- VISIBILITY -->
+            <div class="form-section">
+              <div class="form-section-title">Visibility</div>
+              <div class="status-toggle">
+                <span class="status-toggle__label">Publish immediately — visible on careers page</span>
+                <label class="toggle-switch">
+                  <input type="checkbox" id="f_active" checked/>
+                  <span class="toggle-slider"></span>
+                </label>
+              </div>
+              <div class="form-hint" style="margin-top:.6rem">You can unpublish anytime from the jobs list without deleting the posting.</div>
+            </div>
+
+          </div>
+          <div class="form-footer">
+            <div class="form-footer__left" id="formFooterMsg"></div>
+            <div class="form-footer__right">
+              <button class="btn-secondary" onclick="showSection('jobs')">Cancel</button>
+              <button class="btn-primary" id="saveBtn" onclick="saveJob()">
+                <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+                <span id="saveBtnText">Publish job</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="confirmModal">
+  <div class="modal-box">
+    <div class="modal-title" id="modalTitle">Delete job posting?</div>
+    <div class="modal-text" id="modalText">This will remove the job from your careers page. This cannot be undone.</div>
+    <div class="modal-actions">
+      <button class="modal-cancel" onclick="closeModal()">Cancel</button>
+      <button class="modal-confirm" id="modalConfirmBtn">Delete</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast">
+  <svg id="toastIcon" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+  <span id="toastMsg"></span>
+</div>
+
+<script>
+const API_URL = "https://script.google.com/macros/s/AKfycbxY4zz9mVPoJ5ERB0XDwFZsD1xMe57lQQiKBh-wJ1AdpXJpyjq6CoAi3jBThmQeasDjXA/exec";
+
+let jobs = [];
+let editingId = null;
+let pendingDeleteId = null;
+
+let SESSION_PASSWORD = null; 
+
+// ─── AUTH ─────────────────────────────────────────────────────────
+document.getElementById('loginPassword').addEventListener('keydown', e => {
+  if (e.key === 'Enter') login();
+});
+document.getElementById('loginBtn').addEventListener('click', login);
+
+async function login() {
+  const pw    = document.getElementById('loginPassword').value;
+  const input = document.getElementById('loginPassword');
+  const err   = document.getElementById('loginError');
+  const btn   = document.getElementById('loginBtn');
+
+  if (!pw) return;
+
+  btn.textContent = 'Signing in…';
+  btn.disabled    = true;
+  err.classList.remove('show');
+  input.classList.remove('error');
+
+  try {
+    const res  = await fetch(API_URL, {
+      method:  'POST',
+      headers: { 'Content-Type': 'text/plain' }, 
+      body:    JSON.stringify({ action: 'verifyPassword', password: pw })
+    });
+    const data = await res.json();
+
+    if (data.success) {
+      SESSION_PASSWORD = pw;
+      document.getElementById('loginScreen').style.display = 'none';
+      document.getElementById('adminApp').style.display    = 'block';
+      loadJobs();
+    } else {
+      input.classList.add('error');
+      err.classList.add('show');
+      btn.textContent = 'Sign in';
+      btn.disabled    = false;
+    }
+  } catch (e) {
+    err.textContent = 'Connection error. Try again.';
+    err.classList.add('show');
+    btn.textContent = 'Sign in';
+    btn.disabled    = false;
+  }
+}
+
+document.getElementById('logoutBtn').addEventListener('click', () => {
+  SESSION_PASSWORD = null;
+  document.getElementById('loginScreen').style.display = 'flex';
+  document.getElementById('adminApp').style.display    = 'none';
+  document.getElementById('loginPassword').value       = '';
+  document.getElementById('loginError').classList.remove('show');
+  document.getElementById('loginPassword').classList.remove('error');
+});
+
+// ─── DATA ─────────────────────────────────────────────────────────
+function loadJobs() {
+  const cached = localStorage.getItem('pl_jobs');
+  if (cached) {
+    jobs = JSON.parse(cached);
+    renderJobs();
+  }
+  fetch(API_URL + "?action=getJobs")
+    .then(r => r.json())
+    .then(data => {
+      if (data.jobs) {
+        jobs = data.jobs;
+        localStorage.setItem('pl_jobs', JSON.stringify(jobs));
+        renderJobs();
+      }
+    })
+    .catch(() => {
+      showToast(
+        cached
+          ? 'Could not sync — showing cached data, may be outdated.'
+          : 'Could not load jobs — check your connection.',
+        'error'
+      );
+    });
+}
+
+function saveJobsLocally() { localStorage.setItem('pl_jobs', JSON.stringify(jobs)); }
+
+async function pushToAPI(job, action) {
+  try {
+    const res = await fetch(API_URL, {
+      method:  'POST',
+      headers: { 'Content-Type': 'text/plain' }, 
+      body:    JSON.stringify({ action, job, password: SESSION_PASSWORD })
+    });
+    const data = await res.json();
+    if (!data.success) throw new Error(data.error || 'Unknown error');
+    return true;
+  } catch (err) {
+    showToast('API error: ' + err.message, 'error');
+    return false;
+  }
+}
+
+// ─── RENDER JOBS ──────────────────────────────────────────────────
+function renderJobs() {
+  const list = document.getElementById('jobsList');
+  const empty = document.getElementById('emptyState');
+  const total = jobs.length;
+  const live = jobs.filter(j => j.active).length;
+  const depts = new Set(jobs.map(j => j.dept)).size;
+  document.getElementById('statTotal').textContent = total;
+  document.getElementById('statLive').textContent = live;
+  document.getElementById('statDepts').textContent = depts;
+  document.getElementById('sidebarCount').textContent = total;
+  if (total === 0) { list.innerHTML = ''; empty.style.display = 'block'; return; }
+  empty.style.display = 'none';
+  list.innerHTML = jobs.map(job => `
+    <div class="job-card">
+      <div class="job-card__main">
+        <div>
+          <div class="job-card__dept">${capitalize(job.dept)}</div>
+          <div class="job-card__title">${job.title}</div>
+          <div class="job-admin-id">
+            ID: ${job.id}
+          </div>
+          <div class="job-card__meta">
+            <span class="tag tag-blue">${job.type}</span>
+            <span class="tag tag-gray">${job.location}</span>
+            ${job.salary ? `<span class="tag tag-amber">${job.salary}</span>` : ''}
+            <span class="tag ${job.active ? 'tag-green' : 'tag-red'}">${job.active ? 'Live' : 'Hidden'}</span>
+            ${job.questions && job.questions.length ? `<span class="tag tag-gray">${job.questions.length} question${job.questions.length>1?'s':''}</span>` : ''}
+            ${job.customSections && job.customSections.length ? `<span class="tag tag-gray">${job.customSections.length} custom section${job.customSections.length>1?'s':''}</span>` : ''}
+          </div>
+        </div>
+        <div class="job-card__actions">
+          <button class="icon-btn toggle-active" title="${job.active ? 'Unpublish' : 'Publish'}" onclick="toggleActive('${job.id}')">
+            <svg viewBox="0 0 24 24">${job.active
+              ? '<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/>'
+              : '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>'
+            }</svg>
+          </button>
+          <button class="icon-btn" title="Edit" onclick="editJob('${job.id}')">
+            <svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          </button>
+          <button class="icon-btn delete" title="Delete" onclick="confirmDelete('${job.id}')">
+            <svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ─── NAVIGATION ───────────────────────────────────────────────────
+function showSection(section) {
+  document.getElementById('jobsSection').style.display = section === 'jobs' ? 'block' : 'none';
+  document.getElementById('formSection').style.display = section !== 'jobs' ? 'block' : 'none';
+  document.getElementById('sidebarJobs').classList.toggle('active', section === 'jobs');
+  document.getElementById('sidebarNew').classList.toggle('active', section === 'new' || section === 'edit');
+  if (section === 'new') {
+    editingId = null;
+    clearForm();
+    document.getElementById('formTitle').textContent = 'Post new job';
+    document.getElementById('formCardTitle').textContent = 'New job posting';
+    document.getElementById('saveBtnText').textContent = 'Publish job';
+    document.getElementById('formSubtitle').textContent = 'Fill in the details and publish when ready.';
+  }
+}
+
+// ─── COMMA-SPLIT HELPERS ──────────────────────────────────────────
+function arrayToComma(arr) {
+  if (!arr || arr.length === 0) return '';
+  return arr.join(', ');
+}
+
+function commaToArray(str) {
+  if (!str || !str.trim()) return [];
+  return str.split(',').map(s => s.trim()).filter(Boolean);
+}
+
+// ─── CLEAR FORM ───────────────────────────────────────────────────
+function clearForm() {
+  ['f_title','f_salary','f_experience','f_equity','f_about','f_location',
+   'f_responsibilities','f_requirements','f_niceToHave','f_interviewProcess','f_offer']
+    .forEach(id => { const el = document.getElementById(id); if(el) el.value = ''; });
+  document.getElementById('f_dept').value = '';
+  document.getElementById('f_type').value = '';
+  document.getElementById('f_active').checked = true;
+  document.getElementById('formFooterMsg').textContent = '';
+  document.getElementById('questionsList').innerHTML = '';
+  document.getElementById('customSectionsList').innerHTML = '';
+}
+
+// ─── CUSTOM SECTIONS ──────────────────────────────────────────────
+function addCustomSection(section = null) {
+  const container = document.getElementById('customSectionsList');
+  const card = document.createElement('div');
+  card.className = 'custom-section-card';
+
+  const nameVal = section ? escHtml(section.name) : '';
+  const contentVal = section ? escHtml(arrayToComma(section.items)) : '';
+
+  card.innerHTML = `
+    <div class="custom-section-card__row">
+      <div class="custom-section-card__fields">
+        <input class="custom-section-name" type="text" placeholder="Section name e.g. Tech stack" value="${nameVal}" data-role="csname"/>
+        <textarea class="comma-field" placeholder="React, Node.js, PostgreSQL, Redis" data-role="csitems" style="min-height:56px">${contentVal}</textarea>
+        <div class="comma-hint">Separate items with commas — renders as a bullet list on the careers page.</div>
+      </div>
+      <button class="list-remove-btn" onclick="this.closest('.custom-section-card').remove()" type="button" style="margin-top:.15rem">
+        <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>`;
+  container.appendChild(card);
+}
+
+function getCustomSections() {
+  return Array.from(document.querySelectorAll('.custom-section-card')).map(card => {
+    const name = card.querySelector('[data-role="csname"]').value.trim();
+    const items = commaToArray(card.querySelector('[data-role="csitems"]').value);
+    return { name, items };
+  }).filter(s => s.name && s.items.length > 0);
+}
+
+function populateCustomSections(sections) {
+  document.getElementById('customSectionsList').innerHTML = '';
+  if (sections && sections.length) sections.forEach(s => addCustomSection(s));
+}
+
+// ─── CUSTOM QUESTIONS ─────────────────────────────────────────────
+function addQuestion(q = null) {
+  const container = document.getElementById('questionsList');
+  const id = 'q_' + Date.now() + '_' + Math.random().toString(36).slice(2,6);
+  const card = document.createElement('div');
+  card.className = 'question-card';
+  card.dataset.qid = id;
+
+  const type = q ? q.type : 'dropdown';
+  const label = q ? q.label : '';
+  const required = q ? q.required : true;
+  const options = q && q.options ? q.options : [''];
+
+  card.innerHTML = `
+    <div class="question-card__top">
+      <div class="question-card__fields">
+        <div class="question-card__row">
+          <input class="list-item-input" type="text" placeholder="Question label e.g. Have you graduated?" value="${escHtml(label)}" data-role="qlabel" style="flex:1;padding:.75rem 1rem;border-radius:11px;border:1px solid var(--line-strong);background:rgba(255,255,255,.05);color:#fff;outline:none;font-size:.86rem;transition:border-color .2s"/>
+          <select class="question-type-select" data-role="qtype" onchange="onQuestionTypeChange(this)">
+            <option value="dropdown" ${type==='dropdown'?'selected':''}>Dropdown</option>
+            <option value="text" ${type==='text'?'selected':''}>Short text</option>
+            <option value="yesno" ${type==='yesno'?'selected':''}>Yes / No</option>
+          </select>
+        </div>
+        <label class="question-required-toggle">
+          <input type="checkbox" data-role="qrequired" ${required?'checked':''}/>
+          Required
+        </label>
+        <div class="options-editor" data-role="qoptions" style="${type==='text'?'display:none':''}">
+          ${type === 'yesno'
+            ? '<div style="font-size:.78rem;color:rgba(255,255,255,.3);padding:.3rem 0">Options: Yes, No — fixed</div>'
+            : options.map(o => optionRowHTML(o)).join('') + `<button class="add-option-btn" onclick="addOptionToQuestion(this)" type="button"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Add option</button>`
+          }
+        </div>
+      </div>
+      <button class="list-remove-btn" onclick="this.closest('.question-card').remove()" type="button" style="margin-top:.15rem">
+        <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>`;
+  container.appendChild(card);
+}
+
+function optionRowHTML(value = '') {
+  return `<div class="option-row">
+    <input class="option-input" type="text" placeholder="Option text..." value="${escHtml(value)}" data-role="qoption"/>
+    <button class="option-remove" onclick="this.closest('.option-row').remove()" type="button">
+      <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  </div>`;
+}
+
+function addOptionToQuestion(btn) {
+  const editor = btn.closest('[data-role="qoptions"]');
+  const newRow = document.createElement('div');
+  newRow.innerHTML = optionRowHTML('');
+  editor.insertBefore(newRow.firstElementChild, btn);
+}
+
+function onQuestionTypeChange(sel) {
+  const card = sel.closest('.question-card');
+  const optionsEl = card.querySelector('[data-role="qoptions"]');
+  const type = sel.value;
+  if (type === 'text') {
+    optionsEl.style.display = 'none';
+    optionsEl.innerHTML = '';
+  } else if (type === 'yesno') {
+    optionsEl.style.display = '';
+    optionsEl.innerHTML = '<div style="font-size:.78rem;color:rgba(255,255,255,.3);padding:.3rem 0">Options: Yes, No — fixed</div>';
+  } else {
+    optionsEl.style.display = '';
+    optionsEl.innerHTML = optionRowHTML('') + `<button class="add-option-btn" onclick="addOptionToQuestion(this)" type="button"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Add option</button>`;
+  }
+}
+
+function getQuestions() {
+  const cards = document.querySelectorAll('.question-card');
+  return Array.from(cards).map(card => {
+    const label = card.querySelector('[data-role="qlabel"]').value.trim();
+    const type = card.querySelector('[data-role="qtype"]').value;
+    const required = card.querySelector('[data-role="qrequired"]').checked;
+    let options = [];
+    if (type === 'dropdown') {
+      options = Array.from(card.querySelectorAll('[data-role="qoption"]')).map(i => i.value.trim()).filter(Boolean);
+    } else if (type === 'yesno') {
+      options = ['Yes', 'No'];
+    }
+    return { label, type, required, options };
+  }).filter(q => q.label);
+}
+
+function populateQuestions(questions) {
+  document.getElementById('questionsList').innerHTML = '';
+  if (questions && questions.length) questions.forEach(q => addQuestion(q));
+}
+
+// ─── SAVE ─────────────────────────────────────────────────────────
+async function saveJob() {
+  const title = document.getElementById('f_title').value.trim();
+  const dept = document.getElementById('f_dept').value;
+  const type = document.getElementById('f_type').value;
+  const location = document.getElementById('f_location').value.trim();
+  const about = document.getElementById('f_about').value.trim();
+  if (!title || !dept || !type || !location || !about) {
+    document.getElementById('formFooterMsg').innerHTML = '<span style="color:#fca5a5">Please fill in all required fields.</span>';
+    return;
+  }
+  const btn = document.getElementById('saveBtn');
+  btn.disabled = true;
+  document.getElementById('saveBtnText').textContent = 'Saving…';
+  const deptLabels = { engineering:'Engineering',sales:'Sales',marketing:'Marketing',design:'Design',operations:'Operations',finance:'Finance',product:'Product',other:'Other' };
+  const job = {
+    id: editingId || 'job_' + Date.now(),
+    title, dept, deptLabel: deptLabels[dept] || dept, type, location,
+    salary: document.getElementById('f_salary').value.trim(),
+    experience: document.getElementById('f_experience').value.trim(),
+    equity: document.getElementById('f_equity').value.trim(),
+    about,
+    responsibilities: commaToArray(document.getElementById('f_responsibilities').value),
+    requirements: commaToArray(document.getElementById('f_requirements').value),
+    niceToHave: commaToArray(document.getElementById('f_niceToHave').value),
+    interviewProcess: commaToArray(document.getElementById('f_interviewProcess').value),
+    offer: commaToArray(document.getElementById('f_offer').value),
+    customSections: getCustomSections(),
+    questions: getQuestions(),
+    active: document.getElementById('f_active').checked,
+    isNew: editingId ? (jobs.find(j => j.id === editingId)?.isNew ?? false) : true,
+    createdAt: editingId ? (jobs.find(j=>j.id===editingId)?.createdAt || Date.now()) : Date.now(),
+  };
+  const isEditing = !!editingId;
+  const previousJobs = [...jobs];
+  if (isEditing) { jobs = jobs.map(j => j.id === editingId ? job : j); }
+  else { jobs.unshift(job); }
+  saveJobsLocally();
+  showSection('jobs');
+  renderJobs();
+  btn.disabled = false;
+  document.getElementById('saveBtnText').textContent = isEditing ? 'Save changes' : 'Publish job';
+  const ok = await pushToAPI(job, isEditing ? 'updateJob' : 'addJob');
+  if (!ok) {
+    jobs = previousJobs;
+    saveJobsLocally();
+    renderJobs();
+    editingId = isEditing ? job.id : null;
+    showSection(isEditing ? 'edit' : 'new');
+    if (isEditing) { editJob(job.id); } else { repopulateForm(job); }
+    showToast('Failed to save — your changes are restored in the form.', 'error');
+    return;
+  }
+  showToast(
+    isEditing
+      ? 'Job updated successfully.'
+      : job.active
+        ? 'Job posted and live on careers page.'
+        : 'Job saved as hidden — publish it when ready.',
+    'success'
+  );
+}
+
+// ─── EDIT ─────────────────────────────────────────────────────────
+function editJob(id) {
+  const job = jobs.find(j => j.id === id);
+  if (!job) return;
+  editingId = id;
+  showSection('edit');
+  document.getElementById('formTitle').textContent = 'Edit job';
+  document.getElementById('formCardTitle').textContent = 'Edit: ' + job.title;
+  document.getElementById('formSubtitle').textContent = 'Update the details and save changes.';
+  document.getElementById('saveBtnText').textContent = 'Save changes';
+  document.getElementById('f_title').value = job.title;
+  document.getElementById('f_dept').value = job.dept;
+  document.getElementById('f_type').value = job.type;
+  document.getElementById('f_location').value = job.location;
+  document.getElementById('f_salary').value = job.salary || '';
+  document.getElementById('f_experience').value = job.experience || '';
+  document.getElementById('f_equity').value = job.equity || '';
+  document.getElementById('f_about').value = job.about;
+  document.getElementById('f_active').checked = job.active;
+  // Comma fields
+  document.getElementById('f_responsibilities').value = arrayToComma(job.responsibilities);
+  document.getElementById('f_requirements').value = arrayToComma(job.requirements);
+  document.getElementById('f_niceToHave').value = arrayToComma(job.niceToHave);
+  document.getElementById('f_interviewProcess').value = arrayToComma(job.interviewProcess);
+  document.getElementById('f_offer').value = arrayToComma(job.offer);
+  // Custom sections & questions
+  populateCustomSections(job.customSections);
+  populateQuestions(job.questions);
+}
+
+// ─── TOGGLE / DELETE ──────────────────────────────────────────────
+async function toggleActive(id) {
+  const previousJobs = [...jobs];
+  jobs = jobs.map(j => j.id === id ? {...j, active: !j.active} : j);
+  const job = jobs.find(j => j.id === id);
+  saveJobsLocally();
+  renderJobs();
+  const ok = await pushToAPI(job, 'updateJob');
+  if (!ok) {
+    jobs = previousJobs;
+    saveJobsLocally();
+    renderJobs();
+    showToast('Failed to update — check your connection.', 'error');
+    return;
+  }
+  showToast(job.active ? 'Job is now live.' : 'Job hidden from careers page.', 'success');
+}
+
+    // ─── TOGGLE PASSWORD VISIBILITY ───────────────────────────────────
+function togglePasswordVisibility() {
+  const input = document.getElementById('loginPassword');
+  const btn = document.getElementById('togglePassword');
+  const isHidden = input.type === 'password';
+  input.type = isHidden ? 'text' : 'password';
+  btn.style.color = isHidden ? 'rgba(255,255,255,.72)' : 'rgba(255,255,255,.38)';
+  document.getElementById('eyeIcon').innerHTML = isHidden
+    ? '<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/>'
+    : '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>';
+}
+
+function confirmDelete(id) {
+  pendingDeleteId = id;
+  const job = jobs.find(j => j.id === id);
+  document.getElementById('modalTitle').textContent = 'Delete "' + job.title + '"?';
+  document.getElementById('modalText').textContent = 'This will remove the job from your careers page permanently.';
+  document.getElementById('confirmModal').classList.add('show');
+  document.getElementById('modalConfirmBtn').onclick = async () => {
+    const idToDelete = pendingDeleteId;
+    const previousJobs = [...jobs];
+    jobs = jobs.filter(j => j.id !== idToDelete);
+    saveJobsLocally();
+    closeModal();
+    renderJobs();
+    const ok = await pushToAPI({ id: idToDelete }, 'deleteJob');
+    if (!ok) {
+      jobs = previousJobs;
+      saveJobsLocally();
+      renderJobs();
+      showToast('Failed to delete — check your connection.', 'error');
+      return;
+    }
+    showToast('Job deleted.', 'success');
+  };
+}
+
+function closeModal() { document.getElementById('confirmModal').classList.remove('show'); pendingDeleteId = null; }
+document.getElementById('confirmModal').addEventListener('click', e => { if (e.target === document.getElementById('confirmModal')) closeModal(); });
+
+// ─── TOAST ────────────────────────────────────────────────────────
+let toastTimer;
+function showToast(msg, type = 'success') {
+  const toast = document.getElementById('toast');
+  const icon = document.getElementById('toastIcon');
+  document.getElementById('toastMsg').textContent = msg;
+  toast.className = 'toast ' + type;
+  icon.innerHTML = type === 'success' ? '<polyline points="20 6 9 17 4 12"/>' : '<circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>';
+  clearTimeout(toastTimer);
+  setTimeout(() => toast.classList.add('show'), 10);
+  toastTimer = setTimeout(() => toast.classList.remove('show'), 3500);
+}
+
+// ─── REPOPULATE FORM (restores form state on saveJob API failure) ──
+function repopulateForm(job) {
+  document.getElementById('f_title').value = job.title;
+  document.getElementById('f_dept').value = job.dept;
+  document.getElementById('f_type').value = job.type;
+  document.getElementById('f_location').value = job.location;
+  document.getElementById('f_salary').value = job.salary || '';
+  document.getElementById('f_experience').value = job.experience || '';
+  document.getElementById('f_equity').value = job.equity || '';
+  document.getElementById('f_about').value = job.about;
+  document.getElementById('f_active').checked = job.active;
+  document.getElementById('f_responsibilities').value = arrayToComma(job.responsibilities);
+  document.getElementById('f_requirements').value = arrayToComma(job.requirements);
+  document.getElementById('f_niceToHave').value = arrayToComma(job.niceToHave);
+  document.getElementById('f_interviewProcess').value = arrayToComma(job.interviewProcess);
+  document.getElementById('f_offer').value = arrayToComma(job.offer);
+  populateCustomSections(job.customSections);
+  populateQuestions(job.questions);
+}
+
+function capitalize(str) { return str.charAt(0).toUpperCase() + str.slice(1); }
+function escHtml(str) { if(!str) return ''; return String(str).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+</script>
+</body>
+</html>
