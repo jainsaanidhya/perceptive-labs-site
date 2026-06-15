@@ -52,12 +52,14 @@ body::before{
 .nav__logo img{height:42px;width:auto;border-radius:8px}
 .nav__logo-stack{display:flex;flex-direction:column;gap:.08rem;line-height:1.2}
 .nav__logo-text{font-size:.9rem;font-weight:650;letter-spacing:-.02em;color:#0b0c0f}
-.nav__logo-sub{font-size:.71rem;color:rgba(11,12,15,.4);letter-spacing:.005em}
-.nav__links{display:flex;align-items:center;gap:1.4rem}
-.nav__link{font-size:.84rem;font-weight:500;color:rgba(11,12,15,.52);transition:color .18s ease}
+.nav__logo-sub{font-size:.71rem;color:rgba(11,12,15,.4);letter-spacing:.005em;display:none}
+.nav__links{display:flex;align-items:center;gap:1.2rem}
+.nav__link{font-size:.78rem;font-weight:500;color:rgba(11,12,15,.52);transition:color .18s ease;white-space:nowrap}
 .nav__link:hover{color:#0b0c0f}
-.nav__cta{display:inline-flex;align-items:center;gap:.45rem;padding:.58rem 1.1rem;border-radius:10px;background:#0b0c0f;color:#fff;font-size:.84rem;font-weight:650;transition:transform .2s var(--ease),background .18s ease}
+.nav__cta{display:inline-flex;align-items:center;gap:.45rem;padding:.58rem 1.1rem;border-radius:10px;background:#0b0c0f;color:#fff;font-size:.84rem;font-weight:650;white-space:nowrap;transition:transform .2s var(--ease),background .18s ease}
 .nav__cta:hover{transform:translateY(-1px);background:#1e2028}
+.nav__cta-outline{display:inline-flex;align-items:center;gap:.45rem;padding:.58rem 1.1rem;border-radius:10px;border:1.5px solid rgba(59,110,255,.45);color:#3b6eff;font-size:.84rem;font-weight:650;white-space:nowrap;background:rgba(59,110,255,.07);transition:transform .2s var(--ease),background .18s,border-color .18s,box-shadow .18s}
+.nav__cta-outline:hover{transform:translateY(-1px);background:rgba(59,110,255,.14);border-color:#3b6eff;box-shadow:0 4px 18px rgba(59,110,255,.25)}
 .icon-arrow{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .nav__burger{display:none;flex-direction:column;gap:5px;width:24px;min-width:24px;padding:4px 0;background:none;border:none;cursor:pointer;-webkit-appearance:none;appearance:none}
 .nav__burger span{display:block;height:2px;border-radius:999px;background:#0b0c0f;transition:all .3s var(--ease);width:100%;min-width:20px}
@@ -142,7 +144,8 @@ body::before{
   background:rgba(58,134,255,.06);
 }
 @media(max-width:1080px){.nav__links{gap:1rem}.nav__logo-sub{display:none}}
-@media(max-width:900px){.nav__links,.nav__cta{display:none}.nav__burger,.nav__mobile{display:flex}}
+.nav__cta-btns{display:flex;align-items:center;gap:.6rem}
+@media(max-width:900px){.nav__links,.nav__cta,.nav__cta-btns{display:none}.nav__burger,.nav__mobile{display:flex}}
 @media(max-width:860px){.nav__inner{padding:0 1.1rem}.nav__logo img{height:36px}.nav__logo-text{font-size:.83rem}}
 
 /* sections */
@@ -503,32 +506,35 @@ section{position:relative}
 <body>
 
   <div id="scrollBar"></div>
-<header class="nav" id="nav">
-  <div class="nav__inner">
-    <a href="#top" class="nav__logo" aria-label="Perceptive Labs home">
-      <img src="/logo.png" alt="Perceptive Labs"/>
-      <div class="nav__logo-stack">
-        <span class="nav__logo-text">Perceptive Labs</span>
-        <span class="nav__logo-sub">Intelligence for the business of tomorrow</span>
+  <header class="nav" id="nav">
+    <div class="nav__inner">
+      <a href="#top" class="nav__logo" aria-label="Perceptive Labs home">
+        <img src="/logo.png" alt="Perceptive Labs"/>
+        <div class="nav__logo-stack">
+          <span class="nav__logo-text">Perceptive Labs</span>
+          <span class="nav__logo-sub">Intelligence for the business of tomorrow</span>
+        </div>
+      </a>
+      <nav class="nav__links" aria-label="Main navigation">
+        <a href="#what" class="nav__link">What we do</a>
+        <a href="#problem" class="nav__link">Problem</a>
+        <a href="#industries" class="nav__link">Industries</a>
+        <a href="#value" class="nav__link">Value</a>
+        <a href="#product" class="nav__link">Products</a>
+        <a href="#why" class="nav__link">Why Perceptive</a>
+      </nav>
+      <div class="nav__cta-btns">
+        <a href="/careers" class="nav__cta-outline">Careers</a>
+        <a href="#contact" class="nav__cta">
+          Reach out to us
+          <svg class="icon-arrow" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
       </div>
-    </a>
-    <nav class="nav__links" aria-label="Main navigation">
-      <a href="#what" class="nav__link">What we do</a>
-      <a href="#problem" class="nav__link">Problem</a>
-      <a href="#industries" class="nav__link">Industries</a>
-      <a href="#value" class="nav__link">Value</a>
-      <a href="#product" class="nav__link">Products</a>
-      <a href="#why" class="nav__link">Why Perceptive</a>
-    </nav>
-    <a href="#contact" class="nav__cta">
-      Reach out to us
-      <svg class="icon-arrow" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-    </a>
-    <button class="nav__burger" id="navBurger" aria-label="Open navigation" aria-expanded="false">
-      <span></span><span></span><span></span>
-    </button>
-  </div>
-</header>
+      <button class="nav__burger" id="navBurger" aria-label="Open navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
 
 <div class="nav__mobile" id="navMobile" aria-hidden="true">
   <a href="#what" class="nav__mobile-link">What we do</a>
@@ -537,6 +543,7 @@ section{position:relative}
   <a href="#value" class="nav__mobile-link">Value</a>
   <a href="#industries" class="nav__mobile-link">Industries</a>
   <a href="#why" class="nav__mobile-link">Why Perceptive</a>
+  <a href="/careers" class="nav__mobile-link">Careers</a> 
   <a href="#contact" class="nav__mobile-link">Contact</a>
 </div>
 
