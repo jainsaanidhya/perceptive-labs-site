@@ -121,7 +121,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
 .tag-type{background:rgba(59,110,255,.1);color:#8fb0ff;border:1px solid rgba(59,110,255,.18)}
 .tag-loc{background:rgba(255,255,255,.05);color:rgba(255,255,255,.48);border:1px solid rgba(255,255,255,.09)}
 .tag-remote{background:rgba(73,209,125,.08);color:#7be4a2;border:1px solid rgba(73,209,125,.16)}
-.tag-new{background:rgba(59,110,255,.14);color:#8fb0ff;border:1px solid rgba(59,110,255,.22)}
+.tag-new{background:rgba(236,72,153,.15);color:#f472b6;border:1px solid rgba(236,72,153,.35);font-weight:800}
 .tag-salary{background:rgba(251,191,36,.07);color:#fcd34d;border:1px solid rgba(251,191,36,.18)}
 .role-card__arrow{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.4);transition:all .25s var(--ease);flex-shrink:0}
 .role-card__arrow svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
@@ -515,7 +515,7 @@ function buildTagHTML(job) {
   }
   if (job.salary)     tags += `<span class="role-tag tag-salary">${escHtml(job.salary)}</span>`;
   if (job.experience) tags += `<span class="role-tag tag-loc">${escHtml(job.experience)}</span>`;
-  if (job.isNew)      tags += `<span class="role-tag tag-new">New</span>`;
+  tags += `<span class="role-tag tag-new">New</span>`;
   return tags;
 }
 
@@ -663,7 +663,7 @@ loadJobs();
 
 // ─── VALIDATION ───────────────────────────────────────────────────
 function isValidEmail(v) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); }
-function isValidPhone(v) { return /^[+]?[\d\s\-().]{7,15}$/.test(v); }
+function isValidPhone(v) { return /^[6-9]\d{9}$/.test(v.replace(/\s/g, '')); }
 
 function validateField(input, errorSpan) {
   const name = input.name;
@@ -901,7 +901,7 @@ function attachRoleHandlers() {
             phone,
             answers,
             resumeBase64:    base64,
-            resumeFileName:  file.name   // ← sent so Apps Script can keep the extension
+            resumeFileName:  file.name   
           }
         };
 

@@ -204,7 +204,7 @@ button,input,textarea,select{font:inherit}
 .form-row.full{grid-template-columns:1fr}
 .form-field{display:grid;gap:.42rem}
 .form-label{font-size:.78rem;font-weight:600;color:rgba(255,255,255,.42)}
-.form-label span{color:rgba(255,255,255,.22);font-weight:400}
+.form-label span{color:#f87171;font-weight:600}
 .form-input,.form-select,.form-textarea{
   width:100%;padding:.82rem 1rem;border-radius:12px;border:1px solid var(--line-strong);
   background:rgba(255,255,255,.05);color:#fff;outline:none;font-size:.88rem;
@@ -338,7 +338,12 @@ input:checked + .toggle-slider::before{transform:translateX(18px)}
     <p class="login-sub">Enter your admin password to continue.</p>
     <div class="login-field">
       <label class="login-label" for="loginPassword">Password</label>
-      <input class="login-input" type="password" id="loginPassword" placeholder="Enter password" autocomplete="current-password"/>
+      <div style="position:relative">
+        <input class="login-input" type="password" id="loginPassword" placeholder="Enter password" autocomplete="current-password" style="padding-right:2.8rem"/>
+        <button type="button" id="togglePassword" onclick="togglePasswordVisibility()" style="position:absolute;right:.75rem;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:rgba(255,255,255,.38);padding:0;display:flex;align-items:center;transition:color .18s" aria-label="Show password">
+          <svg id="eyeIcon" viewBox="0 0 24 24" width="17" height="17" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+        </button>
+      </div>
       <div class="login-error" id="loginError">Incorrect password. Try again.</div>
     </div>
     <button class="login-btn" id="loginBtn">Sign in</button>
@@ -635,7 +640,7 @@ let jobs = [];
 let editingId = null;
 let pendingDeleteId = null;
 
-let SESSION_PASSWORD = null; // held in memory only, never in source
+let SESSION_PASSWORD = null; 
 
 // ─── AUTH ─────────────────────────────────────────────────────────
 document.getElementById('loginPassword').addEventListener('keydown', e => {
@@ -659,7 +664,7 @@ async function login() {
   try {
     const res  = await fetch(API_URL, {
       method:  'POST',
-      headers: { 'Content-Type': 'text/plain' }, // changed
+      headers: { 'Content-Type': 'text/plain' }, 
       body:    JSON.stringify({ action: 'verifyPassword', password: pw })
     });
     const data = await res.json();
@@ -694,11 +699,13 @@ document.getElementById('logoutBtn').addEventListener('click', () => {
 
 // ─── DATA ─────────────────────────────────────────────────────────
 function loadJobs() {
-  jobs = JSON.parse(localStorage.getItem('pl_jobs') || '[]');
-  renderJobs();
-
+  const cached = localStorage.getItem('pl_jobs');
+  if (cached) {
+    jobs = JSON.parse(cached);
+    renderJobs();
+  }
   fetch(API_URL + "?action=getJobs")
-    .then(r  => r.json())
+    .then(r => r.json())
     .then(data => {
       if (data.jobs) {
         jobs = data.jobs;
@@ -706,7 +713,14 @@ function loadJobs() {
         renderJobs();
       }
     })
-    .catch(() => showToast('Could not sync jobs from server.', 'error'));
+    .catch(() => {
+      showToast(
+        cached
+          ? 'Could not sync — showing cached data, may be outdated.'
+          : 'Could not load jobs — check your connection.',
+        'error'
+      );
+    });
 }
 
 function saveJobsLocally() { localStorage.setItem('pl_jobs', JSON.stringify(jobs)); }
@@ -715,7 +729,7 @@ async function pushToAPI(job, action) {
   try {
     const res = await fetch(API_URL, {
       method:  'POST',
-      headers: { 'Content-Type': 'text/plain' }, // changed
+      headers: { 'Content-Type': 'text/plain' }, 
       body:    JSON.stringify({ action, job, password: SESSION_PASSWORD })
     });
     const data = await res.json();
@@ -794,13 +808,11 @@ function showSection(section) {
 }
 
 // ─── COMMA-SPLIT HELPERS ──────────────────────────────────────────
-// Convert an array to a comma-separated string for the textarea
 function arrayToComma(arr) {
   if (!arr || arr.length === 0) return '';
   return arr.join(', ');
 }
 
-// Parse a comma-separated string into a trimmed, non-empty array
 function commaToArray(str) {
   if (!str || !str.trim()) return [];
   return str.split(',').map(s => s.trim()).filter(Boolean);
@@ -980,18 +992,37 @@ async function saveJob() {
     customSections: getCustomSections(),
     questions: getQuestions(),
     active: document.getElementById('f_active').checked,
-    isNew: !editingId,
+    isNew: editingId ? (jobs.find(j => j.id === editingId)?.isNew ?? false) : true,
     createdAt: editingId ? (jobs.find(j=>j.id===editingId)?.createdAt || Date.now()) : Date.now(),
   };
-  if (editingId) { jobs = jobs.map(j => j.id === editingId ? job : j); }
+  const isEditing = !!editingId;
+  const previousJobs = [...jobs];
+  if (isEditing) { jobs = jobs.map(j => j.id === editingId ? job : j); }
   else { jobs.unshift(job); }
   saveJobsLocally();
-  await pushToAPI(job, editingId ? 'updateJob' : 'addJob');
-  btn.disabled = false;
-  document.getElementById('saveBtnText').textContent = editingId ? 'Save changes' : 'Publish job';
-  showToast(editingId ? 'Job updated successfully.' : 'Job posted and live on careers page.', 'success');
   showSection('jobs');
   renderJobs();
+  btn.disabled = false;
+  document.getElementById('saveBtnText').textContent = isEditing ? 'Save changes' : 'Publish job';
+  const ok = await pushToAPI(job, isEditing ? 'updateJob' : 'addJob');
+  if (!ok) {
+    jobs = previousJobs;
+    saveJobsLocally();
+    renderJobs();
+    editingId = isEditing ? job.id : null;
+    showSection(isEditing ? 'edit' : 'new');
+    if (isEditing) { editJob(job.id); } else { repopulateForm(job); }
+    showToast('Failed to save — your changes are restored in the form.', 'error');
+    return;
+  }
+  showToast(
+    isEditing
+      ? 'Job updated successfully.'
+      : job.active
+        ? 'Job posted and live on careers page.'
+        : 'Job saved as hidden — publish it when ready.',
+    'success'
+  );
 }
 
 // ─── EDIT ─────────────────────────────────────────────────────────
@@ -1026,12 +1057,32 @@ function editJob(id) {
 
 // ─── TOGGLE / DELETE ──────────────────────────────────────────────
 async function toggleActive(id) {
+  const previousJobs = [...jobs];
   jobs = jobs.map(j => j.id === id ? {...j, active: !j.active} : j);
   const job = jobs.find(j => j.id === id);
   saveJobsLocally();
-  await pushToAPI(job, 'updateJob');
-  showToast(job.active ? 'Job is now live.' : 'Job hidden from careers page.', 'success');
   renderJobs();
+  const ok = await pushToAPI(job, 'updateJob');
+  if (!ok) {
+    jobs = previousJobs;
+    saveJobsLocally();
+    renderJobs();
+    showToast('Failed to update — check your connection.', 'error');
+    return;
+  }
+  showToast(job.active ? 'Job is now live.' : 'Job hidden from careers page.', 'success');
+}
+
+    // ─── TOGGLE PASSWORD VISIBILITY ───────────────────────────────────
+function togglePasswordVisibility() {
+  const input = document.getElementById('loginPassword');
+  const btn = document.getElementById('togglePassword');
+  const isHidden = input.type === 'password';
+  input.type = isHidden ? 'text' : 'password';
+  btn.style.color = isHidden ? 'rgba(255,255,255,.72)' : 'rgba(255,255,255,.38)';
+  document.getElementById('eyeIcon').innerHTML = isHidden
+    ? '<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/>'
+    : '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>';
 }
 
 function confirmDelete(id) {
@@ -1042,12 +1093,20 @@ function confirmDelete(id) {
   document.getElementById('confirmModal').classList.add('show');
   document.getElementById('modalConfirmBtn').onclick = async () => {
     const idToDelete = pendingDeleteId;
+    const previousJobs = [...jobs];
     jobs = jobs.filter(j => j.id !== idToDelete);
     saveJobsLocally();
     closeModal();
-    showToast('Job deleted.', 'success');
     renderJobs();
-    pushToAPI({ id: idToDelete }, 'deleteJob');
+    const ok = await pushToAPI({ id: idToDelete }, 'deleteJob');
+    if (!ok) {
+      jobs = previousJobs;
+      saveJobsLocally();
+      renderJobs();
+      showToast('Failed to delete — check your connection.', 'error');
+      return;
+    }
+    showToast('Job deleted.', 'success');
   };
 }
 
@@ -1065,6 +1124,26 @@ function showToast(msg, type = 'success') {
   clearTimeout(toastTimer);
   setTimeout(() => toast.classList.add('show'), 10);
   toastTimer = setTimeout(() => toast.classList.remove('show'), 3500);
+}
+
+// ─── REPOPULATE FORM (restores form state on saveJob API failure) ──
+function repopulateForm(job) {
+  document.getElementById('f_title').value = job.title;
+  document.getElementById('f_dept').value = job.dept;
+  document.getElementById('f_type').value = job.type;
+  document.getElementById('f_location').value = job.location;
+  document.getElementById('f_salary').value = job.salary || '';
+  document.getElementById('f_experience').value = job.experience || '';
+  document.getElementById('f_equity').value = job.equity || '';
+  document.getElementById('f_about').value = job.about;
+  document.getElementById('f_active').checked = job.active;
+  document.getElementById('f_responsibilities').value = arrayToComma(job.responsibilities);
+  document.getElementById('f_requirements').value = arrayToComma(job.requirements);
+  document.getElementById('f_niceToHave').value = arrayToComma(job.niceToHave);
+  document.getElementById('f_interviewProcess').value = arrayToComma(job.interviewProcess);
+  document.getElementById('f_offer').value = arrayToComma(job.offer);
+  populateCustomSections(job.customSections);
+  populateQuestions(job.questions);
 }
 
 function capitalize(str) { return str.charAt(0).toUpperCase() + str.slice(1); }
