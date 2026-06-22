@@ -7,6 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800;900&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css"/>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{-webkit-font-smoothing:antialiased;text-rendering:geometricPrecision}
@@ -216,15 +217,20 @@ button,input,textarea,select{font:inherit}
 .form-textarea{resize:vertical;line-height:1.66}
 .form-hint{font-size:.74rem;color:rgba(255,255,255,.28);line-height:1.5;margin-top:.3rem}
 
-/* COMMA TEXTAREA — replaces the old list-editor rows */
-.comma-field{
-  width:100%;padding:.82rem 1rem;border-radius:12px;border:1px solid var(--line-strong);
-  background:rgba(255,255,255,.05);color:#fff;outline:none;font-size:.88rem;
-  transition:border-color .2s,background .2s;resize:vertical;line-height:1.66;min-height:72px;
-}
-.comma-field::placeholder{color:rgba(255,255,255,.22)}
-.comma-field:focus{border-color:rgba(59,110,255,.5);background:rgba(59,110,255,.06)}
-.comma-hint{font-size:.74rem;color:rgba(255,255,255,.28);margin-top:.35rem;line-height:1.5}
+/* RICH TEXT EDITOR */
+.rte-head{display:flex;align-items:center;justify-content:space-between;gap:.75rem;padding-bottom:.5rem;border-bottom:1px solid var(--line);margin-bottom:.75rem;flex-wrap:wrap}
+.rte-head-label{font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.42)}
+.rte-head-label span{text-transform:none;letter-spacing:0;font-weight:400;opacity:.6}
+.rte-toolbar{display:flex;align-items:center;gap:2px}
+.rte-btn{width:26px;height:26px;border:none;background:transparent;border-radius:7px;color:rgba(255,255,255,.4);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:.72rem;font-weight:700;transition:all .15s}
+.rte-btn:hover{background:rgba(255,255,255,.06);color:rgba(255,255,255,.8)}
+.rte-btn.active{background:rgba(59,110,255,.16);color:#8fb0ff}
+.rte-divider{width:1px;height:14px;background:var(--line-strong);margin:0 4px}
+.rte-editable{min-height:110px;padding:0;color:#fff;font-size:.88rem;line-height:1.7;outline:none}
+.rte-editable:empty::before{content:attr(data-placeholder);color:rgba(255,255,255,.22)}
+.rte-editable ul{margin:.3rem 0 .3rem 1.2rem}
+.rte-editable li{margin:.2rem 0}
+.rte-editable b,.rte-editable strong{font-weight:700}
 
 /* CUSTOM SECTIONS BUILDER */
 .custom-section-card{
@@ -513,54 +519,22 @@ input:checked + .toggle-slider::before{transform:translateX(18px)}
               <div class="form-section-title">Description</div>
               <div class="form-row full">
                 <div class="form-field">
-                  <label class="form-label">About the role <span>*</span></label>
-                  <textarea class="form-textarea" id="f_about" rows="4" placeholder="Describe the role, the team, and what this person will be working on..."></textarea>
+                  <div id="rte_about"></div>
                 </div>
-              </div>
-            </div>
-
-            <!-- RESPONSIBILITIES -->
-            <div class="form-section">
-              <div class="form-section-title">What you'll be building <span style="font-weight:400;opacity:.5">(responsibilities)</span></div>
-              <div class="form-field">
-                <textarea class="comma-field" id="f_responsibilities" placeholder="Build the API, Write unit tests, Deploy to production"></textarea>
-                <div class="comma-hint">Separate items with commas — each becomes a bullet point on the careers page.</div>
-              </div>
-            </div>
-
-            <!-- REQUIREMENTS -->
-            <div class="form-section">
-              <div class="form-section-title">Required skills</div>
-              <div class="form-field">
-                <textarea class="comma-field" id="f_requirements" placeholder="Python, React, SQL, REST APIs"></textarea>
-                <div class="comma-hint">Separate items with commas.</div>
-              </div>
-            </div>
-
-            <!-- NICE TO HAVE -->
-            <div class="form-section">
-              <div class="form-section-title">Nice to have <span style="font-weight:400;opacity:.5">(optional)</span></div>
-              <div class="form-field">
-                <textarea class="comma-field" id="f_niceToHave" placeholder="GCP, AWS, Docker, GraphQL"></textarea>
-                <div class="comma-hint">Separate items with commas.</div>
               </div>
             </div>
 
             <!-- INTERVIEW PROCESS -->
             <div class="form-section">
-              <div class="form-section-title">Interview process <span style="font-weight:400;opacity:.5">(optional)</span></div>
               <div class="form-field">
-                <textarea class="comma-field" id="f_interviewProcess" placeholder="Intro call, Take-home task, Final interview, Offer"></textarea>
-                <div class="comma-hint">Separate steps with commas.</div>
+                <div id="rte_interviewProcess"></div>
               </div>
             </div>
 
             <!-- WHAT WE OFFER -->
             <div class="form-section">
-              <div class="form-section-title">What we offer <span style="font-weight:400;opacity:.5">(optional)</span></div>
               <div class="form-field">
-                <textarea class="comma-field" id="f_offer" placeholder="Flexible hours, Remote-friendly, Learning budget"></textarea>
-                <div class="comma-hint">Separate items with commas.</div>
+                <div id="rte_offer"></div>
               </div>
             </div>
 
@@ -572,7 +546,7 @@ input:checked + .toggle-slider::before{transform:translateX(18px)}
                 <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
                 Add section
               </button>
-              <div class="form-hint" style="margin-top:.5rem">Give the section a name (e.g. "Tech stack") and list items separated by commas. It renders as a bullet list on the careers page.</div>
+              <div class="form-hint" style="margin-top:.5rem">Give the section a name (e.g. "Tech stack") and format the content using the toolbar below.</div>
             </div>
 
             <!-- CUSTOM QUESTIONS -->
@@ -698,19 +672,29 @@ document.getElementById('logoutBtn').addEventListener('click', () => {
 });
 
 // ─── DATA ─────────────────────────────────────────────────────────
+const JOBS_CACHE_VERSION = 'v2'; 
+const JOBS_CACHE_KEY = 'pl_jobs_' + JOBS_CACHE_VERSION;
+
 function loadJobs() {
-  const cached = localStorage.getItem('pl_jobs');
+  const cached = localStorage.getItem(JOBS_CACHE_KEY);
   if (cached) {
-    jobs = JSON.parse(cached);
-    renderJobs();
+    try {
+      jobs = JSON.parse(cached);
+      renderJobs();
+    } catch (e) {
+      localStorage.removeItem(JOBS_CACHE_KEY);
+      jobs = [];
+    }
   }
   fetch(API_URL + "?action=getJobs")
     .then(r => r.json())
     .then(data => {
-      if (data.jobs) {
+      if (Array.isArray(data.jobs)) {
         jobs = data.jobs;
-        localStorage.setItem('pl_jobs', JSON.stringify(jobs));
+        localStorage.setItem(JOBS_CACHE_KEY, JSON.stringify(jobs));
         renderJobs();
+      } else if (data.error) {
+        showToast('Could not load jobs: ' + data.error, 'error');
       }
     })
     .catch(() => {
@@ -723,7 +707,7 @@ function loadJobs() {
     });
 }
 
-function saveJobsLocally() { localStorage.setItem('pl_jobs', JSON.stringify(jobs)); }
+function saveJobsLocally() { localStorage.setItem(JOBS_CACHE_KEY, JSON.stringify(jobs)); }
 
 async function pushToAPI(job, action) {
   try {
@@ -807,21 +791,10 @@ function showSection(section) {
   }
 }
 
-// ─── COMMA-SPLIT HELPERS ──────────────────────────────────────────
-function arrayToComma(arr) {
-  if (!arr || arr.length === 0) return '';
-  return arr.join(', ');
-}
-
-function commaToArray(str) {
-  if (!str || !str.trim()) return [];
-  return str.split(',').map(s => s.trim()).filter(Boolean);
-}
 
 // ─── CLEAR FORM ───────────────────────────────────────────────────
 function clearForm() {
-  ['f_title','f_salary','f_experience','f_equity','f_about','f_location',
-   'f_responsibilities','f_requirements','f_niceToHave','f_interviewProcess','f_offer']
+  ['f_title','f_salary','f_experience','f_equity','f_location']
     .forEach(id => { const el = document.getElementById(id); if(el) el.value = ''; });
   document.getElementById('f_dept').value = '';
   document.getElementById('f_type').value = '';
@@ -829,6 +802,9 @@ function clearForm() {
   document.getElementById('formFooterMsg').textContent = '';
   document.getElementById('questionsList').innerHTML = '';
   document.getElementById('customSectionsList').innerHTML = '';
+  initRTE('rte_about', '', 'Describe the role, the team, and what this person will be working on...', 'About the role');
+  initRTE('rte_interviewProcess', '', 'Intro call, take-home task, final interview...', 'Interview process');
+  initRTE('rte_offer', '', 'Flexible hours, remote-friendly, learning budget...', 'What we offer');
 }
 
 // ─── CUSTOM SECTIONS ──────────────────────────────────────────────
@@ -838,28 +814,30 @@ function addCustomSection(section = null) {
   card.className = 'custom-section-card';
 
   const nameVal = section ? escHtml(section.name) : '';
-  const contentVal = section ? escHtml(arrayToComma(section.items)) : '';
+  const contentVal = section ? (section.html || '') : '';
 
+  const rteId = 'rte_cs_' + Date.now() + '_' + Math.random().toString(36).slice(2,6);
   card.innerHTML = `
     <div class="custom-section-card__row">
       <div class="custom-section-card__fields">
         <input class="custom-section-name" type="text" placeholder="Section name e.g. Tech stack" value="${nameVal}" data-role="csname"/>
-        <textarea class="comma-field" placeholder="React, Node.js, PostgreSQL, Redis" data-role="csitems" style="min-height:56px">${contentVal}</textarea>
-        <div class="comma-hint">Separate items with commas — renders as a bullet list on the careers page.</div>
+        <div id="${rteId}" data-role="csrte"></div>
       </div>
       <button class="list-remove-btn" onclick="this.closest('.custom-section-card').remove()" type="button" style="margin-top:.15rem">
         <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
       </button>
     </div>`;
   container.appendChild(card);
+  initRTE(rteId, contentVal, 'React, Node.js, PostgreSQL, Redis...');
 }
 
 function getCustomSections() {
   return Array.from(document.querySelectorAll('.custom-section-card')).map(card => {
     const name = card.querySelector('[data-role="csname"]').value.trim();
-    const items = commaToArray(card.querySelector('[data-role="csitems"]').value);
-    return { name, items };
-  }).filter(s => s.name && s.items.length > 0);
+    const rteHost = card.querySelector('[data-role="csrte"]');
+    const html = rteHost ? getRTEHTML(rteHost.id) : '';
+    return { name, html };
+  }).filter(s => s.name && s.html);
 }
 
 function populateCustomSections(sections) {
@@ -962,13 +940,64 @@ function populateQuestions(questions) {
   if (questions && questions.length) questions.forEach(q => addQuestion(q));
 }
 
+// ─── RICH TEXT EDITOR ─────────────────────────────────────────────
+const rteInstances = {}; // id -> editable element
+
+function initRTE(id, initialHTML = '', placeholder = 'Type here...', label = '') {
+  const host = document.getElementById(id);
+  if (!host) return;
+  host.innerHTML = `
+    <div class="rte-head">
+      ${label ? `<span class="rte-head-label">${label}</span>` : '<span></span>'}
+      <div class="rte-toolbar">
+        <button type="button" class="rte-btn" data-cmd="bold" title="Bold"><i class="ti ti-bold"></i></button>
+        <button type="button" class="rte-btn" data-cmd="italic" title="Italic"><i class="ti ti-italic"></i></button>
+        <button type="button" class="rte-btn" data-cmd="underline" title="Underline"><i class="ti ti-underline"></i></button>
+        <span class="rte-divider"></span>
+        <button type="button" class="rte-btn" data-cmd="insertUnorderedList" title="Bullet list"><i class="ti ti-list"></i></button>
+      </div>
+    </div>
+    <div class="rte-editable" contenteditable="true" data-placeholder="${escHtml(placeholder)}"></div>
+  `;
+  const editable = host.querySelector('.rte-editable');
+  editable.innerHTML = initialHTML || '';
+  rteInstances[id] = editable;
+
+  host.querySelectorAll('.rte-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      editable.focus();
+      document.execCommand(btn.dataset.cmd, false, null);
+      updateToolbarState(host, editable);
+    });
+  });
+  editable.addEventListener('keyup', () => updateToolbarState(host, editable));
+  editable.addEventListener('mouseup', () => updateToolbarState(host, editable));
+  editable.addEventListener('focus', () => updateToolbarState(host, editable));
+}
+
+function getRTEHTML(id) {
+  const editable = rteInstances[id];
+  if (!editable) return '';
+  const html = editable.innerHTML.trim();
+  return html === '<br>' ? '' : html;
+}
+
+function updateToolbarState(host, editable) {
+  host.querySelectorAll('.rte-btn').forEach(btn => {
+    const cmd = btn.dataset.cmd;
+    let isActive = false;
+    try { isActive = document.queryCommandState(cmd); } catch (e) {}
+    btn.classList.toggle('active', isActive);
+  });
+}
+
 // ─── SAVE ─────────────────────────────────────────────────────────
 async function saveJob() {
   const title = document.getElementById('f_title').value.trim();
   const dept = document.getElementById('f_dept').value;
   const type = document.getElementById('f_type').value;
   const location = document.getElementById('f_location').value.trim();
-  const about = document.getElementById('f_about').value.trim();
+  const about = getRTEHTML('rte_about');
   if (!title || !dept || !type || !location || !about) {
     document.getElementById('formFooterMsg').innerHTML = '<span style="color:#fca5a5">Please fill in all required fields.</span>';
     return;
@@ -984,11 +1013,8 @@ async function saveJob() {
     experience: document.getElementById('f_experience').value.trim(),
     equity: document.getElementById('f_equity').value.trim(),
     about,
-    responsibilities: commaToArray(document.getElementById('f_responsibilities').value),
-    requirements: commaToArray(document.getElementById('f_requirements').value),
-    niceToHave: commaToArray(document.getElementById('f_niceToHave').value),
-    interviewProcess: commaToArray(document.getElementById('f_interviewProcess').value),
-    offer: commaToArray(document.getElementById('f_offer').value),
+    interviewProcess: getRTEHTML('rte_interviewProcess'),
+    offer: getRTEHTML('rte_offer'),
     customSections: getCustomSections(),
     questions: getQuestions(),
     active: document.getElementById('f_active').checked,
@@ -1042,20 +1068,15 @@ function editJob(id) {
   document.getElementById('f_salary').value = job.salary || '';
   document.getElementById('f_experience').value = job.experience || '';
   document.getElementById('f_equity').value = job.equity || '';
-  document.getElementById('f_about').value = job.about;
-  document.getElementById('f_active').checked = job.active;
-  // Comma fields
-  document.getElementById('f_responsibilities').value = arrayToComma(job.responsibilities);
-  document.getElementById('f_requirements').value = arrayToComma(job.requirements);
-  document.getElementById('f_niceToHave').value = arrayToComma(job.niceToHave);
-  document.getElementById('f_interviewProcess').value = arrayToComma(job.interviewProcess);
-  document.getElementById('f_offer').value = arrayToComma(job.offer);
+  initRTE('rte_about', job.about || '', 'Describe the role, the team, and what this person will be working on...', 'About the role');
+  initRTE('rte_interviewProcess', job.interviewProcess || '', 'Intro call, take-home task, final interview...', 'Interview process');
+  initRTE('rte_offer', job.offer || '', 'Flexible hours, remote-friendly, learning budget...', 'What we offer');
   // Custom sections & questions
   populateCustomSections(job.customSections);
   populateQuestions(job.questions);
-}
+  }
 
-// ─── TOGGLE / DELETE ──────────────────────────────────────────────
+  // ─── TOGGLE / DELETE ──────────────────────────────────────────────
 async function toggleActive(id) {
   const previousJobs = [...jobs];
   jobs = jobs.map(j => j.id === id ? {...j, active: !j.active} : j);
@@ -1135,13 +1156,9 @@ function repopulateForm(job) {
   document.getElementById('f_salary').value = job.salary || '';
   document.getElementById('f_experience').value = job.experience || '';
   document.getElementById('f_equity').value = job.equity || '';
-  document.getElementById('f_about').value = job.about;
-  document.getElementById('f_active').checked = job.active;
-  document.getElementById('f_responsibilities').value = arrayToComma(job.responsibilities);
-  document.getElementById('f_requirements').value = arrayToComma(job.requirements);
-  document.getElementById('f_niceToHave').value = arrayToComma(job.niceToHave);
-  document.getElementById('f_interviewProcess').value = arrayToComma(job.interviewProcess);
-  document.getElementById('f_offer').value = arrayToComma(job.offer);
+  initRTE('rte_about', job.about || '', 'Describe the role, the team, and what this person will be working on...', 'About the role');
+  initRTE('rte_interviewProcess', job.interviewProcess || '', 'Intro call, take-home task, final interview...', 'Interview process');
+  initRTE('rte_offer', job.offer || '', 'Flexible hours, remote-friendly, learning budget...', 'What we offer');
   populateCustomSections(job.customSections);
   populateQuestions(job.questions);
 }

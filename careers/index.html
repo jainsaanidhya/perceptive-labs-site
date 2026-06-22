@@ -136,9 +136,9 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
 .jd-section:last-child{margin-bottom:0}
 .jd-label{font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:.75rem}
 .jd-body{font-size:.9rem;line-height:1.76;color:rgba(255,255,255,.62)}
-.jd-list{list-style:none;display:grid;gap:.5rem}
-.jd-list li{display:flex;align-items:flex-start;gap:.65rem;font-size:.88rem;line-height:1.6;color:rgba(255,255,255,.62)}
-.jd-list li::before{content:'';width:5px;height:5px;border-radius:50%;background:#3b6eff;flex-shrink:0;margin-top:.55rem}
+.jd-body ul{margin:.4rem 0 .4rem 1.2rem}
+.jd-body li{margin:.25rem 0}
+.jd-body b,.jd-body strong{font-weight:700;color:#fff}
 
 /* APPLY FORM */
 .apply-form-wrap{border-radius:18px;border:1px solid rgba(255,255,255,.09);background:rgba(255,255,255,.03);padding:1.5rem}
@@ -429,6 +429,8 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
 <script>
 const API_URL    = "https://script.google.com/macros/s/AKfycbxY4zz9mVPoJ5ERB0XDwFZsD1xMe57lQQiKBh-wJ1AdpXJpyjq6CoAi3jBThmQeasDjXA/exec";
 const WORKER_URL = 'https://perceptive-contact.jainsaanidhya.workers.dev/';
+const JOBS_CACHE_VERSION = 'v2';
+const JOBS_CACHE_KEY = 'pl_jobs_' + JOBS_CACHE_VERSION;
 
 let JOBS = [];
 
@@ -437,7 +439,7 @@ const SUBMIT_BTN_INNER = 'Submit application<svg viewBox="0 0 24 24" width="14" 
 
 // ─── LOAD & SYNC ──────────────────────────────────────────────────
 async function loadJobs() {
-  const cached = localStorage.getItem('pl_jobs');
+  const cached = localStorage.getItem(JOBS_CACHE_KEY);
   if (cached) {
     JOBS = JSON.parse(cached).filter(j => j.active);
     renderJobs('all');
@@ -456,7 +458,7 @@ async function syncJobs() {
     const fresh = all.filter(j => j.active);
     if (JSON.stringify(fresh) !== JSON.stringify(JOBS)) {
       JOBS = fresh;
-      localStorage.setItem('pl_jobs', JSON.stringify(all));
+      localStorage.setItem(JOBS_CACHE_KEY, JSON.stringify(all));
       renderJobs(document.querySelector('.filter-btn.active')?.dataset.filter || 'all');
       initFilters();
     }
@@ -496,10 +498,10 @@ function buildCustomQuestions(job) {
 function buildCustomSectionsHTML(job) {
   if (!job.customSections || job.customSections.length === 0) return '';
   return job.customSections.map(s => {
-    if (!s.name || !s.items || s.items.length === 0) return '';
+    if (!s.name || !s.html) return '';
     return `<div class="jd-section">
     <div class="jd-label">${escHtml(s.name)}</div>
-    <ul class="jd-list">${s.items.map(item => `<li>${escHtml(item)}</li>`).join('')}</ul>
+    <div class="jd-body">${s.html}</div>
   </div>`;
   }).join('');
 }
@@ -519,13 +521,6 @@ function buildTagHTML(job) {
 }
 
 function buildRoleHTML(job) {
-  const listItems = arr => (arr && arr.length) 
-  ? arr.map(i => `<li>${escHtml(i)}</li>`) .join('') 
-  : '';
-  const optionalSection = (arr, label) => arr && arr.length
-    ? `<div class="jd-section"><div class="jd-label">${label}</div><ul class="jd-list">${listItems(arr)}</ul></div>`
-    : '';
-
   return `
     <div class="role-item" data-open="false" data-dept="${escHtml(job.dept)}" data-id="${escHtml(job.id)}">
       <button class="role-card" aria-expanded="false">
@@ -545,19 +540,16 @@ function buildRoleHTML(job) {
           <div class="role-jd">
             <div class="jd-section">
               <div class="jd-label">About the role</div>
-              <div class="jd-body">${escHtml(job.about)}</div>
+              <div class="jd-body">${job.about || ''}</div>
             </div>
-            ${job.responsibilities && job.responsibilities.length ? `<div class="jd-section">
-              <div class="jd-label">What you'll be building</div>
-              <ul class="jd-list">${listItems(job.responsibilities)}</ul>
+            ${job.interviewProcess ? `<div class="jd-section">
+              <div class="jd-label">Interview process</div>
+              <div class="jd-body">${job.interviewProcess}</div>
             </div>` : ''}
-            ${job.requirements && job.requirements.length ? `<div class="jd-section">
-              <div class="jd-label">Required skills</div>
-              <ul class="jd-list">${listItems(job.requirements)}</ul>
+            ${job.offer ? `<div class="jd-section">
+              <div class="jd-label">What we offer</div>
+              <div class="jd-body">${job.offer}</div>
             </div>` : ''}
-            ${optionalSection(job.niceToHave, 'Nice to have')}
-            ${optionalSection(job.interviewProcess, 'Interview process')}
-            ${optionalSection(job.offer, 'What we offer')}
             ${buildCustomSectionsHTML(job)}
           </div>
           <div class="role-apply">
