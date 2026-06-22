@@ -101,6 +101,16 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
 .section-title{font-size:clamp(1.9rem,4vw,3rem);font-weight:760;letter-spacing:-.04em;line-height:1.06;color:#fff}
 .section-sub{font-size:1rem;line-height:1.7;color:rgba(255,255,255,.52);max-width:58ch;margin-top:.8rem}
 
+.openings__head .section-title {
+  font-size: clamp(2rem, 5vw, 3.6rem);
+  font-weight: 760;
+  letter-spacing: -.04em;
+  background: linear-gradient(90deg, #fff 0%, #9cb8ff 44%, #5b84ff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
 /* FILTERS */
 .filters{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:2rem}
 .filter-btn{display:inline-flex;align-items:center;gap:.4rem;padding:.48rem .9rem;border-radius:999px;font-size:.8rem;font-weight:600;border:1px solid rgba(255,255,255,.1);background:transparent;color:rgba(255,255,255,.5);cursor:pointer;transition:all .2s}
@@ -309,7 +319,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
       <div class="hero__inner">
         <div class="hero__label">We're hiring</div>
         <h1 class="hero__title reveal">Build systems that<br/><span class="hl">actually work.</span></h1>
-        <p class="hero__sub reveal reveal-delay-1">We're a small team working on hard operational problems. If you care about how businesses actually run — not just what software promises — this is the right place.</p>
+        <p class="hero__sub reveal reveal-delay-1">We're a small team working on hard operational problems. If you care about how businesses actually run not just what software promises this is the right place.</p>
         <div class="hero__actions reveal reveal-delay-2">
           <a href="#openings" class="btn btn-accent">See open roles<svg class="icon-arrow" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
           <a href="#apply" class="btn btn-ghost-dark">Talk to us first</a>
@@ -321,9 +331,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
   <section id="openings" class="openings">
     <div class="wrap">
       <div class="openings__head reveal">
-        <span class="section-eyebrow">Open roles</span>
-        <h2 class="section-title">Where we need you.</h2>
-        <p class="section-sub">All roles are based in India. Remote-friendly for the right fit.</p>
+        <h2 class="section-title" style="background:linear-gradient(90deg,#fff 0%,#9cb8ff 44%,#5b84ff 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Open roles</h2>
       </div>
       <div class="filters reveal reveal-delay-1" role="group" aria-label="Filter by department" id="filtersContainer">
         <button class="filter-btn active" data-filter="all">All roles</button>
@@ -333,7 +341,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
         <div class="roles-empty__icon">
           <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
         </div>
-        <div class="roles-empty__title">Stay tuned — more roles coming soon.</div>
+        <div class="roles-empty__title">Stay tuned more roles coming soon.</div>
       </div>
     </div>
   </section>
@@ -342,9 +350,9 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
     <div class="wrap">
       <div class="hiring-process__label reveal">How hiring works</div>
       <div class="hiring-process__steps reveal reveal-delay-1">
-        <div class="hiring-step"><div class="hiring-step__n">01</div><div class="hiring-step__title">Apply or reach out</div><div class="hiring-step__text">Send us your application or drop a message. No lengthy forms — just tell us what you do.</div></div>
+        <div class="hiring-step"><div class="hiring-step__n">01</div><div class="hiring-step__title">Apply or reach out</div><div class="hiring-step__text">Send us your application or drop a message. No lengthy forms just tell us what you do.</div></div>
         <div class="hiring-step"><div class="hiring-step__n">02</div><div class="hiring-step__title">Intro call</div><div class="hiring-step__text">A 30-minute conversation. We want to understand how you think, not just what you've done.</div></div>
-        <div class="hiring-step"><div class="hiring-step__n">03</div><div class="hiring-step__title">A real problem</div><div class="hiring-step__text">A short, paid task tied to actual work — not a whiteboard puzzle. You'll see what we build.</div></div>
+        <div class="hiring-step"><div class="hiring-step__n">03</div><div class="hiring-step__title">A real problem</div><div class="hiring-step__text">A short, paid task tied to actual work not a whiteboard puzzle. You'll see what we build.</div></div>
         <div class="hiring-step"><div class="hiring-step__n">04</div><div class="hiring-step__title">Offer</div><div class="hiring-step__text">Fast decision. No drawn-out loops. If it's a fit, we move quickly.</div></div>
       </div>
     </div>
@@ -356,8 +364,8 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
       <h2 class="section-title reveal reveal-delay-1">What working here looks like.</h2>
       <div class="perks__grid">
         <div class="perk-card reveal reveal-delay-1"><div class="perk-card__icon"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><div class="perk-card__title">Real responsibility early</div><p class="perk-card__text">No shadow work. You own the outcome of what you build from day one.</p></div>
-        <div class="perk-card reveal reveal-delay-2"><div class="perk-card__icon"><svg viewBox="0 0 24 24"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></div><div class="perk-card__title">Learning that compounds</div><p class="perk-card__text">Exposure to real business problems across industries — retail, logistics, finance, and more.</p></div>
-        <div class="perk-card reveal reveal-delay-3"><div class="perk-card__icon"><svg viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 1 7 7c0 3.5-2.5 6-4 7H9c-1.5-1-4-3.5-4-7a7 7 0 0 1 7-7z"/><line x1="9" y1="21" x2="15" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div><div class="perk-card__title">Creative thinking welcomed</div><p class="perk-card__text">If you see a better way to solve something, say it — that's how we get better.</p></div>
+        <div class="perk-card reveal reveal-delay-2"><div class="perk-card__icon"><svg viewBox="0 0 24 24"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></div><div class="perk-card__title">Learning that compounds</div><p class="perk-card__text">Exposure to real business problems across industries retail, logistics, finance, and more.</p></div>
+        <div class="perk-card reveal reveal-delay-3"><div class="perk-card__icon"><svg viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 1 7 7c0 3.5-2.5 6-4 7H9c-1.5-1-4-3.5-4-7a7 7 0 0 1 7-7z"/><line x1="9" y1="21" x2="15" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div><div class="perk-card__title">Creative thinking welcomed</div><p class="perk-card__text">If you see a better way to solve something, say it that's how we get better.</p></div>
         <div class="perk-card reveal reveal-delay-1"><div class="perk-card__icon"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div><div class="perk-card__title">A team that ships</div><p class="perk-card__text">Small, opinionated, and focused. No endless meetings. Decisions get made.</p></div>
       </div>
     </div>
@@ -369,7 +377,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
         <div class="contact-careers-left">
           <span class="section-eyebrow">Any questions?</span>
           <h2 class="section-title" style="font-size:clamp(1.9rem,4vw,2.8rem);margin-top:.4rem">Talk to us.</h2>
-          <p class="section-sub" style="margin-top:.75rem">Whether it's about a role, a question about how we work, or just a hello — drop a message and we'll get back to you.</p>
+          <p class="section-sub" style="margin-top:.75rem">Whether it's about a role, a question about how we work, or just a hello drop a message and we'll get back to you.</p>
           <div class="contact-careers-info">
             <div class="contact-careers-info__item"><svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22 6 12 13 2 6"/></svg>team@perceptivelabs.in</div>
             <div class="contact-careers-info__item"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.39 2 2 0 0 1 3.6 1.22h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.83a16 16 0 0 0 6.29 6.29l.95-.95a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>+91 9303301009</div>
@@ -691,7 +699,8 @@ function checkSubmitGate(form) {
   const minReqOk = Array.from(form.querySelectorAll('[data-min-requirement="true"]'))
     .every(el => {
       if (!el.value) return el.dataset.required !== 'true';
-      return el.value === el.dataset.minValue;
+      const minVals = JSON.parse(el.dataset.minValue || '[]');
+      return Array.isArray(minVals) ? minVals.includes(el.value) : el.value === el.dataset.minValue;
     });
 
   const fileInput = form.querySelector('[name="resume"]');
