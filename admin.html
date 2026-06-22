@@ -324,6 +324,13 @@ input:checked + .toggle-slider::before{transform:translateX(18px)}
 @media(max-width:1024px){.admin-layout{grid-template-columns:1fr}.sidebar{display:none}}
 @media(max-width:680px){.stats-row{grid-template-columns:1fr 1fr}.form-row{grid-template-columns:1fr}.form-row.triple{grid-template-columns:1fr}}
 @media(max-width:480px){.stats-row{grid-template-columns:1fr}.page-header{flex-direction:column;align-items:stretch}.page-header .btn-primary{justify-content:center}}
+
+/*Minimum Requirement*/
+.minreq-options{display:grid;gap:.4rem;padding:.6rem;border-radius:10px;border:1px solid var(--line-strong);background:rgba(255,255,255,.03);max-height:180px;overflow-y:auto}
+.minreq-option-row{display:flex;align-items:center;gap:.6rem;padding:.5rem .65rem;border-radius:8px;font-size:.84rem;color:rgba(255,255,255,.62);cursor:pointer;transition:background .15s}
+.minreq-option-row:hover{background:rgba(255,255,255,.05)}
+.minreq-option-row input[type="checkbox"]{accent-color:var(--accent);width:15px;height:15px;cursor:pointer;flex-shrink:0}
+
 </style>
 </head>
 <body>
@@ -887,11 +894,11 @@ function addQuestion(q = null) {
             Set as minimum requirement
           </label>
           <div data-role="qminreqvaluewrap" style="margin-top:.55rem;${minRequirement?'':'display:none'}">
-            <select class="question-type-select" data-role="qminreqvalue" style="width:100%">
-              ${buildMinReqSelectOptions(type, options, minRequirementValue)}
-            </select>
-            <div class="form-hint" style="margin-top:.4rem">Applicants who don't select this option will see "doesn't meet minimum requirement" and won't be able to submit (unless the question is left unanswered and not marked Required).</div>
+          <div class="minreq-options" data-role="qminreqvalue">
+            ${buildMinReqCheckboxes(type, options, minRequirementValue)}
           </div>
+          <div class="form-hint" style="margin-top:.4rem">Applicants who don't select this option will see "doesn't meet minimum requirement" and won't be able to submit (unless the question is left unanswered and not marked Required).</div>
+        </div>
         </div>
       </div>
       <button class="list-remove-btn" onclick="this.closest('.question-card').remove()" type="button" style="margin-top:.15rem">
@@ -949,11 +956,15 @@ function removeOptionRow(btn) {
   if (card) refreshMinReqOptions(card);
 }
 
-function buildMinReqSelectOptions(type, options, selected) {
+function buildMinReqCheckboxes(type, options, selected) {
   const opts = type === 'yesno' ? ['Yes', 'No'] : (options || []).map(o => o.trim()).filter(Boolean);
-  let html = `<option value="" ${!selected ? 'selected' : ''} disabled>Select option</option>`;
-  html += opts.map(o => `<option value="${escHtml(o)}" ${o === selected ? 'selected' : ''}>${escHtml(o)}</option>`).join('');
-  return html;
+  const selectedArr = Array.isArray(selected) ? selected : (selected ? [selected] : []);
+  if (!opts.length) return '<div class="form-hint" style="padding:.2rem 0">Add options above first.</div>';
+  return opts.map(o => `
+    <label class="minreq-option-row">
+      <input type="checkbox" value="${escHtml(o)}" ${selectedArr.includes(o) ? 'checked' : ''}/>
+      ${escHtml(o)}
+    </label>`).join('');
 }
 
 function onMinReqToggle(checkbox) {
@@ -963,12 +974,12 @@ function onMinReqToggle(checkbox) {
 }
 
 function refreshMinReqOptions(card) {
-  const select = card.querySelector('[data-role="qminreqvalue"]');
-  if (!select) return;
+  const container = card.querySelector('[data-role="qminreqvalue"]');
+  if (!container) return;
   const type    = card.querySelector('[data-role="qtype"]').value;
   const options = Array.from(card.querySelectorAll('[data-role="qoption"]')).map(i => i.value.trim()).filter(Boolean);
-  const current = select.value;
-  select.innerHTML = buildMinReqSelectOptions(type, options, current);
+  const current = Array.from(container.querySelectorAll('input[type="checkbox"]:checked')).map(c => c.value);
+  container.innerHTML = buildMinReqCheckboxes(type, options, current);
 }
 
 function refreshMinReqOptionsFromInput(input) {
@@ -990,8 +1001,8 @@ function getQuestions() {
     }
     const minreqCb     = card.querySelector('[data-role="qminreq"]');
     const minRequirement = type !== 'text' && minreqCb ? minreqCb.checked : false;
-    const minreqSelect = card.querySelector('[data-role="qminreqvalue"]');
-    const minRequirementValue = minRequirement && minreqSelect ? minreqSelect.value : '';
+    const minreqContainer = card.querySelector('[data-role="qminreqvalue"]');
+    const minRequirementValue = minRequirement && minreqContainer ? Array.from(minreqContainer.querySelectorAll('input[type="checkbox"]:checked')).map(c => c.value) : [];
     return { label, type, required, options, minRequirement, minRequirementValue };
   }).filter(q => q.label);
 }
