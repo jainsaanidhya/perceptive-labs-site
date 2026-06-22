@@ -490,8 +490,8 @@ function buildCustomQuestions(job) {
       </div>`;
     } else {
       const opts = (q.type === 'yesno') ? ['Yes', 'No'] : (q.options || []);
-      const minReqAttrs = (q.minRequirement && q.minRequirementValue)
-        ? `data-min-requirement="true" data-min-value="${escHtml(q.minRequirementValue)}"`
+      const minReqAttrs = (q.minRequirement && q.minRequirementValue && q.minRequirementValue.length)
+        ? `data-min-requirement="true" data-min-value="${escHtml(JSON.stringify(q.minRequirementValue))}"`
         : `data-min-requirement="false"`;
       return `<div class="aform-field">
         <label class="aform-label">${escHtml(q.label)}${optLabel}</label>
@@ -718,7 +718,10 @@ function checkMinRequirement(el, form) {
     if (errSpan) errSpan.classList.remove('visible');
     return true;
   }
-  if (el.value !== el.dataset.minValue) {
+  let minVals = [];
+  try { minVals = JSON.parse(el.dataset.minValue || '[]'); } catch (e) {}
+  const ok = Array.isArray(minVals) ? minVals.includes(el.value) : el.value === el.dataset.minValue;
+  if (!ok) {
     el.classList.add('input-error');
     if (errSpan) errSpan.classList.add('visible');
     return false;
@@ -726,6 +729,33 @@ function checkMinRequirement(el, form) {
   el.classList.remove('input-error');
   if (errSpan) errSpan.classList.remove('visible');
   return true;
+}
+
+function draftKey(jobId) { return 'pl_apply_draft_' + jobId; }
+
+function saveDraft(form, jobId) {
+  const data = {};
+  form.querySelectorAll('input:not([type="file"]), select, textarea').forEach(el => {
+    if (el.name) data[el.name] = el.value;
+  });
+  try { localStorage.setItem(draftKey(jobId), JSON.stringify(data)); } catch (e) {}
+}
+
+function restoreDraft(form, jobId) {
+  let raw;
+  try { raw = localStorage.getItem(draftKey(jobId)); } catch (e) { return; }
+  if (!raw) return;
+  let data;
+  try { data = JSON.parse(raw); } catch (e) { return; }
+  Object.keys(data).forEach(name => {
+    const el = form.querySelector(`[name="${name}"]`);
+    if (el) el.value = data[name];
+  });
+  checkSubmitGate(form);
+}
+
+function clearDraft(jobId) {
+  try { localStorage.removeItem(draftKey(jobId)); } catch (e) {}
 }
 
 // ─── ROLE HANDLERS ────────────────────────────────────────────────
@@ -745,6 +775,14 @@ function attachRoleHandlers() {
         setTimeout(() => item.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 50);
       }
     });
+  });
+
+  // Restore drafts + auto-save on input
+  document.querySelectorAll('.apply-form').forEach(form => {
+    const jobId = form.dataset.jobid;
+    restoreDraft(form, jobId);
+    form.addEventListener('input', () => saveDraft(form, jobId));
+    form.addEventListener('change', () => saveDraft(form, jobId));
   });
 
   // Field validation listeners
@@ -887,7 +925,10 @@ function attachRoleHandlers() {
 
       form.querySelectorAll('[data-min-requirement="true"]').forEach(field => {
         if (!field.value) return;
-        if (field.value !== field.dataset.minValue) {
+        let minVals = [];
+        try { minVals = JSON.parse(field.dataset.minValue || '[]'); } catch (e) {}
+        const ok = Array.isArray(minVals) ? minVals.includes(field.value) : field.value === field.dataset.minValue;
+        if (!ok) {
           field.classList.add('input-error');
           const err = form.querySelector(`.minreq-error[data-for="${field.name}"]`);
           if (err) err.classList.add('visible');
@@ -962,6 +1003,7 @@ function attachRoleHandlers() {
       msgEl.className   = 'aform-message success';
       msgEl.textContent = "Application sent — we'll be in touch from team@perceptivelabs.in.";
       form.reset();
+      clearDraft(jobId);
       document.querySelectorAll('.file-preview').forEach(p => p.classList.remove('visible'));
       btn.disabled  = true;
       btn.innerHTML = SUBMIT_BTN_INNER;
