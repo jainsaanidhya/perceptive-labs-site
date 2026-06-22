@@ -857,6 +857,8 @@ function addQuestion(q = null) {
   const label = q ? q.label : '';
   const required = q ? q.required : true;
   const options = q && q.options ? q.options : [''];
+  const minRequirement = q ? !!q.minRequirement : false;
+  const minRequirementValue = q ? (q.minRequirementValue || '') : '';
 
   card.innerHTML = `
     <div class="question-card__top">
@@ -879,6 +881,18 @@ function addQuestion(q = null) {
             : options.map(o => optionRowHTML(o)).join('') + `<button class="add-option-btn" onclick="addOptionToQuestion(this)" type="button"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Add option</button>`
           }
         </div>
+        <div class="min-req-block" data-role="qminreqblock" style="${type==='text'?'display:none':''}margin-top:.3rem;padding-top:.65rem;border-top:1px dashed var(--line-strong)">
+          <label class="question-required-toggle">
+            <input type="checkbox" data-role="qminreq" ${minRequirement?'checked':''} onchange="onMinReqToggle(this)"/>
+            Set as minimum requirement
+          </label>
+          <div data-role="qminreqvaluewrap" style="margin-top:.55rem;${minRequirement?'':'display:none'}">
+            <select class="question-type-select" data-role="qminreqvalue" style="width:100%">
+              ${buildMinReqSelectOptions(type, options, minRequirementValue)}
+            </select>
+            <div class="form-hint" style="margin-top:.4rem">Applicants who don't select this option will see "doesn't meet minimum requirement" and won't be able to submit (unless the question is left unanswered and not marked Required).</div>
+          </div>
+        </div>
       </div>
       <button class="list-remove-btn" onclick="this.closest('.question-card').remove()" type="button" style="margin-top:.15rem">
         <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
@@ -889,11 +903,35 @@ function addQuestion(q = null) {
 
 function optionRowHTML(value = '') {
   return `<div class="option-row">
-    <input class="option-input" type="text" placeholder="Option text..." value="${escHtml(value)}" data-role="qoption"/>
-    <button class="option-remove" onclick="this.closest('.option-row').remove()" type="button">
+    <input class="option-input" type="text" placeholder="Option text..." value="${escHtml(value)}" data-role="qoption" oninput="refreshMinReqOptionsFromInput(this)"/>
+    <button class="option-remove" onclick="removeOptionRow(this)" type="button">
       <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
     </button>
   </div>`;
+}
+
+function onQuestionTypeChange(sel) {
+  const card = sel.closest('.question-card');
+  const optionsEl   = card.querySelector('[data-role="qoptions"]');
+  const minreqBlock = card.querySelector('[data-role="qminreqblock"]');
+  const type = sel.value;
+
+  if (type === 'text') {
+    optionsEl.style.display = 'none';
+    optionsEl.innerHTML = '';
+    minreqBlock.style.display = 'none';
+    const minreqCb = card.querySelector('[data-role="qminreq"]');
+    if (minreqCb && minreqCb.checked) { minreqCb.checked = false; onMinReqToggle(minreqCb); }
+  } else if (type === 'yesno') {
+    optionsEl.style.display = '';
+    optionsEl.innerHTML = '<div style="font-size:.78rem;color:rgba(255,255,255,.3);padding:.3rem 0">Options: Yes, No — fixed</div>';
+    minreqBlock.style.display = '';
+  } else {
+    optionsEl.style.display = '';
+    optionsEl.innerHTML = optionRowHTML('') + `<button class="add-option-btn" onclick="addOptionToQuestion(this)" type="button"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Add option</button>`;
+    minreqBlock.style.display = '';
+  }
+  refreshMinReqOptions(card);
 }
 
 function addOptionToQuestion(btn) {
@@ -901,29 +939,48 @@ function addOptionToQuestion(btn) {
   const newRow = document.createElement('div');
   newRow.innerHTML = optionRowHTML('');
   editor.insertBefore(newRow.firstElementChild, btn);
+  const card = btn.closest('.question-card');
+  if (card) refreshMinReqOptions(card);
 }
 
-function onQuestionTypeChange(sel) {
-  const card = sel.closest('.question-card');
-  const optionsEl = card.querySelector('[data-role="qoptions"]');
-  const type = sel.value;
-  if (type === 'text') {
-    optionsEl.style.display = 'none';
-    optionsEl.innerHTML = '';
-  } else if (type === 'yesno') {
-    optionsEl.style.display = '';
-    optionsEl.innerHTML = '<div style="font-size:.78rem;color:rgba(255,255,255,.3);padding:.3rem 0">Options: Yes, No — fixed</div>';
-  } else {
-    optionsEl.style.display = '';
-    optionsEl.innerHTML = optionRowHTML('') + `<button class="add-option-btn" onclick="addOptionToQuestion(this)" type="button"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Add option</button>`;
-  }
+function removeOptionRow(btn) {
+  const card = btn.closest('.question-card');
+  btn.closest('.option-row').remove();
+  if (card) refreshMinReqOptions(card);
+}
+
+function buildMinReqSelectOptions(type, options, selected) {
+  const opts = type === 'yesno' ? ['Yes', 'No'] : (options || []).map(o => o.trim()).filter(Boolean);
+  let html = `<option value="" ${!selected ? 'selected' : ''} disabled>Select option</option>`;
+  html += opts.map(o => `<option value="${escHtml(o)}" ${o === selected ? 'selected' : ''}>${escHtml(o)}</option>`).join('');
+  return html;
+}
+
+function onMinReqToggle(checkbox) {
+  const block = checkbox.closest('[data-role="qminreqblock"]');
+  const wrap  = block.querySelector('[data-role="qminreqvaluewrap"]');
+  wrap.style.display = checkbox.checked ? '' : 'none';
+}
+
+function refreshMinReqOptions(card) {
+  const select = card.querySelector('[data-role="qminreqvalue"]');
+  if (!select) return;
+  const type    = card.querySelector('[data-role="qtype"]').value;
+  const options = Array.from(card.querySelectorAll('[data-role="qoption"]')).map(i => i.value.trim()).filter(Boolean);
+  const current = select.value;
+  select.innerHTML = buildMinReqSelectOptions(type, options, current);
+}
+
+function refreshMinReqOptionsFromInput(input) {
+  const card = input.closest('.question-card');
+  if (card) refreshMinReqOptions(card);
 }
 
 function getQuestions() {
   const cards = document.querySelectorAll('.question-card');
   return Array.from(cards).map(card => {
-    const label = card.querySelector('[data-role="qlabel"]').value.trim();
-    const type = card.querySelector('[data-role="qtype"]').value;
+    const label    = card.querySelector('[data-role="qlabel"]').value.trim();
+    const type     = card.querySelector('[data-role="qtype"]').value;
     const required = card.querySelector('[data-role="qrequired"]').checked;
     let options = [];
     if (type === 'dropdown') {
@@ -931,7 +988,11 @@ function getQuestions() {
     } else if (type === 'yesno') {
       options = ['Yes', 'No'];
     }
-    return { label, type, required, options };
+    const minreqCb     = card.querySelector('[data-role="qminreq"]');
+    const minRequirement = type !== 'text' && minreqCb ? minreqCb.checked : false;
+    const minreqSelect = card.querySelector('[data-role="qminreqvalue"]');
+    const minRequirementValue = minRequirement && minreqSelect ? minreqSelect.value : '';
+    return { label, type, required, options, minRequirement, minRequirementValue };
   }).filter(q => q.label);
 }
 

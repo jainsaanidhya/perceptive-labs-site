@@ -120,9 +120,9 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
 .role-tag{display:inline-flex;align-items:center;gap:.3rem;padding:.22rem .62rem;border-radius:7px;font-size:.7rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
 .tag-type{background:rgba(59,110,255,.1);color:#8fb0ff;border:1px solid rgba(59,110,255,.18)}
 .tag-loc{background:rgba(255,255,255,.05);color:rgba(255,255,255,.48);border:1px solid rgba(255,255,255,.09)}
-.tag-remote{background:rgba(73,209,125,.08);color:#7be4a2;border:1px solid rgba(73,209,125,.16)}
-.tag-new{background:rgba(236,72,153,.15);color:#f472b6;border:1px solid rgba(236,72,153,.35);font-weight:800}
-.tag-salary{background:rgba(251,191,36,.07);color:#fcd34d;border:1px solid rgba(251,191,36,.18)}
+.tag-remote{background:rgba(255,255,255,.05);color:rgba(255,255,255,.48);border:1px solid rgba(255,255,255,.09)}
+.tag-new{background:rgba(255,255,255,.05);color:rgba(255,255,255,.48);border:1px solid rgba(255,255,255,.09)}
+.tag-salary{background:rgba(255,255,255,.05);color:rgba(255,255,255,.48);border:1px solid rgba(255,255,255,.09)}
 .role-card__arrow{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.4);transition:all .25s var(--ease);flex-shrink:0}
 .role-card__arrow svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 @media(max-width:580px){.role-card{grid-template-columns:1fr;gap:.9rem}.role-card__arrow{display:none}}
@@ -482,14 +482,18 @@ function buildCustomQuestions(job) {
       </div>`;
     } else {
       const opts = (q.type === 'yesno') ? ['Yes', 'No'] : (q.options || []);
+      const minReqAttrs = (q.minRequirement && q.minRequirementValue)
+        ? `data-min-requirement="true" data-min-value="${escHtml(q.minRequirementValue)}"`
+        : `data-min-requirement="false"`;
       return `<div class="aform-field">
         <label class="aform-label">${escHtml(q.label)}${optLabel}</label>
-        <select class="aform-input" name="${name}" ${req} ${dataReq}>
+        <select class="aform-input" name="${name}" ${req} ${dataReq} ${minReqAttrs}>
           <option value="" disabled selected>Select an option</option>
           ${opts.map(o => `<option value="${escHtml(o)}">${escHtml(o)}</option>`).join('')}
         </select>
         <span class="field-error" data-for="${name}">${errMsg}</span>
-      </div>`;;
+        <span class="field-error minreq-error" data-for="${name}">Doesn't meet minimum requirement.</span>
+      </div>`;
     }
   }).join('');
 }
@@ -653,7 +657,6 @@ function initFilters() {
 }
 
 loadJobs();
-document.getElementById('rolesEmpty').style.display = 'block';
 
 // ─── VALIDATION ───────────────────────────────────────────────────
 function isValidEmail(v) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); }
@@ -685,10 +688,35 @@ function checkSubmitGate(form) {
     .filter(el => el.dataset.required === 'true')
     .every(el => el.value.trim().length > 0);
 
+  const minReqOk = Array.from(form.querySelectorAll('[data-min-requirement="true"]'))
+    .every(el => {
+      if (!el.value) return el.dataset.required !== 'true';
+      return el.value === el.dataset.minValue;
+    });
+
   const fileInput = form.querySelector('[name="resume"]');
   const resumeOk  = fileInput && fileInput.files && fileInput.files.length > 0;
 
-  btn.disabled = !(nameOk && emailOk && phoneOk && customOk && resumeOk);
+  btn.disabled = !(nameOk && emailOk && phoneOk && customOk && minReqOk && resumeOk);
+}
+
+function checkMinRequirement(el, form) {
+  if (el.dataset.minRequirement !== 'true') return true;
+  const errSpan = form.querySelector(`.minreq-error[data-for="${el.name}"]`);
+
+  if (!el.value) {
+    el.classList.remove('input-error');
+    if (errSpan) errSpan.classList.remove('visible');
+    return true;
+  }
+  if (el.value !== el.dataset.minValue) {
+    el.classList.add('input-error');
+    if (errSpan) errSpan.classList.add('visible');
+    return false;
+  }
+  el.classList.remove('input-error');
+  if (errSpan) errSpan.classList.remove('visible');
+  return true;
 }
 
 // ─── ROLE HANDLERS ────────────────────────────────────────────────
@@ -727,9 +755,10 @@ function attachRoleHandlers() {
       const onCustomChange = () => {
         if (el.dataset.required === 'true' && el.value.trim().length > 0) {
           el.classList.remove('input-error');
-          const errSpan = form.querySelector(`.field-error[data-for="${el.name}"]`);
+          const errSpan = form.querySelector(`.field-error:not(.minreq-error)[data-for="${el.name}"]`);
           if (errSpan) errSpan.classList.remove('visible');
         }
+        checkMinRequirement(el, form);
         checkSubmitGate(form);
       };
       el.addEventListener('change', onCustomChange);
@@ -842,6 +871,16 @@ function attachRoleHandlers() {
         if (field.dataset.required === 'true' && !field.value.trim()) {
           field.classList.add('input-error');
           const err = form.querySelector(`.field-error[data-for="${field.name}"]`);
+          if (err) err.classList.add('visible');
+          valid = false;
+        }
+      });
+
+      form.querySelectorAll('[data-min-requirement="true"]').forEach(field => {
+        if (!field.value) return;
+        if (field.value !== field.dataset.minValue) {
+          field.classList.add('input-error');
+          const err = form.querySelector(`.minreq-error[data-for="${field.name}"]`);
           if (err) err.classList.add('visible');
           valid = false;
         }
