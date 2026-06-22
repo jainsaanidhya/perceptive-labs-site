@@ -34,6 +34,9 @@ jobs:
         
       - name: Copy careers page
         run: cp -r careers dist/careers
+
+      - name: Copy admin page
+        run: cp admin.html dist/admin.html
         
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
