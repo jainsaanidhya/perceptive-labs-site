@@ -380,32 +380,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
           <p class="section-sub" style="margin-top:.75rem">Whether it's about a role, a question about how we work, or just a hello drop a message and we'll get back to you.</p>
           <div class="contact-careers-info">
             <div class="contact-careers-info__item"><svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22 6 12 13 2 6"/></svg>team@perceptivelabs.in</div>
-            <div class="contact-careers-info__item"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.39 2 2 0 0 1 3.6 1.22h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.83a16 16 0 0 0 6.29 6.29l.95-.95a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>+91 9303301009</div>
           </div>
-        </div>
-        <div class="contact-careers-form">
-          <form id="careersContactForm" novalidate>
-            <div class="cform-row">
-              <div class="cform-field">
-                <label class="cform-label" for="c_name">Your name</label>
-                <input class="cform-input" type="text" id="c_name" placeholder="Name" required/>
-                <span class="cform-field-error" id="c_name_err">Please enter your name.</span>
-              </div>
-              <div class="cform-field">
-                <label class="cform-label" for="c_email">Email</label>
-                <input class="cform-input" type="email" id="c_email" placeholder="you@company.com" required/>
-                <span class="cform-field-error" id="c_email_err">Please enter a valid email address.</span>
-              </div>
-            </div>
-            <div class="cform-field"><label class="cform-label" for="c_role">Role you're interested in <span style="color:rgba(255,255,255,.28);font-weight:400">(optional)</span></label><input class="cform-input" type="text" id="c_role" placeholder="e.g. Full-Stack Engineer"/></div>
-            <div class="cform-field">
-              <label class="cform-label" for="c_msg">Your message</label>
-              <textarea class="cform-input cform-textarea" id="c_msg" placeholder="What you do, what you're looking for, or just say hi." required></textarea>
-              <span class="cform-field-error" id="c_msg_err">Please enter your message.</span>
-            </div>
-            <button class="cform-submit" type="submit" id="careersSubmitBtn" disabled>Send message<svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
-            <div class="cform-message" id="careersFormMsg" role="alert"></div>
-          </form>
         </div>
       </div>
     </div>
@@ -1054,61 +1029,6 @@ window.addEventListener('scroll', () => {
   const pct = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
   document.getElementById('scrollBar').style.width = pct + '%';
 }, { passive: true });
-
-// ─── CONTACT FORM ─────────────────────────────────────────────────
-const careersForm = document.getElementById('careersContactForm');
-
-function checkCareersFormGate() {
-  const name    = document.getElementById('c_name').value.trim();
-  const email   = document.getElementById('c_email').value.trim();
-  const message = document.getElementById('c_msg').value.trim();
-  const btn     = document.getElementById('careersSubmitBtn');
-  btn.disabled  = !(name.length > 0 && isValidEmail(email) && message.length > 0);
-}
-
-if (careersForm) {
-  ['c_name', 'c_email', 'c_role', 'c_msg'].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.addEventListener('input', checkCareersFormGate);
-  });
-  checkCareersFormGate();
-
-  careersForm.addEventListener('submit', async e => {
-    e.preventDefault();
-    const btn = document.getElementById('careersSubmitBtn');
-    const msg = document.getElementById('careersFormMsg');
-    msg.className = 'cform-message';
-    btn.disabled  = true;
-    btn.innerHTML = 'Sending…';
-
-    const role    = document.getElementById('c_role').value;
-    const payload = {
-      name:    document.getElementById('c_name').value,
-      email:   document.getElementById('c_email').value,
-      message: (role ? '[Role: ' + role + ']\n\n' : '') + document.getElementById('c_msg').value,
-      _origin: window.location.href
-    };
-
-    try {
-      const res = await fetch(WORKER_URL, {
-        method:  'POST',
-        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-        body:    JSON.stringify(payload)
-      });
-      if (!res.ok) throw new Error('HTTP ' + res.status);
-      msg.className   = 'cform-message success';
-      msg.textContent = "Got it — we'll reply from team@perceptivelabs.in.";
-      careersForm.reset();
-      checkCareersFormGate();
-    } catch (err) {
-      msg.className   = 'cform-message error';
-      msg.textContent = "Couldn't send. Email us at team@perceptivelabs.in directly.";
-      btn.disabled    = false;
-    } finally {
-      btn.innerHTML = 'Send message<svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>';
-    }
-  });
-}
 </script>
 </body>
 </html>
