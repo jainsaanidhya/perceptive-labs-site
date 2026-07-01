@@ -424,29 +424,41 @@ const SUBMIT_BTN_INNER = 'Submit application<svg viewBox="0 0 24 24" width="14" 
 async function loadJobs() {
   const cached = localStorage.getItem(JOBS_CACHE_KEY);
   if (cached) {
-    JOBS = JSON.parse(cached).filter(j => j.active);
+    const cachedJobs = JSON.parse(cached);
+    JOBS = cachedJobs.filter(j => j.active !== false);
     renderJobs('all');
     initFilters();
   }
+
   await syncJobs();
   setInterval(syncJobs, 30000);
 }
 
 async function syncJobs() {
   if (API_URL === "YOUR_GOOGLE_SHEET_URL_HERE") return;
+
   try {
-    const res  = await fetch(API_URL + "?action=getJobs");
+    const res = await fetch(API_URL + "?action=getJobs");
     const data = await res.json();
-    const all  = data.jobs || [];
-    const fresh = all.filter(j => j.active);
+
+    if (!data.success) {
+      throw new Error(data.error || "Could not load jobs");
+    }
+
+    const all = data.jobs || [];
+    const fresh = all.filter(j => j.active !== false);
+
     if (JSON.stringify(fresh) !== JSON.stringify(JOBS)) {
       JOBS = fresh;
       localStorage.setItem(JOBS_CACHE_KEY, JSON.stringify(all));
       renderJobs(document.querySelector('.filter-btn.active')?.dataset.filter || 'all');
       initFilters();
     }
-  } catch {}
+  } catch (err) {
+    console.error("Jobs load failed:", err);
+  }
 }
+  
 
 // ─── BUILD CUSTOM QUESTIONS ───────────────────────────────────────
 function buildCustomQuestions(job) {
