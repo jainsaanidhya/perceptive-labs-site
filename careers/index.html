@@ -412,7 +412,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
 <script>
 const API_URL    = "https://script.google.com/macros/s/AKfycbzwN3wagXpL7TU0yieMVRpECtUlcckaufOqEYKVbO53G4ZoAdyL2yi33oqfbtvgOqgV/exec";
 const WORKER_URL = 'https://perceptive-contact.jainsaanidhya.workers.dev/';
-const JOBS_CACHE_VERSION = 'v2';
+const JOBS_CACHE_VERSION = 'v3';
 const JOBS_CACHE_KEY = 'pl_jobs_' + JOBS_CACHE_VERSION;
 
 let JOBS = [];
@@ -424,10 +424,14 @@ const SUBMIT_BTN_INNER = 'Submit application<svg viewBox="0 0 24 24" width="14" 
 async function loadJobs() {
   const cached = localStorage.getItem(JOBS_CACHE_KEY);
   if (cached) {
-    const cachedJobs = JSON.parse(cached);
-    JOBS = cachedJobs.filter(j => j.active !== false);
-    renderJobs('all');
-    initFilters();
+    try {
+      const cachedJobs = JSON.parse(cached);
+      JOBS = normalizeJobs(cachedJobs).filter(j => j.active !== false);
+      renderJobs('all');
+      initFilters();
+    } catch (e) {
+      localStorage.removeItem(JOBS_CACHE_KEY);
+    }
   }
 
   await syncJobs();
@@ -435,17 +439,23 @@ async function loadJobs() {
 }
 
 async function syncJobs() {
-  if (API_URL === "YOUR_GOOGLE_SHEET_URL_HERE") return;
-
   try {
-    const res = await fetch(API_URL + "?action=getJobs");
+    const res = await fetch(API_URL + "?action=getJobs&_=" + Date.now(), {
+      method: "GET",
+      cache: "no-store"
+    });
+
+    if (!res.ok) {
+      throw new Error("HTTP " + res.status + " while loading jobs");
+    }
+
     const data = await res.json();
 
     if (!data.success) {
       throw new Error(data.error || "Could not load jobs");
     }
 
-    const all = data.jobs || [];
+    const all = normalizeJobs(data.jobs || []);
     const fresh = all.filter(j => j.active !== false);
 
     if (JSON.stringify(fresh) !== JSON.stringify(JOBS)) {
@@ -456,7 +466,43 @@ async function syncJobs() {
     }
   } catch (err) {
     console.error("Jobs load failed:", err);
+    const grid = document.getElementById('rolesGrid');
+    const empty = document.getElementById('rolesEmpty');
+    if (!JOBS.length && grid && empty) {
+      grid.innerHTML = '';
+      grid.style.display = 'none';
+      empty.style.display = 'block';
+      const title = empty.querySelector('.roles-empty__title');
+      if (title) title.textContent = 'Could not load roles. Please refresh or email team@perceptivelabs.in.';
+    }
   }
+}
+
+function normalizeJobs(rawJobs) {
+  return (rawJobs || []).map(job => {
+    job = job || {};
+    return {
+      id: String(job.id || job.jobId || job.title || 'job').trim(),
+      title: String(job.title || job.role || job.id || 'Open Role').trim(),
+      dept: String(job.dept || job.department || 'general').trim() || 'general',
+      deptLabel: String(job.deptLabel || job.departmentLabel || job.dept || 'General').trim() || 'General',
+      type: String(job.type || job.employmentType || 'Full-time').trim() || 'Full-time',
+      location: String(job.location || 'Ahmedabad, India').trim() || 'Ahmedabad, India',
+      salary: String(job.salary || '').trim(),
+      experience: String(job.experience || '').trim(),
+      equity: String(job.equity || '').trim(),
+      about: job.about || '',
+      responsibilities: Array.isArray(job.responsibilities) ? job.responsibilities : [],
+      requirements: Array.isArray(job.requirements) ? job.requirements : [],
+      niceToHave: Array.isArray(job.niceToHave) ? job.niceToHave : [],
+      interviewProcess: job.interviewProcess || '',
+      offer: job.offer || '',
+      customSections: Array.isArray(job.customSections) ? job.customSections : [],
+      questions: Array.isArray(job.questions) ? job.questions : [],
+      active: job.active === false ? false : true,
+      isNew: job.isNew === false ? false : true
+    };
+  });
 }
   
 
@@ -507,11 +553,13 @@ function buildCustomSectionsHTML(job) {
 
 // ─── BUILD ROLE HTML ──────────────────────────────────────────────
 function buildTagHTML(job) {
-  let tags = `<span class="role-tag tag-type">${job.type}</span>`;
-  if (job.location.toLowerCase().includes('remote')) {
-    tags += `<span class="role-tag tag-remote">${escHtml(job.location)}</span>`;
+  const type = job.type || 'Full-time';
+  const location = job.location || 'Ahmedabad, India';
+  let tags = `<span class="role-tag tag-type">${escHtml(type)}</span>`;
+  if (location.toLowerCase().includes('remote')) {
+    tags += `<span class="role-tag tag-remote">${escHtml(location)}</span>`;
   } else {
-    tags += `<span class="role-tag tag-loc">${escHtml(job.location)}</span>`;
+    tags += `<span class="role-tag tag-loc">${escHtml(location)}</span>`;
   }
   if (job.salary)     tags += `<span class="role-tag tag-salary">${escHtml(job.salary)}</span>`;
   if (job.experience) tags += `<span class="role-tag tag-loc">${escHtml(job.experience)}</span>`;
@@ -977,11 +1025,15 @@ function attachRoleHandlers() {
 
         btn.innerHTML = 'Submitting…';
 
-        const res  = await fetch('https://perceptive-contact.jainsaanidhya.workers.dev/apply', {
+        const res  = await fetch(WORKER_URL.replace(/\/$/, '') + '/apply', {
         method:  'POST',
         headers: { 'Content-Type': 'application/json' },
         body:    JSON.stringify(payload)
       });
+      if (!res.ok) {
+        throw new Error('HTTP ' + res.status + ' while submitting application');
+      }
+
       const data = await res.json();
 
       if (!data.success) throw new Error(data.error || 'Submission failed');
