@@ -1025,7 +1025,9 @@ function attachRoleHandlers() {
         if (text) data = JSON.parse(text);
       } catch (e) { /* ignore parse error if response is empty */ }
 
-      if (data.success === false) throw new Error(data.error || 'Submission failed');
+      if (data.success === false || data.status === 'error') {
+          throw new Error(data.message || data.error || 'Submission failed');
+      }
 
       if (progressEl) progressEl.classList.remove('visible');
       msgEl.className   = 'aform-message success';
