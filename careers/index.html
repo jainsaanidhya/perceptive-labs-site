@@ -287,7 +287,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
       <a href="/#why" class="nav__link">Why Perceptive</a>
     </nav>
     <div class="nav__cta-btns">
-      <a href="/careers" class="nav__cta-outline nav__cta-outline--active">Careers</a>
+      <a href="/careers/" class="nav__cta-outline nav__cta-outline--active">Careers</a>
       <a href="/#contact" class="nav__cta">
         Reach out to us
         <svg class="icon-arrow" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
@@ -306,7 +306,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
   <a href="/#value">Value</a>
   <a href="/#industries">Industries</a>
   <a href="/#why">Why Perceptive</a>
-  <a href="/careers">Careers</a>
+  <a href="/careers/">Careers</a>
   <a href="/#contact">Contact</a>
 </div>
 
@@ -411,7 +411,8 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
 
 <script>
 const API_URL = "https://script.google.com/macros/s/AKfycbwpQqoCPO-H8CbntKQN0uANkXDgQPRwvTfAPP-pAEG_QKXPi_QErPcpg-fGf6-D0IEOdQ/exec";
-const WORKER_URL = 'https://perceptive-contact.jainsaanidhya.workers.dev/';
+const WORKER_URL = 'https://ai-interview-jmt3gxdwuq-el.a.run.app/';
+// const WORKER_URL = 'http://localhost:8000/';
 const JOBS_CACHE_VERSION = 'v3';
 const JOBS_CACHE_KEY = 'pl_jobs_' + JOBS_CACHE_VERSION;
 
@@ -998,45 +999,33 @@ function attachRoleHandlers() {
         });
       }
 
-      // ── Read file as base64, then POST ──
-      const file = fileInput.files[0];
-
+      // ── Build and send payload ──
       try {
-        const base64 = await new Promise((resolve, reject) => {
-          const reader = new FileReader();
-          reader.onload  = () => resolve(reader.result.split(',')[1]);
-          reader.onerror = () => reject(new Error('File read failed'));
-          reader.readAsDataURL(file);
-        });
-
-        const payload = {
-          action: "submitApplication",
-          data: {
-            role,
-            jobId,
-            name,
-            email,
-            phone,
-            answers,
-            resumeBase64:    base64,
-            resumeFileName:  file.name   
-          }
-        };
+        const formData = new FormData();
+        formData.append('role', role);
+        formData.append('job_id', jobId);
+        formData.append('name', name);
+        formData.append('email', email);
+        formData.append('phone', phone);
+        formData.append('resume', fileInput.files[0]);
 
         btn.innerHTML = 'Submitting…';
 
-        const res  = await fetch(WORKER_URL.replace(/\/$/, '') + '/apply', {
+        const res  = await fetch(WORKER_URL.replace(/\/$/, '') + '/api/apply', {
         method:  'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body:    JSON.stringify(payload)
+        body:    formData
       });
       if (!res.ok) {
         throw new Error('HTTP ' + res.status + ' while submitting application');
       }
 
-      const data = await res.json();
+      let data = {};
+      try {
+        const text = await res.text();
+        if (text) data = JSON.parse(text);
+      } catch (e) { /* ignore parse error if response is empty */ }
 
-      if (!data.success) throw new Error(data.error || 'Submission failed');
+      if (data.success === false) throw new Error(data.error || 'Submission failed');
 
       if (progressEl) progressEl.classList.remove('visible');
       msgEl.className   = 'aform-message success';
