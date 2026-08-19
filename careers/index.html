@@ -714,18 +714,36 @@ function initFilters() {
 loadJobs();
 
 // ─── VALIDATION ───────────────────────────────────────────────────
-function isValidEmail(v) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); }
-function isValidPhone(v) { return /^[6-9]\d{9}$/.test(v.replace(/\s/g, '')); }
+function isValidEmail(v) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(v || '').trim()); }
+function isValidPhone(v) { 
+  const digits = String(v || '').replace(/\D/g, '');
+  return digits.length >= 10 && digits.length <= 15;
+}
 
-function validateField(input, errorSpan) {
+function validateField(input, errorSpan, isSubmit = false) {
   const name = input.name;
   const val  = input.value.trim();
   let   msg  = '';
-  if (name === 'name')  { if (!val) msg = 'Please enter your full name.'; }
-  else if (name === 'email') { if (!val) msg = 'Please enter your email address.'; else if (!isValidEmail(val)) msg = 'Please enter a valid email address.'; }
-  else if (name === 'phone') { if (!val) msg = 'Please enter your phone number.'; else if (!isValidPhone(val)) msg = 'Please enter a valid phone number.'; }
-  if (msg) { input.classList.add('input-error'); errorSpan.textContent = msg; errorSpan.classList.add('visible'); }
-  else     { input.classList.remove('input-error'); errorSpan.textContent = ''; errorSpan.classList.remove('visible'); }
+
+  if (name === 'name') {
+    if (!val && isSubmit) msg = 'Please enter your full name.';
+  } else if (name === 'email') {
+    if (!val && isSubmit) msg = 'Please enter your email address.';
+    else if (val && !isValidEmail(val)) msg = 'Please enter a valid email address.';
+  } else if (name === 'phone') {
+    if (!val && isSubmit) msg = 'Please enter your phone number.';
+    else if (val && !isValidPhone(val)) msg = 'Please enter a valid phone number.';
+  }
+
+  if (msg) {
+    input.classList.add('input-error');
+    errorSpan.textContent = msg;
+    errorSpan.classList.add('visible');
+  } else {
+    input.classList.remove('input-error');
+    errorSpan.textContent = '';
+    errorSpan.classList.remove('visible');
+  }
   return !msg;
 }
 
@@ -735,9 +753,9 @@ function checkSubmitGate(form) {
   const phoneInput = form.querySelector('[name="phone"]');
   const btn        = form.querySelector('.aform-submit');
 
-  const nameOk  = nameInput.value.trim().length > 0 && !nameInput.classList.contains('input-error');
-  const emailOk = emailInput.value.trim().length > 0 && isValidEmail(emailInput.value.trim());
-  const phoneOk = phoneInput.value.trim().length > 0 && isValidPhone(phoneInput.value.trim());
+  const nameOk  = nameInput && nameInput.value.trim().length > 0 && !nameInput.classList.contains('input-error');
+  const emailOk = emailInput && emailInput.value.trim().length > 0 && isValidEmail(emailInput.value.trim());
+  const phoneOk = phoneInput && phoneInput.value.trim().length > 0 && isValidPhone(phoneInput.value.trim());
 
   const customOk = Array.from(form.querySelectorAll('[name^="custom_"]'))
     .filter(el => el.dataset.required === 'true')
