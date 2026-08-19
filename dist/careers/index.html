@@ -6,8 +6,8 @@
 <title>Careers — Perceptive Labs</title>
 <meta name="description" content="Join Perceptive Labs. We're building intelligent systems for the business of tomorrow. See open roles."/>
 <link rel="canonical" href="https://perceptivelabs.in/careers"/>
-<link rel="icon" href="/favicon.ico"/>
-<link rel="apple-touch-icon" href="/apple-touch-icon.png"/>
+<link rel="icon" href="/assets/favicon-BNOIRLOd.ico"/>
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon-Dc3s4bXe.png"/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800;900&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet"/>
@@ -161,6 +161,9 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
 .aform-input::-moz-placeholder{color:rgba(255,255,255,.22)}
 .aform-input::placeholder{color:rgba(255,255,255,.22)}
 .aform-input:focus{border-color:rgba(59,110,255,.5);background:rgba(59,110,255,.06)}
+select.aform-input{cursor:pointer;background-color:#0b0d13}
+select.aform-input option{background-color:#12151c;color:#ffffff;padding:.5rem}
+select.aform-input option:disabled{color:rgba(255,255,255,.38)}
 .aform-input.input-error{border-color:rgba(248,113,113,.55) !important;background:rgba(248,113,113,.05) !important}
 .field-error{display:none;font-size:.74rem;font-weight:600;color:#fca5a5;margin-top:.3rem;line-height:1.4}
 .field-error.visible{display:block}
@@ -275,7 +278,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
 <header class="nav" id="nav">
   <div class="nav__inner">
     <a href="/" class="nav__logo" aria-label="Perceptive Labs home">
-      <img src="/logo.png" alt="Perceptive Labs"/>
+      <img src="/assets/logo-BgEswNli.png" alt="Perceptive Labs"/>
       <div class="nav__logo-stack">
         <span class="nav__logo-text">Perceptive Labs</span>
         <span class="nav__logo-sub">Intelligence for the business of tomorrow</span>
@@ -394,7 +397,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
   <div class="wrap">
     <div class="footer-inner">
       <div class="footer-left">
-        <img src="/logo.png" alt="Perceptive Labs" style="height:34px;width:auto;border-radius:8px;flex-shrink:0"/>
+        <img src="/assets/logo-BgEswNli.png" alt="Perceptive Labs" style="height:34px;width:auto;border-radius:8px;flex-shrink:0"/>
         <div><div class="footer-name">Perceptive Labs Private Limited</div><div class="footer-tag">Intelligence for the business of tomorrow.</div></div>
       </div>
       <div class="footer-right">
@@ -413,9 +416,17 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
 </footer>
 
 <script>
-const API_URL = "https://script.google.com/macros/s/AKfycbwpQqoCPO-H8CbntKQN0uANkXDgQPRwvTfAPP-pAEG_QKXPi_QErPcpg-fGf6-D0IEOdQ/exec";
-const WORKER_URL = 'https://ai-interview-jmt3gxdwuq-el.a.run.app/';
-// const WORKER_URL = 'http://localhost:8000/';
+const BACKEND_URL = (function() {
+  try {
+    const fromStorage = localStorage.getItem('PL_BACKEND_URL');
+    if (fromStorage) return fromStorage.replace(/\/$/, '');
+  } catch (e) {}
+  if (typeof __VITE_BACKEND_URL__ !== 'undefined' && __VITE_BACKEND_URL__) {
+    return __VITE_BACKEND_URL__;
+  }
+  return 'http://localhost:8000';
+})();
+const WORKER_URL = BACKEND_URL;
 const JOBS_CACHE_VERSION = 'v3';
 const JOBS_CACHE_KEY = 'pl_jobs_' + JOBS_CACHE_VERSION;
 
@@ -444,7 +455,7 @@ async function loadJobs() {
 
 async function syncJobs() {
   try {
-    const res = await fetch(API_URL + "?action=getJobs&_=" + Date.now(), {
+    const res = await fetch(`${BACKEND_URL}/api/jobs?active_only=true&_=${Date.now()}`, {
       method: "GET",
       cache: "no-store"
     });

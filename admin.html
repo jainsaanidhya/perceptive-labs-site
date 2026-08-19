@@ -353,7 +353,7 @@ input:checked + .toggle-slider::before{transform:translateX(18px)}
       <label class="login-label" for="loginPassword">Password</label>
       <div style="position:relative">
         <input class="login-input" type="password" id="loginPassword" placeholder="Enter password" autocomplete="current-password" style="padding-right:2.8rem"/>
-        <button type="button" id="togglePassword" onclick="togglePasswordVisibility()" style="position:absolute;right:.75rem;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:rgba(255,255,255,.38);padding:0;display:flex;align-items:center;transition:color .18s" aria-label="Show password">
+        <button type="button" id="togglePassword" style="position:absolute;right:.75rem;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:rgba(255,255,255,.38);padding:0;display:flex;align-items:center;transition:color .18s" aria-label="Show password">
           <svg id="eyeIcon" viewBox="0 0 24 24" width="17" height="17" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
         </button>
       </div>
@@ -615,7 +615,17 @@ input:checked + .toggle-slider::before{transform:translateX(18px)}
 </div>
 
 <script>
-const API_URL = "https://script.google.com/macros/s/AKfycbwpQqoCPO-H8CbntKQN0uANkXDgQPRwvTfAPP-pAEG_QKXPi_QErPcpg-fGf6-D0IEOdQ/exec";
+const BACKEND_URL = (function() {
+  try {
+    const fromStorage = localStorage.getItem('PL_BACKEND_URL');
+    if (fromStorage) return fromStorage.replace(/\/$/, '');
+  } catch (e) {}
+  if (typeof __VITE_BACKEND_URL__ !== 'undefined' && __VITE_BACKEND_URL__) {
+    return __VITE_BACKEND_URL__;
+  }
+  return 'http://localhost:8000';
+})();
+
 let jobs = [];
 let editingId = null;
 let pendingDeleteId = null;
@@ -623,10 +633,21 @@ let pendingDeleteId = null;
 let SESSION_PASSWORD = null; 
 
 // ─── AUTH ─────────────────────────────────────────────────────────
-document.getElementById('loginPassword').addEventListener('keydown', e => {
-  if (e.key === 'Enter') login();
-});
-document.getElementById('loginBtn').addEventListener('click', login);
+const pwInput = document.getElementById('loginPassword');
+const loginBtnEl = document.getElementById('loginBtn');
+const togglePwBtn = document.getElementById('togglePassword');
+
+if (pwInput) {
+  pwInput.addEventListener('keydown', e => {
+    if (e.key === 'Enter') login();
+  });
+}
+if (loginBtnEl) {
+  loginBtnEl.addEventListener('click', login);
+}
+if (togglePwBtn) {
+  togglePwBtn.addEventListener('click', togglePasswordVisibility);
+}
 
 async function login() {
   const pw    = document.getElementById('loginPassword').value;
@@ -642,10 +663,10 @@ async function login() {
   input.classList.remove('error');
 
   try {
-    const res  = await fetch(API_URL, {
+    const res  = await fetch(`${BACKEND_URL}/api/jobs/verify-password`, {
       method:  'POST',
-      headers: { 'Content-Type': 'text/plain' }, 
-      body:    JSON.stringify({ action: 'verifyPassword', password: pw })
+      headers: { 'Content-Type': 'application/json' }, 
+      body:    JSON.stringify({ password: pw })
     });
     const data = await res.json();
 
@@ -692,7 +713,7 @@ function loadJobs() {
       jobs = [];
     }
   }
-  fetch(API_URL + "?action=getJobs")
+  fetch(`${BACKEND_URL}/api/jobs`)
     .then(r => r.json())
     .then(data => {
       if (Array.isArray(data.jobs)) {
@@ -717,10 +738,18 @@ function saveJobsLocally() { localStorage.setItem(JOBS_CACHE_KEY, JSON.stringify
 
 async function pushToAPI(job, action) {
   try {
-    const res = await fetch(API_URL, {
+    let endpoint = '/api/jobs/add';
+    if (action === 'updateJob') endpoint = '/api/jobs/edit';
+    else if (action === 'deleteJob') endpoint = '/api/jobs/delete';
+
+    const payload = action === 'deleteJob'
+      ? { id: job?.id || job, password: SESSION_PASSWORD }
+      : { job, password: SESSION_PASSWORD };
+
+    const res = await fetch(`${BACKEND_URL}${endpoint}`, {
       method:  'POST',
-      headers: { 'Content-Type': 'text/plain' }, 
-      body:    JSON.stringify({ action, job, password: SESSION_PASSWORD })
+      headers: { 'Content-Type': 'application/json' }, 
+      body:    JSON.stringify(payload)
     });
     const data = await res.json();
     if (!data.success) throw new Error(data.error || 'Unknown error');
@@ -1044,6 +1073,11 @@ function initRTE(id, initialHTML = '', placeholder = 'Type here...', label = '')
   editable.addEventListener('keyup', () => updateToolbarState(host, editable));
   editable.addEventListener('mouseup', () => updateToolbarState(host, editable));
   editable.addEventListener('focus', () => updateToolbarState(host, editable));
+  editable.addEventListener('paste', e => {
+    e.preventDefault();
+    const text = (e.clipboardData || window.clipboardData).getData('text/plain');
+    document.execCommand('insertText', false, text);
+  });
 }
 
 function getRTEHTML(id) {
@@ -1180,8 +1214,16 @@ function togglePasswordVisibility() {
 function confirmDelete(id) {
   pendingDeleteId = id;
   const job = jobs.find(j => j.id === id);
-  document.getElementById('modalTitle').textContent = 'Delete "' + job.title + '"?';
-  document.getElementById('modalText').textContent = 'This will remove the job from your careers page permanently.';
+  const title = job ? job.title : id;
+  document.getElementById('modalTitle').textContent = 'Delete "' + title + '"?';
+  document.getElementById('modalText').innerHTML =
+    'This action <strong style="color:#f87171">cannot be undone</strong>. Deleting this job will permanently erase from your database:' +
+    '<ul style="margin:.6rem 0 0 1.2rem;color:rgba(255,255,255,.75);font-size:.82rem;line-height:1.6">' +
+      '<li>All candidate applications &amp; resume links</li>' +
+      '<li>All ATS screening reports &amp; rankings</li>' +
+      '<li>All completed AI interview records &amp; transcripts</li>' +
+      '<li>Job description &amp; configuration settings</li>' +
+    '</ul>';
   document.getElementById('confirmModal').classList.add('show');
   document.getElementById('modalConfirmBtn').onclick = async () => {
     const idToDelete = pendingDeleteId;

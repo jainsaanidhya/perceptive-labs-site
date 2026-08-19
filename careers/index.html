@@ -159,6 +159,9 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
 .aform-input{width:100%;padding:.78rem 1rem;border-radius:11px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.05);color:#fff;outline:none;transition:border-color .2s,background .2s;font-size:.88rem}
 .aform-input::placeholder{color:rgba(255,255,255,.22)}
 .aform-input:focus{border-color:rgba(59,110,255,.5);background:rgba(59,110,255,.06)}
+select.aform-input{cursor:pointer;background-color:#0b0d13}
+select.aform-input option{background-color:#12151c;color:#ffffff;padding:.5rem}
+select.aform-input option:disabled{color:rgba(255,255,255,.38)}
 .aform-input.input-error{border-color:rgba(248,113,113,.55) !important;background:rgba(248,113,113,.05) !important}
 .field-error{display:none;font-size:.74rem;font-weight:600;color:#fca5a5;margin-top:.3rem;line-height:1.4}
 .field-error.visible{display:block}
@@ -410,9 +413,17 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
 </footer>
 
 <script>
-const API_URL = "https://script.google.com/macros/s/AKfycbwpQqoCPO-H8CbntKQN0uANkXDgQPRwvTfAPP-pAEG_QKXPi_QErPcpg-fGf6-D0IEOdQ/exec";
-const WORKER_URL = 'https://ai-interview-jmt3gxdwuq-el.a.run.app/';
-// const WORKER_URL = 'http://localhost:8000/';
+const BACKEND_URL = (function() {
+  try {
+    const fromStorage = localStorage.getItem('PL_BACKEND_URL');
+    if (fromStorage) return fromStorage.replace(/\/$/, '');
+  } catch (e) {}
+  if (typeof __VITE_BACKEND_URL__ !== 'undefined' && __VITE_BACKEND_URL__) {
+    return __VITE_BACKEND_URL__;
+  }
+  return 'http://localhost:8000';
+})();
+const WORKER_URL = BACKEND_URL;
 const JOBS_CACHE_VERSION = 'v3';
 const JOBS_CACHE_KEY = 'pl_jobs_' + JOBS_CACHE_VERSION;
 
@@ -441,7 +452,7 @@ async function loadJobs() {
 
 async function syncJobs() {
   try {
-    const res = await fetch(API_URL + "?action=getJobs&_=" + Date.now(), {
+    const res = await fetch(`${BACKEND_URL}/api/jobs?active_only=true&_=${Date.now()}`, {
       method: "GET",
       cache: "no-store"
     });
