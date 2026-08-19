@@ -3,7 +3,13 @@ import { resolve } from 'path';
 
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
-  const backendUrl = env.VITE_BACKEND_URL || 'http://localhost:8000';
+  
+  // Production build defaults to Cloud Run backend; Dev mode defaults to localhost
+  const defaultUrl = mode === 'production'
+    ? 'https://ai-interview-jmt3gxdwuq-el.a.run.app'
+    : 'http://localhost:8000';
+
+  const backendUrl = env.VITE_BACKEND_URL || defaultUrl;
 
   return {
     define: {
