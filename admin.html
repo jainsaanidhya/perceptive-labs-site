@@ -827,6 +827,33 @@ function showSection(section) {
 }
 
 
+const DEFAULT_JOB_MANDATORY_QUESTIONS = [
+  {
+    type: 'yesno',
+    label: 'Are you open to relocate to Ahmedabad in-person?',
+    options: ['yes', 'no'],
+    required: true,
+    minRequirement: true,
+    minRequirementValue: ['yes']
+  },
+  {
+    type: 'yesno',
+    label: 'Are you graduated ?',
+    options: ['yes', 'no'],
+    required: true,
+    minRequirement: true,
+    minRequirementValue: ['yes']
+  },
+  {
+    type: 'text',
+    label: 'what is your expected annual salary ? (ex: min- max)',
+    options: [],
+    required: true,
+    minRequirement: false,
+    minRequirementValue: []
+  }
+];
+
 // ─── CLEAR FORM ───────────────────────────────────────────────────
 function clearForm() {
   ['f_title','f_salary','f_experience','f_equity','f_location']
@@ -837,6 +864,7 @@ function clearForm() {
   document.getElementById('formFooterMsg').textContent = '';
   document.getElementById('questionsList').innerHTML = '';
   document.getElementById('customSectionsList').innerHTML = '';
+  populateQuestions(DEFAULT_JOB_MANDATORY_QUESTIONS);
   initRTE('rte_about', '', 'Describe the role, the team, and what this person will be working on...', 'About the role');
   initRTE('rte_interviewProcess', '', 'Intro call, take-home task, final interview...', 'Interview process');
   initRTE('rte_offer', '', 'Flexible hours, remote-friendly, learning budget...', 'What we offer');
