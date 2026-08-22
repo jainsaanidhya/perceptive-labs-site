@@ -764,8 +764,12 @@ function checkSubmitGate(form) {
   const minReqOk = Array.from(form.querySelectorAll('[data-min-requirement="true"]'))
     .every(el => {
       if (!el.value) return el.dataset.required !== 'true';
-      const minVals = JSON.parse(el.dataset.minValue || '[]');
-      return Array.isArray(minVals) ? minVals.includes(el.value) : el.value === el.dataset.minValue;
+      let minVals = [];
+      try { minVals = JSON.parse(el.dataset.minValue || '[]'); } catch (e) {}
+      const valLower = String(el.value || '').trim().toLowerCase();
+      return Array.isArray(minVals)
+        ? minVals.some(v => String(v || '').trim().toLowerCase() === valLower)
+        : String(el.dataset.minValue || '').trim().toLowerCase() === valLower;
     });
 
   const fileInput = form.querySelector('[name="resume"]');
@@ -785,7 +789,10 @@ function checkMinRequirement(el, form) {
   }
   let minVals = [];
   try { minVals = JSON.parse(el.dataset.minValue || '[]'); } catch (e) {}
-  const ok = Array.isArray(minVals) ? minVals.includes(el.value) : el.value === el.dataset.minValue;
+  const valLower = String(el.value || '').trim().toLowerCase();
+  const ok = Array.isArray(minVals)
+    ? minVals.some(v => String(v || '').trim().toLowerCase() === valLower)
+    : String(el.dataset.minValue || '').trim().toLowerCase() === valLower;
   if (!ok) {
     el.classList.add('input-error');
     if (errSpan) errSpan.classList.add('visible');
@@ -1036,6 +1043,7 @@ function attachRoleHandlers() {
         formData.append('name', name);
         formData.append('email', email);
         formData.append('phone', phone);
+        formData.append('answers_json', JSON.stringify(answers));
         formData.append('resume', fileInput.files[0]);
 
         btn.innerHTML = 'Submitting…';
