@@ -613,44 +613,30 @@ const BACKEND_URL = (function() {
   return 'https://ai-interview-jmt3gxdwuq-el.a.run.app';
 })();
 
+// ─── DATA & STATE ──────────────────────────────────────────────────
+const JOBS_CACHE_VERSION = 'v2'; 
+const JOBS_CACHE_KEY = 'pl_jobs_' + JOBS_CACHE_VERSION;
+
 let jobs = [];
 let editingId = null;
 let pendingDeleteId = null;
-
 let SESSION_PASSWORD = null; 
-
-// ─── MICROSOFT SSO AUTO-LOGIN ─────────────────────────────────────
-(function checkMicrosoftAuth() {
-  const params = new URLSearchParams(window.location.search);
-  if (params.get('ms_auth') === '1') {
-    const email = params.get('email') || '';
-    const name = params.get('name') || '';
-    // Clear the URL params without reload
-    window.history.replaceState({}, '', window.location.pathname);
-    // Skip password screen and enter admin
-    SESSION_PASSWORD = '__ms_auth__';
-    document.getElementById('loginScreen').style.display = 'none';
-    document.getElementById('adminApp').style.display = 'block';
-    loadJobs();
-  }
-})();
 
 // ─── SIGN OUT ─────────────────────────────────────────────────────
 function logout() {
   SESSION_PASSWORD = null;
+  sessionStorage.removeItem('admin_logged_in');
+  sessionStorage.removeItem('admin_email');
   try {
-    localStorage.removeItem('pl_jobs_v2');
+    localStorage.removeItem(JOBS_CACHE_KEY);
   } catch (e) {}
   window.location.replace('/careers/');
 }
+
 const logoutBtnEl = document.getElementById('logoutBtn');
 if (logoutBtnEl) {
   logoutBtnEl.addEventListener('click', logout);
 }
-
-// ─── DATA ─────────────────────────────────────────────────────────
-const JOBS_CACHE_VERSION = 'v2'; 
-const JOBS_CACHE_KEY = 'pl_jobs_' + JOBS_CACHE_VERSION;
 
 function loadJobs() {
   const cached = localStorage.getItem(JOBS_CACHE_KEY);
@@ -759,6 +745,28 @@ function renderJobs() {
     </div>
   `).join('');
 }
+
+// ─── AUTH STATE CHECK ──────────────────────────────────────────────
+function checkAuth() {
+  const params = new URLSearchParams(window.location.search);
+  const isMsAuth = params.get('ms_auth') === '1';
+  const hasSavedSession = sessionStorage.getItem('admin_logged_in') === '1';
+
+  if (isMsAuth || hasSavedSession) {
+    if (isMsAuth) {
+      sessionStorage.setItem('admin_logged_in', '1');
+      const email = params.get('email') || '';
+      if (email) sessionStorage.setItem('admin_email', email);
+      window.history.replaceState({}, '', window.location.pathname);
+    }
+    SESSION_PASSWORD = '__ms_auth__';
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('adminApp').style.display = 'block';
+    loadJobs();
+  }
+}
+
+checkAuth();
 
 // ─── NAVIGATION ───────────────────────────────────────────────────
 function showSection(section) {
