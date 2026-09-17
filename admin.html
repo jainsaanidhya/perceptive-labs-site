@@ -643,64 +643,6 @@ function logout() {
   } catch (e) {}
   window.location.replace('/careers/');
 }
-
-// ─── AUTH ─────────────────────────────────────────────────────────
-const pwInput = document.getElementById('loginPassword');
-const loginBtnEl = document.getElementById('loginBtn');
-const togglePwBtn = document.getElementById('togglePassword');
-
-if (pwInput) {
-  pwInput.addEventListener('keydown', e => {
-    if (e.key === 'Enter') login();
-  });
-}
-if (loginBtnEl) {
-  loginBtnEl.addEventListener('click', login);
-}
-if (togglePwBtn) {
-  togglePwBtn.addEventListener('click', togglePasswordVisibility);
-}
-
-async function login() {
-  const pw    = document.getElementById('loginPassword').value;
-  const input = document.getElementById('loginPassword');
-  const err   = document.getElementById('loginError');
-  const btn   = document.getElementById('loginBtn');
-
-  if (!pw) return;
-
-  btn.textContent = 'Signing in…';
-  btn.disabled    = true;
-  err.classList.remove('show');
-  input.classList.remove('error');
-
-  try {
-    const res  = await fetch(`${BACKEND_URL}/api/jobs/verify-password`, {
-      method:  'POST',
-      headers: { 'Content-Type': 'application/json' }, 
-      body:    JSON.stringify({ password: pw })
-    });
-    const data = await res.json();
-
-    if (data.success) {
-      SESSION_PASSWORD = pw;
-      document.getElementById('loginScreen').style.display = 'none';
-      document.getElementById('adminApp').style.display    = 'block';
-      loadJobs();
-    } else {
-      input.classList.add('error');
-      err.classList.add('show');
-      btn.textContent = 'Sign in';
-      btn.disabled    = false;
-    }
-  } catch (e) {
-    err.textContent = 'Connection error. Try again.';
-    err.classList.add('show');
-    btn.textContent = 'Sign in';
-    btn.disabled    = false;
-  }
-}
-
 const logoutBtnEl = document.getElementById('logoutBtn');
 if (logoutBtnEl) {
   logoutBtnEl.addEventListener('click', logout);
@@ -751,8 +693,8 @@ async function pushToAPI(job, action) {
     else if (action === 'deleteJob') endpoint = '/api/jobs/delete';
 
     const payload = action === 'deleteJob'
-      ? { id: job?.id || job, password: SESSION_PASSWORD }
-      : { job, password: SESSION_PASSWORD };
+      ? { id: job?.id || job }
+      : { job };
 
     const res = await fetch(`${BACKEND_URL}${endpoint}`, {
       method:  'POST',
@@ -1241,17 +1183,6 @@ async function toggleActive(id) {
   showToast(job.active ? 'Job is now live.' : 'Job hidden from careers page.', 'success');
 }
 
-    // ─── TOGGLE PASSWORD VISIBILITY ───────────────────────────────────
-function togglePasswordVisibility() {
-  const input = document.getElementById('loginPassword');
-  const btn = document.getElementById('togglePassword');
-  const isHidden = input.type === 'password';
-  input.type = isHidden ? 'text' : 'password';
-  btn.style.color = isHidden ? 'rgba(255,255,255,.72)' : 'rgba(255,255,255,.38)';
-  document.getElementById('eyeIcon').innerHTML = isHidden
-    ? '<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/>'
-    : '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>';
-}
 
 function confirmDelete(id) {
   pendingDeleteId = id;
