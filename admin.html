@@ -675,11 +675,8 @@ let SESSION_PASSWORD = null;
 // ─── SIGN OUT ─────────────────────────────────────────────────────
 document.getElementById('logoutBtn').addEventListener('click', function() {
   SESSION_PASSWORD = null;
-  document.getElementById('adminApp').style.display = 'none';
-  document.getElementById('loginScreen').style.display = 'flex';
-  document.getElementById('loginPassword').value = '';
-  document.getElementById('loginError').classList.remove('show');
-  document.getElementById('loginPassword').classList.remove('error');
+  localStorage.removeItem(JOBS_CACHE_KEY);
+  window.location.href = window.location.pathname;
 });
 
 // ─── AUTH ─────────────────────────────────────────────────────────
