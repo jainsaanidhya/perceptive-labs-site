@@ -656,6 +656,22 @@ let pendingDeleteId = null;
 
 let SESSION_PASSWORD = null; 
 
+// ─── MICROSOFT SSO AUTO-LOGIN ─────────────────────────────────────
+(function checkMicrosoftAuth() {
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('ms_auth') === '1') {
+    const email = params.get('email') || '';
+    const name = params.get('name') || '';
+    // Clear the URL params without reload
+    window.history.replaceState({}, '', window.location.pathname);
+    // Skip password screen and enter admin
+    SESSION_PASSWORD = '__ms_auth__';
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('adminApp').style.display = 'block';
+    loadJobs();
+  }
+})();
+
 // ─── AUTH ─────────────────────────────────────────────────────────
 const pwInput = document.getElementById('loginPassword');
 const loginBtnEl = document.getElementById('loginBtn');
