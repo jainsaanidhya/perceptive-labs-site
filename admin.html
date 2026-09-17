@@ -58,6 +58,21 @@ button,input,textarea,select{font:inherit}
   transition:transform .2s var(--ease),background .18s;box-shadow:0 12px 28px var(--accent-glow);
 }
 .login-btn:hover{transform:translateY(-1px);background:#2f5ce8}
+.login-divider{
+  display:flex;align-items:center;gap:.75rem;margin:1.2rem 0;
+}
+.login-divider::before,.login-divider::after{
+  content:'';flex:1;height:1px;background:var(--line-strong);
+}
+.login-divider span{font-size:.74rem;color:rgba(255,255,255,.3);font-weight:500;text-transform:uppercase;letter-spacing:.08em}
+.login-ms-btn{
+  width:100%;padding:.82rem;border-radius:12px;background:rgba(255,255,255,.06);color:#fff;
+  font-size:.88rem;font-weight:600;border:1px solid var(--line-strong);cursor:pointer;
+  display:inline-flex;align-items:center;justify-content:center;gap:.6rem;
+  transition:all .18s;
+}
+.login-ms-btn:hover{border-color:rgba(255,255,255,.28);background:rgba(255,255,255,.1);transform:translateY(-1px)}
+.login-ms-btn svg{width:18px;height:18px;flex-shrink:0}
 
 /* ADMIN APP */
 #adminApp{display:none}
@@ -360,6 +375,11 @@ input:checked + .toggle-slider::before{transform:translateX(18px)}
       <div class="login-error" id="loginError">Incorrect password. Try again.</div>
     </div>
     <button class="login-btn" id="loginBtn">Sign in</button>
+    <div class="login-divider"><span>or</span></div>
+    <button class="login-ms-btn" id="msLoginBtn" onclick="window.location.href=BACKEND_URL+'/api/auth/microsoft/login'">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 21 21"><rect x="1" y="1" width="9" height="9" fill="#f25022"/><rect x="11" y="1" width="9" height="9" fill="#7fba00"/><rect x="1" y="11" width="9" height="9" fill="#00a4ef"/><rect x="11" y="11" width="9" height="9" fill="#ffb900"/></svg>
+      Sign in with Microsoft
+    </button>
   </div>
 </div>
 
