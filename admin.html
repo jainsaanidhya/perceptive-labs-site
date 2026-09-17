@@ -672,6 +672,16 @@ let SESSION_PASSWORD = null;
   }
 })();
 
+// ─── SIGN OUT ─────────────────────────────────────────────────────
+document.getElementById('logoutBtn').addEventListener('click', function() {
+  SESSION_PASSWORD = null;
+  document.getElementById('adminApp').style.display = 'none';
+  document.getElementById('loginScreen').style.display = 'flex';
+  document.getElementById('loginPassword').value = '';
+  document.getElementById('loginError').classList.remove('show');
+  document.getElementById('loginPassword').classList.remove('error');
+});
+
 // ─── AUTH ─────────────────────────────────────────────────────────
 const pwInput = document.getElementById('loginPassword');
 const loginBtnEl = document.getElementById('loginBtn');
