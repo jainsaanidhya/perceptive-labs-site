@@ -339,7 +339,7 @@ input:checked + .toggle-slider::before{transform:translateX(18px)}
     </div>
     <div class="login-title">Sign in</div>
     <p class="login-sub">Sign in with your Microsoft account to access the admin panel.</p>
-    <button class="login-ms-btn" id="msLoginBtn" onclick="window.location.href=BACKEND_URL+'/api/auth/microsoft/login'">
+    <button class="login-ms-btn" id="msLoginBtn" onclick="startMicrosoftLogin()">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 21 21"><rect x="1" y="1" width="9" height="9" fill="#f25022"/><rect x="11" y="1" width="9" height="9" fill="#7fba00"/><rect x="1" y="11" width="9" height="9" fill="#00a4ef"/><rect x="11" y="11" width="9" height="9" fill="#ffb900"/></svg>
       Sign in with Microsoft
     </button>
@@ -621,6 +621,15 @@ let jobs = [];
 let editingId = null;
 let pendingDeleteId = null;
 let SESSION_PASSWORD = null; 
+
+// ─── LOGIN ────────────────────────────────────────────────────────
+function startMicrosoftLogin() {
+  const hasSession = sessionStorage.getItem('admin_logged_in') === '1';
+  // If session is missing in storage (e.g. user logged out), force prompt=login to require credentials.
+  // If session is already there, don't pass prompt=login, allowing direct login with saved Microsoft cookie.
+  const query = hasSession ? '' : '?prompt=login';
+  window.location.href = `${BACKEND_URL}/api/auth/microsoft/login${query}`;
+}
 
 // ─── SIGN OUT ─────────────────────────────────────────────────────
 function logout() {
