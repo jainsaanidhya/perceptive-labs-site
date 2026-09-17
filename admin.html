@@ -405,7 +405,7 @@ input:checked + .toggle-slider::before{transform:translateX(18px)}
           View site
           <svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
         </a>
-        <button class="logout-btn" id="logoutBtn">Sign out</button>
+        <button class="logout-btn" id="logoutBtn" onclick="logout()">Sign out</button>
       </div>
     </div>
   </header>
@@ -673,12 +673,13 @@ let SESSION_PASSWORD = null;
 })();
 
 // ─── SIGN OUT ─────────────────────────────────────────────────────
-document.getElementById('logoutBtn').addEventListener('click', function() {
+function logout() {
   SESSION_PASSWORD = null;
-  localStorage.removeItem(JOBS_CACHE_KEY);
-  window.location.href = window.location.pathname;
-  window.location.href = '/careers/';
-});
+  try {
+    localStorage.removeItem('pl_jobs_v2');
+  } catch (e) {}
+  window.location.replace('/careers/');
+}
 
 // ─── AUTH ─────────────────────────────────────────────────────────
 const pwInput = document.getElementById('loginPassword');
@@ -737,14 +738,10 @@ async function login() {
   }
 }
 
-document.getElementById('logoutBtn').addEventListener('click', () => {
-  SESSION_PASSWORD = null;
-  document.getElementById('loginScreen').style.display = 'flex';
-  document.getElementById('adminApp').style.display    = 'none';
-  document.getElementById('loginPassword').value       = '';
-  document.getElementById('loginError').classList.remove('show');
-  document.getElementById('loginPassword').classList.remove('error');
-});
+const logoutBtnEl = document.getElementById('logoutBtn');
+if (logoutBtnEl) {
+  logoutBtnEl.addEventListener('click', logout);
+}
 
 // ─── DATA ─────────────────────────────────────────────────────────
 const JOBS_CACHE_VERSION = 'v2'; 
