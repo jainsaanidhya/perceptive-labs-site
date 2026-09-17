@@ -338,19 +338,7 @@ input:checked + .toggle-slider::before{transform:translateX(18px)}
       </div>
     </div>
     <div class="login-title">Sign in</div>
-    <p class="login-sub">Enter your admin password to continue.</p>
-    <div class="login-field">
-      <label class="login-label" for="loginPassword">Password</label>
-      <div style="position:relative">
-        <input class="login-input" type="password" id="loginPassword" placeholder="Enter password" autocomplete="current-password" style="padding-right:2.8rem"/>
-        <button type="button" id="togglePassword" style="position:absolute;right:.75rem;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:rgba(255,255,255,.38);padding:0;display:flex;align-items:center;transition:color .18s" aria-label="Show password">
-          <svg id="eyeIcon" viewBox="0 0 24 24" width="17" height="17" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-        </button>
-      </div>
-      <div class="login-error" id="loginError">Incorrect password. Try again.</div>
-    </div>
-    <button class="login-btn" id="loginBtn">Sign in</button>
-    <div class="login-divider"><span>or</span></div>
+    <p class="login-sub">Sign in with your Microsoft account to access the admin panel.</p>
     <button class="login-ms-btn" id="msLoginBtn" onclick="window.location.href=BACKEND_URL+'/api/auth/microsoft/login'">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 21 21"><rect x="1" y="1" width="9" height="9" fill="#f25022"/><rect x="11" y="1" width="9" height="9" fill="#7fba00"/><rect x="1" y="11" width="9" height="9" fill="#00a4ef"/><rect x="11" y="11" width="9" height="9" fill="#ffb900"/></svg>
       Sign in with Microsoft
