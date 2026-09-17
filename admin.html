@@ -1146,11 +1146,17 @@ async function saveJob() {
     experience: document.getElementById('f_experience').value.trim(),
     equity: document.getElementById('f_equity').value.trim(),
     about,
+    job_description: about,
     interviewProcess: getRTEHTML('rte_interviewProcess'),
     offer: getRTEHTML('rte_offer'),
     customSections: getCustomSections(),
     questions: getQuestions(),
+    interview_questions: getQuestions(),
     active: document.getElementById('f_active').checked,
+    is_active: document.getElementById('f_active').checked,
+    rules: "[]",
+    scorecard: "[]",
+    scoring_config: "{}",
     isNew: editingId ? (jobs.find(j => j.id === editingId)?.isNew ?? false) : true,
     createdAt: editingId ? (jobs.find(j=>j.id===editingId)?.createdAt || Date.now()) : Date.now(),
   };
@@ -1212,7 +1218,7 @@ function editJob(id) {
   // ─── TOGGLE / DELETE ──────────────────────────────────────────────
 async function toggleActive(id) {
   const previousJobs = [...jobs];
-  jobs = jobs.map(j => j.id === id ? {...j, active: !j.active} : j);
+  jobs = jobs.map(j => j.id === id ? {...j, active: !j.active, is_active: !j.active} : j);
   const job = jobs.find(j => j.id === id);
   saveJobsLocally();
   renderJobs();
