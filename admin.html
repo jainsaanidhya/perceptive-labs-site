@@ -624,18 +624,19 @@ let SESSION_PASSWORD = null;
 
 // ─── LOGIN ────────────────────────────────────────────────────────
 function startMicrosoftLogin() {
-  const hasSession = sessionStorage.getItem('admin_logged_in') === '1';
-  // If session is missing in storage (e.g. user logged out), force prompt=login to require credentials.
-  // If session is already there, don't pass prompt=login, allowing direct login with saved Microsoft cookie.
-  const query = hasSession ? '' : '?prompt=login';
+  const isSignedOut = localStorage.getItem('admin_signed_out') === '1';
+  // If the user explicitly clicked "Sign out", force prompt=login so Microsoft asks for password.
+  // If they did not click sign out, do not pass prompt=login, directly using the saved Microsoft cookie.
+  const query = isSignedOut ? '?prompt=login' : '';
   window.location.href = `${BACKEND_URL}/api/auth/microsoft/login${query}`;
 }
 
 // ─── SIGN OUT ─────────────────────────────────────────────────────
 function logout() {
   SESSION_PASSWORD = null;
-  sessionStorage.removeItem('admin_logged_in');
-  sessionStorage.removeItem('admin_email');
+  localStorage.removeItem('admin_logged_in');
+  localStorage.removeItem('admin_email');
+  localStorage.setItem('admin_signed_out', '1');
   try {
     localStorage.removeItem(JOBS_CACHE_KEY);
   } catch (e) {}
@@ -759,19 +760,24 @@ function renderJobs() {
 function checkAuth() {
   const params = new URLSearchParams(window.location.search);
   const isMsAuth = params.get('ms_auth') === '1';
-  const hasSavedSession = sessionStorage.getItem('admin_logged_in') === '1';
+  const hasSavedSession = localStorage.getItem('admin_logged_in') === '1';
+  const isSignedOut = localStorage.getItem('admin_signed_out') === '1';
 
-  if (isMsAuth || hasSavedSession) {
+  if (isMsAuth || (hasSavedSession && !isSignedOut)) {
     if (isMsAuth) {
-      sessionStorage.setItem('admin_logged_in', '1');
+      localStorage.setItem('admin_logged_in', '1');
+      localStorage.removeItem('admin_signed_out');
       const email = params.get('email') || '';
-      if (email) sessionStorage.setItem('admin_email', email);
+      if (email) localStorage.setItem('admin_email', email);
       window.history.replaceState({}, '', window.location.pathname);
     }
     SESSION_PASSWORD = '__ms_auth__';
     document.getElementById('loginScreen').style.display = 'none';
     document.getElementById('adminApp').style.display = 'block';
     loadJobs();
+  } else {
+    document.getElementById('loginScreen').style.display = 'flex';
+    document.getElementById('adminApp').style.display = 'none';
   }
 }
 
